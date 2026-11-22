@@ -67,8 +67,12 @@ u16 random_u16(void) {
 
 // Generate a pseudorandom float in the range [0, 1).
 f32 random_float(void) {
-    f32 rnd = random_u16();
-    return rnd / (double) 0x10000;
+    union {
+        u32 i;
+        f32 f;
+    } u;
+    u.i = 0x3F800000 | ((u32) random_u16() << 7);
+    return u.f - 1.0f;
 }
 
 // Return either -1 or 1 with a 50:50 chance.

@@ -349,23 +349,13 @@ f32 approach_f32_symmetric(f32 value, f32 target, f32 increment) {
 }
 
 s16 approach_s16_symmetric(s16 value, s16 target, s16 increment) {
-    s16 dist = target - value;
+    s32 dist = (s16) (target - value);
+    s32 sign = dist >> 31;
 
-    if (dist >= 0) {
-        if (dist > increment) {
-            value += increment;
-        } else {
-            value = target;
-        }
-    } else {
-        if (dist < -increment) {
-            value -= increment;
-        } else {
-            value = target;
-        }
+    if (((dist ^ sign) - sign) > increment) {
+        return (s16) (value + ((increment ^ sign) - sign));
     }
-
-    return value;
+    return target;
 }
 
 s32 cur_obj_rotate_yaw_toward(s16 target, s16 increment) {
@@ -2153,11 +2143,8 @@ f32 absf(f32 x) {
 }
 
 s32 absi(s32 x) {
-    if (x >= 0) {
-        return x;
-    } else {
-        return -x;
-    }
+    s32 mask = x >> 31;
+    return (x ^ mask) - mask;
 }
 
 s32 cur_obj_wait_then_blink(s32 timeUntilBlinking, s32 numBlinks) {
