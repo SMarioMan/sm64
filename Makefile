@@ -414,7 +414,10 @@ ifeq ($(COMPILER),gcc)
   $(BUILD_DIR)/src/engine/math_util.o: OPT_FLAGS := -O2
   $(BUILD_DIR)/src/engine/surface_collision.o: OPT_FLAGS := -O2
   $(BUILD_DIR)/src/engine/surface_load.o: OPT_FLAGS := -O2
+  $(BUILD_DIR)/src/engine/behavior_script.o: OPT_FLAGS := -O2
   $(BUILD_DIR)/src/game/rendering_graph_node.o: OPT_FLAGS := -O2
+  $(BUILD_DIR)/src/game/object_list_processor.o: OPT_FLAGS := -O2
+  $(BUILD_DIR)/src/game/object_collision.o: OPT_FLAGS := -O2
   $(BUILD_DIR)/src/game/shadow.o: OPT_FLAGS := -O2
   $(BUILD_DIR)/src/game/mario.o: OPT_FLAGS := -O2
   $(BUILD_DIR)/src/audio/%.o: OPT_FLAGS := -O2

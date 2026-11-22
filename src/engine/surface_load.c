@@ -666,7 +666,9 @@ void transform_object_vertices(TerrainData **data, TerrainData *vertexData) {
     register s32 numVertices;
 
     Mat4 *objectTransform;
-    Mat4 m;
+    Mat4 scaledMtx;
+    Mat4 *mPtr;
+    f32 m00, m01, m02, m10, m11, m12, m20, m21, m22, m30, m31, m32;
 
     objectTransform = &gCurrentObject->transform;
 
@@ -680,7 +682,19 @@ void transform_object_vertices(TerrainData **data, TerrainData *vertexData) {
         obj_build_transform_from_pos_and_angle(gCurrentObject, O_POS_INDEX, O_FACE_ANGLE_INDEX);
     }
 
-    obj_apply_scale_to_matrix(gCurrentObject, m, *objectTransform);
+    if (gCurrentObject->header.gfx.scale[0] == 1.0f
+        && gCurrentObject->header.gfx.scale[1] == 1.0f
+        && gCurrentObject->header.gfx.scale[2] == 1.0f) {
+        mPtr = objectTransform;
+    } else {
+        obj_apply_scale_to_matrix(gCurrentObject, scaledMtx, *objectTransform);
+        mPtr = &scaledMtx;
+    }
+
+    m00 = (*mPtr)[0][0]; m01 = (*mPtr)[0][1]; m02 = (*mPtr)[0][2];
+    m10 = (*mPtr)[1][0]; m11 = (*mPtr)[1][1]; m12 = (*mPtr)[1][2];
+    m20 = (*mPtr)[2][0]; m21 = (*mPtr)[2][1]; m22 = (*mPtr)[2][2];
+    m30 = (*mPtr)[3][0]; m31 = (*mPtr)[3][1]; m32 = (*mPtr)[3][2];
 
     // Go through all vertices, rotating and translating them to transform the object.
     while (numVertices--) {
@@ -689,9 +703,9 @@ void transform_object_vertices(TerrainData **data, TerrainData *vertexData) {
         vz = *(vertices++);
 
         //! No bounds check on vertex data
-        *vertexData++ = (TerrainData)(vx * m[0][0] + vy * m[1][0] + vz * m[2][0] + m[3][0]);
-        *vertexData++ = (TerrainData)(vx * m[0][1] + vy * m[1][1] + vz * m[2][1] + m[3][1]);
-        *vertexData++ = (TerrainData)(vx * m[0][2] + vy * m[1][2] + vz * m[2][2] + m[3][2]);
+        *vertexData++ = (TerrainData)(vx * m00 + vy * m10 + vz * m20 + m30);
+        *vertexData++ = (TerrainData)(vx * m01 + vy * m11 + vz * m21 + m31);
+        *vertexData++ = (TerrainData)(vx * m02 + vy * m12 + vz * m22 + m32);
     }
 
     *data = vertices;

@@ -1,6 +1,8 @@
 #include <ultra64.h>
+#include <math.h>
 
 #include "sm64.h"
+#include "math_util.h"
 #include "behavior_data.h"
 #include "behavior_script.h"
 #include "game/area.h"
@@ -915,62 +917,75 @@ static BhvCommandProc BehaviorCmdTable[] = {
 
 // Execute the behavior script of the current object, process the object flags, and other miscellaneous code for updating objects.
 void cur_obj_update(void) {
-    UNUSED u8 filler[4];
-
-    s16 objFlags = gCurrentObject->oFlags;
-    f32 distanceFromMario;
-    BhvCommandProc bhvCmdProc;
+    struct Object *obj = gCurrentObject;
+    s16 objFlags = obj->oFlags;
+    f32 distanceFromMario = 0.0f;
     s32 bhvProcResult;
 
-    // Calculate the distance from the object to Mario.
-    if (objFlags & OBJ_FLAG_COMPUTE_DIST_TO_MARIO) {
-        gCurrentObject->oDistanceToMario = dist_between_objects(gCurrentObject, gMarioObject);
-        distanceFromMario = gCurrentObject->oDistanceToMario;
-    } else {
-        distanceFromMario = 0.0f;
-    }
+    // Calculate distance and/or angle from the object to Mario in a single pass.
+    if (objFlags & (OBJ_FLAG_COMPUTE_DIST_TO_MARIO | OBJ_FLAG_COMPUTE_ANGLE_TO_MARIO)) {
+        f32 dx = gMarioObject->oPosX - obj->oPosX;
+        f32 dz = gMarioObject->oPosZ - obj->oPosZ;
 
-    // Calculate the angle from the object to Mario.
-    if (objFlags & OBJ_FLAG_COMPUTE_ANGLE_TO_MARIO) {
-        gCurrentObject->oAngleToMario = obj_angle_to_object(gCurrentObject, gMarioObject);
+        if (objFlags & OBJ_FLAG_COMPUTE_DIST_TO_MARIO) {
+            f32 dy = gMarioObject->oPosY - obj->oPosY;
+            distanceFromMario = sqrtf(dx * dx + dy * dy + dz * dz);
+            obj->oDistanceToMario = distanceFromMario;
+        }
+        if (objFlags & OBJ_FLAG_COMPUTE_ANGLE_TO_MARIO) {
+            obj->oAngleToMario = atan2s(dz, dx);
+        }
     }
 
     // If the object's action has changed, reset the action timer.
-    if (gCurrentObject->oAction != gCurrentObject->oPrevAction) {
-        (void) (gCurrentObject->oTimer = 0, gCurrentObject->oSubAction = 0,
-                gCurrentObject->oPrevAction = gCurrentObject->oAction);
+    if (obj->oAction != obj->oPrevAction) {
+        (void) (obj->oTimer = 0, obj->oSubAction = 0, obj->oPrevAction = obj->oAction);
     }
 
-    // Execute the behavior script.
-    gCurBhvCommand = gCurrentObject->curBhvCommand;
+    // Execute the behavior script with fast paths for the two dominant opcodes:
+    // 0x0C (CALL_NATIVE) and 0x09 (END_LOOP).
+    gCurBhvCommand = obj->curBhvCommand;
 
-    do {
-        bhvCmdProc = BehaviorCmdTable[*gCurBhvCommand >> 24];
-        bhvProcResult = bhvCmdProc();
-    } while (bhvProcResult == BHV_PROC_CONTINUE);
+    for (;;) {
+        u32 cmd = *gCurBhvCommand >> 24;
+        if (cmd == 0x0C) {
+            NativeBhvFunc behaviorFunc = BHV_CMD_GET_VPTR(1);
+            behaviorFunc();
+            gCurBhvCommand += 2;
+            continue;
+        }
+        if (cmd == 0x09) {
+            gCurBhvCommand = (const BehaviorScript *) gCurrentObject->bhvStack[gCurrentObject->bhvStackIndex - 1];
+            break;
+        }
+        bhvProcResult = BehaviorCmdTable[cmd]();
+        if (bhvProcResult != BHV_PROC_CONTINUE) {
+            break;
+        }
+    }
 
-    gCurrentObject->curBhvCommand = gCurBhvCommand;
+    obj = gCurrentObject;
+    obj->curBhvCommand = gCurBhvCommand;
 
     // Increment the object's timer.
-    if (gCurrentObject->oTimer < 0x3FFFFFFF) {
-        gCurrentObject->oTimer++;
+    if (obj->oTimer < 0x3FFFFFFF) {
+        obj->oTimer++;
     }
 
     // If the object's action has changed, reset the action timer.
-    if (gCurrentObject->oAction != gCurrentObject->oPrevAction) {
-        (void) (gCurrentObject->oTimer = 0, gCurrentObject->oSubAction = 0,
-                gCurrentObject->oPrevAction = gCurrentObject->oAction);
+    if (obj->oAction != obj->oPrevAction) {
+        (void) (obj->oTimer = 0, obj->oSubAction = 0, obj->oPrevAction = obj->oAction);
     }
 
     // Execute various code based on object flags.
-    objFlags = (s16) gCurrentObject->oFlags;
+    objFlags = (s16) obj->oFlags;
 
     if (objFlags & OBJ_FLAG_SET_FACE_ANGLE_TO_MOVE_ANGLE) {
-        obj_set_face_angle_to_move_angle(gCurrentObject);
+        obj_set_face_angle_to_move_angle(obj);
     }
 
     if (objFlags & OBJ_FLAG_SET_FACE_YAW_TO_MOVE_YAW) {
-        gCurrentObject->oFaceAngleYaw = gCurrentObject->oMoveAngleYaw;
+        obj->oFaceAngleYaw = obj->oMoveAngleYaw;
     }
 
     if (objFlags & OBJ_FLAG_MOVE_XZ_USING_FVEL) {
@@ -982,32 +997,32 @@ void cur_obj_update(void) {
     }
 
     if (objFlags & OBJ_FLAG_TRANSFORM_RELATIVE_TO_PARENT) {
-        obj_build_transform_relative_to_parent(gCurrentObject);
+        obj_build_transform_relative_to_parent(obj);
     }
 
     if (objFlags & OBJ_FLAG_SET_THROW_MATRIX_FROM_TRANSFORM) {
-        obj_set_throw_matrix_from_transform(gCurrentObject);
+        obj_set_throw_matrix_from_transform(obj);
     }
 
     if (objFlags & OBJ_FLAG_UPDATE_GFX_POS_AND_ANGLE) {
-        obj_update_gfx_pos_and_angle(gCurrentObject);
+        obj_update_gfx_pos_and_angle(obj);
     }
 
     // Handle visibility of object
-    if (gCurrentObject->oRoom != -1) {
+    if (obj->oRoom != -1) {
         // If the object is in a room, only show it when Mario is in the room.
         cur_obj_enable_rendering_if_mario_in_room();
-    } else if ((objFlags & OBJ_FLAG_COMPUTE_DIST_TO_MARIO) && gCurrentObject->collisionData == NULL) {
+    } else if ((objFlags & OBJ_FLAG_COMPUTE_DIST_TO_MARIO) && obj->collisionData == NULL) {
         if (!(objFlags & OBJ_FLAG_ACTIVE_FROM_AFAR)) {
             // If the object has a render distance, check if it should be shown.
-            if (distanceFromMario > gCurrentObject->oDrawingDistance) {
+            if (distanceFromMario > obj->oDrawingDistance) {
                 // Out of render distance, hide the object.
-                gCurrentObject->header.gfx.node.flags &= ~GRAPH_RENDER_ACTIVE;
-                gCurrentObject->activeFlags |= ACTIVE_FLAG_FAR_AWAY;
-            } else if (gCurrentObject->oHeldState == HELD_FREE) {
+                obj->header.gfx.node.flags &= ~GRAPH_RENDER_ACTIVE;
+                obj->activeFlags |= ACTIVE_FLAG_FAR_AWAY;
+            } else if (obj->oHeldState == HELD_FREE) {
                 // In render distance (and not being held), show the object.
-                gCurrentObject->header.gfx.node.flags |= GRAPH_RENDER_ACTIVE;
-                gCurrentObject->activeFlags &= ~ACTIVE_FLAG_FAR_AWAY;
+                obj->header.gfx.node.flags |= GRAPH_RENDER_ACTIVE;
+                obj->activeFlags &= ~ACTIVE_FLAG_FAR_AWAY;
             }
         }
     }

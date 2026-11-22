@@ -275,14 +275,16 @@ void bhv_mario_update(void) {
     // to sync it with the Mario object
     copy_mario_state_to_object();
 
-    i = 0;
-    while (sParticleTypes[i].particleFlag != 0) {
-        if (particleFlags & sParticleTypes[i].particleFlag) {
-            spawn_particle(sParticleTypes[i].activeParticleFlag, sParticleTypes[i].model,
-                           sParticleTypes[i].behavior);
-        }
+    if (particleFlags != 0) {
+        i = 0;
+        while (sParticleTypes[i].particleFlag != 0) {
+            if (particleFlags & sParticleTypes[i].particleFlag) {
+                spawn_particle(sParticleTypes[i].activeParticleFlag, sParticleTypes[i].model,
+                               sParticleTypes[i].behavior);
+            }
 
-        i++;
+            i++;
+        }
     }
 }
 
