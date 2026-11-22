@@ -13,7 +13,7 @@
  * linker script syntax.
 */
 
-#define SEG_START         0x8005C000
+#define SEG_START         0x80025C00
 
 #define SEG_FRAMEBUFFERS_SIZE (2 * SCREEN_WIDTH * SCREEN_HEIGHT * 3)
 #define SEG_GODDARD_POOL_OFFSET 0x52000 // Offset from right side of pool
@@ -24,7 +24,7 @@
 #define RDRAM_END         0x80400000
 
 #define SEG_POOL_START    SEG_START
-#define SEG_POOL_SIZE     0x165000
+#define SEG_POOL_SIZE     0x19B400
 #define SEG_POOL_END      (SEG_POOL_START + SEG_POOL_SIZE)
 
 #define SEG_BUFFERS       SEG_POOL_END
