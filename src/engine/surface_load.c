@@ -203,18 +203,10 @@ static s16 lower_cell_index(TerrainData coord) {
     // [0, 16)
     index = coord / CELL_SIZE;
 
-    // Include extra cell if close to boundary
-    //! Some wall checks are larger than the buffer, meaning wall checks can
-    //  miss walls that are near a cell border.
-    if (coord % CELL_SIZE < 50) {
-        index--;
+    if (index > NUM_CELLS_INDEX) {
+        index = NUM_CELLS_INDEX;
     }
 
-    if (index < 0) {
-        index = 0;
-    }
-
-    // Potentially > 15, but since the upper index is <= 15, not exploitable
     return index;
 }
 
@@ -235,18 +227,10 @@ static s16 upper_cell_index(TerrainData coord) {
     // [0, 16)
     index = coord / CELL_SIZE;
 
-    // Include extra cell if close to boundary
-    //! Some wall checks are larger than the buffer, meaning wall checks can
-    //  miss walls that are near a cell border.
-    if (coord % CELL_SIZE > CELL_SIZE - 50) {
-        index++;
-    }
-
     if (index > NUM_CELLS_INDEX) {
         index = NUM_CELLS_INDEX;
     }
 
-    // Potentially < 0, but since lower index is >= 0, not exploitable
     return index;
 }
 

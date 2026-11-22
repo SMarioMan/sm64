@@ -44,14 +44,14 @@ static s32 find_wall_collisions_from_list(struct SurfaceNode *surfaceNode,
             continue;
         }
 
-        offset = surf->normal.x * x + surf->normal.y * y + surf->normal.z * z + surf->originOffset;
+        offset = surf->normal.x * data->x + surf->normal.y * y + surf->normal.z * data->z + surf->originOffset;
 
-        if (offset < -radius || offset > radius) {
+        if (offset < 0.0f || offset > radius) {
             continue;
         }
 
-        px = x;
-        pz = z;
+        px = data->x;
+        pz = data->z;
 
         //! (Quantum Tunneling) Due to issues with the vertices walls choose and
         //  the fact they are floating point, certain floating point positions
@@ -184,9 +184,11 @@ s32 f32_find_wall_collision(f32 *xPtr, f32 *yPtr, f32 *zPtr, f32 offsetY, f32 ra
 s32 find_wall_collisions(struct WallCollisionData *colData) {
     struct SurfaceNode *node;
     s16 cellX, cellZ;
+    s16 minCellX, maxCellX, minCellZ, maxCellZ;
     s32 numCollisions = 0;
-    TerrainData x = colData->x;
-    TerrainData z = colData->z;
+    s32 x = colData->x;
+    s32 z = colData->z;
+    s32 r = (s32) colData->radius;
 
     colData->numWalls = 0;
 
@@ -197,18 +199,30 @@ s32 find_wall_collisions(struct WallCollisionData *colData) {
         return numCollisions;
     }
 
-    // World (level) consists of a 16x16 grid. Find where the collision is on
-    // the grid (round toward -inf)
-    cellX = ((x + LEVEL_BOUNDARY_MAX) / CELL_SIZE) & NUM_CELLS_INDEX;
-    cellZ = ((z + LEVEL_BOUNDARY_MAX) / CELL_SIZE) & NUM_CELLS_INDEX;
+    // World (level) consists of a 16x16 grid. Check all cells overlapped by
+    // [x - radius, x + radius] x [z - radius, z + radius] instead of relying
+    // on the 50-unit surface cell overlap buffer.
+    minCellX = (x - r + LEVEL_BOUNDARY_MAX) / CELL_SIZE;
+    maxCellX = (x + r + LEVEL_BOUNDARY_MAX) / CELL_SIZE;
+    minCellZ = (z - r + LEVEL_BOUNDARY_MAX) / CELL_SIZE;
+    maxCellZ = (z + r + LEVEL_BOUNDARY_MAX) / CELL_SIZE;
 
-    // Check for surfaces belonging to objects.
-    node = gDynamicSurfacePartition[cellZ][cellX][SPATIAL_PARTITION_WALLS].next;
-    numCollisions += find_wall_collisions_from_list(node, colData);
+    if (minCellX < 0) minCellX = 0;
+    if (maxCellX > NUM_CELLS_INDEX) maxCellX = NUM_CELLS_INDEX;
+    if (minCellZ < 0) minCellZ = 0;
+    if (maxCellZ > NUM_CELLS_INDEX) maxCellZ = NUM_CELLS_INDEX;
 
-    // Check for surfaces that are a part of level geometry.
-    node = gStaticSurfacePartition[cellZ][cellX][SPATIAL_PARTITION_WALLS].next;
-    numCollisions += find_wall_collisions_from_list(node, colData);
+    for (cellZ = minCellZ; cellZ <= maxCellZ; cellZ++) {
+        for (cellX = minCellX; cellX <= maxCellX; cellX++) {
+            // Check for surfaces belonging to objects.
+            node = gDynamicSurfacePartition[cellZ][cellX][SPATIAL_PARTITION_WALLS].next;
+            numCollisions += find_wall_collisions_from_list(node, colData);
+
+            // Check for surfaces that are a part of level geometry.
+            node = gStaticSurfacePartition[cellZ][cellX][SPATIAL_PARTITION_WALLS].next;
+            numCollisions += find_wall_collisions_from_list(node, colData);
+        }
+    }
 
     // Increment the debug tracker.
     gNumCalls.wall++;
