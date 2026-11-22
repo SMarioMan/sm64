@@ -219,22 +219,25 @@ struct Waypoint {
 };
 
 struct Surface {
-    /*0x00*/ TerrainData type;
-    /*0x02*/ TerrainData force;
-    /*0x04*/ s8 flags;
-    /*0x05*/ RoomData room;
-    /*0x06*/ TerrainData lowerY;
-    /*0x08*/ TerrainData upperY;
-    /*0x0A*/ Vec3Terrain vertex1;
-    /*0x10*/ Vec3Terrain vertex2;
-    /*0x16*/ Vec3Terrain vertex3;
-    /*0x1C*/ struct {
+    /* Cache line 0 (0x00..0x0F): hot rejection bounds + first two vertices */
+    /*0x00*/ TerrainData lowerY;
+    /*0x02*/ TerrainData upperY;
+    /*0x04*/ Vec3Terrain vertex1;
+    /*0x0A*/ Vec3Terrain vertex2;
+    /* Cache line 1 (0x10..0x1F): third vertex + metadata */
+    /*0x10*/ Vec3Terrain vertex3;
+    /*0x16*/ TerrainData type;
+    /*0x18*/ TerrainData force;
+    /*0x1A*/ s8 flags;
+    /*0x1B*/ RoomData room;
+    /*0x1C*/ struct Object *object;
+    /* Cache line 2 (0x20..0x2F): plane equation */
+    /*0x20*/ struct {
         f32 x;
         f32 y;
         f32 z;
     } normal;
-    /*0x28*/ f32 originOffset;
-    /*0x2C*/ struct Object *object;
+    /*0x2C*/ f32 originOffset;
 };
 
 struct MarioBodyState {
