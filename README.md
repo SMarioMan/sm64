@@ -16,7 +16,7 @@ A prior copy of the game is required to extract the assets.
 
 ## Quick Start (for Ubuntu)
 
-1. Install prerequisites: `sudo apt install -y binutils-mips-linux-gnu build-essential git pkgconf python3`
+1. Install prerequisites: `sudo apt install -y binutils-mips-linux-gnu gcc-mips-linux-gnu build-essential git pkgconf python3`
 2. Clone the repo from within Linux: `git clone https://github.com/n64decomp/sm64.git`
 3. Place a Super Mario 64 ROM called `baserom.<VERSION>.z64` into the project folder for asset extraction, where `VERSION` can be `jp`, `us`, `eu`, `sh`, or `cn`.
 4. Run `make` to build. Specify the version through `make VERSION=<VERSION>`. Add `-j4` to improve build speed (hardware dependent).
@@ -45,6 +45,7 @@ There are 3 steps to set up a working build.
 
 The build system has the following package requirements:
  * binutils-mips
+ * gcc-mips (required for GCC builds)
  * pkgconf
  * python3 >= 3.6
 
@@ -53,7 +54,7 @@ Dependency installation instructions for common Linux distros are provided below
 ##### Debian / Ubuntu
 To install build dependencies:
 ```
-sudo apt install -y binutils-mips-linux-gnu build-essential git pkgconf python3
+sudo apt install -y binutils-mips-linux-gnu gcc-mips-linux-gnu build-essential git pkgconf python3
 ```
 
 ##### Arch Linux
@@ -128,6 +129,8 @@ gmake VERSION=jp -j4       # build (J) version instead with 4 jobs
 
 ### Docker Installation
 
+The included `Dockerfile` uses Ubuntu 24.04 with `gcc-mips-linux-gnu` and `binutils-mips-linux-gnu` preinstalled.
+
 #### Create Docker image
 
 After installing and starting Docker, create the docker image. This only needs to be done once.
@@ -137,7 +140,7 @@ docker build -t sm64 .
 
 #### Build
 
-To build, mount the local filesystem into the Docker container and build the ROM with `docker run sm64 make`.
+Ensure `baserom.<VERSION>.z64` (e.g., `baserom.us.z64`) is in the repository root, then mount the local filesystem into the Docker container and build the ROM with `docker run sm64 make`.
 
 ##### macOS example for (U):
 ```
@@ -147,7 +150,7 @@ docker run --rm --mount type=bind,source="$(pwd)",destination=/sm64 sm64 make VE
 ##### Linux example for (U):
 For a Linux host, Docker needs to be instructed which user should own the output files:
 ```
-docker run --rm --mount type=bind,source="$(pwd)",destination=/sm64 --user $UID:$GID sm64 make VERSION=us -j4
+docker run --rm --mount type=bind,source="$(pwd)",destination=/sm64 --user "$(id -u):$(id -g)" sm64 make VERSION=us -j4
 ```
 
 Resulting artifacts can be found in the `build` directory.

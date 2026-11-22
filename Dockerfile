@@ -1,14 +1,20 @@
-FROM ubuntu:18.04 as build
+FROM ubuntu:24.04 AS build
+
+ENV DEBIAN_FRONTEND=noninteractive
 
 RUN apt-get update && \
-    apt-get install -y \
+    apt-get install -y --no-install-recommends \
         binutils-mips-linux-gnu \
+        gcc-mips-linux-gnu \
         build-essential \
         git \
         pkgconf \
-        python3
+        python3 \
+        ca-certificates \
+        bsdextrautils \
+    && rm -rf /var/lib/apt/lists/*
 
-RUN mkdir /sm64
+RUN mkdir -p /sm64
 WORKDIR /sm64
 ENV PATH="/sm64/tools:${PATH}"
 
