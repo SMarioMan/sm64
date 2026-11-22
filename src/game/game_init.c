@@ -382,6 +382,7 @@ void display_and_vsync_frame(s32 waitExtraVblank, s32 incGlobalTimer) {
     profiler_log_thread5_time(AFTER_DISPLAY_LISTS);
     osRecvMesg(&gGameVblankQueue, &gMainReceivedMesg, OS_MESG_BLOCK);
     profiler_log_thread5_time(THREAD5_END);
+    profiler_log_frame_isviewer();
     if (waitExtraVblank) {
         osRecvMesg(&gGameVblankQueue, &gMainReceivedMesg, OS_MESG_BLOCK);
     }
@@ -711,7 +712,9 @@ void thread5_game_loop(UNUSED void *arg) {
             osContStartReadData(&gSIEventMesgQueue);
         }
 
+        profiler_stage_begin(PROF_STAGE_AUDIO_TICK);
         audio_game_loop_tick();
+        profiler_stage_end(PROF_STAGE_AUDIO_TICK);
         interp_save_state();
         gInterpActive = 1;
         select_gfx_pool();

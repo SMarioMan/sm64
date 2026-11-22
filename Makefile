@@ -131,6 +131,17 @@ ifeq ($(NON_MATCHING),1)
   COMPARE := 0
 endif
 
+ENABLE_PROFILER_LOG ?= 0
+ifeq ($(ENABLE_PROFILER_LOG),1)
+  DEFINES += ENABLE_PROFILER_LOG=1
+  COMPARE := 0
+endif
+
+ifdef PROFILE_BOOT_LEVEL
+  DEFINES += PROFILE_BOOT_LEVEL=$(PROFILE_BOOT_LEVEL)
+  COMPARE := 0
+endif
+
 
 # COMPARE - whether to verify the SHA-1 hash of the ROM after building
 #   1 - verifies the SHA-1 hash of the selected version of the game

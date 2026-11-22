@@ -5,8 +5,13 @@
 #include "sm64.h"
 #include "profiler.h"
 #include "game_init.h"
+#include "level_update.h"
+#include "object_list_processor.h"
 
 s16 gProfilerMode = 0;
+
+static OSTime sStageStart[PROF_STAGE_COUNT];
+static OSTime sStageTotal[PROF_STAGE_COUNT];
 
 // the thread 3 info is logged on the opposite profiler from what is used by
 // the thread4 and 5 loggers. It's likely because the sound thread runs at a
@@ -80,10 +85,10 @@ void draw_profiler_bar(OSTime clockBase, OSTime clockStart, OSTime clockEnd, s16
     //  code seems to use the wrong variables... it's possible that the variable
     //  names were very similar within a single letter.
     if (rectX1 > 319) {
-        clockStart = 319;
+        rectX1 = 319;
     }
     if (rectX2 > 319) {
-        clockEnd = 319;
+        rectX2 = 319;
     }
 
     // perform the render if start is less than end. in most cases, it should be.
@@ -306,3 +311,215 @@ void draw_profiler(void) {
         draw_profiler_mode_1();
     }
 }
+
+void profiler_stage_begin(enum ProfilerStage stage) {
+    sStageStart[stage] = osGetTime();
+}
+
+void profiler_stage_end(enum ProfilerStage stage) {
+    sStageTotal[stage] += osGetTime() - sStageStart[stage];
+}
+
+#ifdef ENABLE_PROFILER_LOG
+static void isviewer_write(const char *str, u32 len) {
+    volatile u32 *buf = (volatile u32 *) 0xB3FF0020;
+    volatile u32 *flush = (volatile u32 *) 0xB3FF0014;
+    volatile u32 *piStatus = (volatile u32 *) 0xA4600010;
+    u32 i;
+    u32 word;
+
+    for (i = 0; i < len; i += 4) {
+        word = ((u32)(u8) str[i] << 24);
+        if (i + 1 < len) word |= ((u32)(u8) str[i + 1] << 16);
+        if (i + 2 < len) word |= ((u32)(u8) str[i + 2] << 8);
+        if (i + 3 < len) word |= ((u32)(u8) str[i + 3]);
+        while (*piStatus & 3) {}
+        buf[i >> 2] = word;
+    }
+    while (*piStatus & 3) {}
+    *flush = len;
+}
+
+static char *prof_append_str(char *dst, const char *src) {
+    while (*src != '\0') {
+        *dst++ = *src++;
+    }
+    return dst;
+}
+
+static char *prof_append_s32(char *dst, s32 val) {
+    char tmp[16];
+    s32 i = 0;
+    u32 uval;
+
+    if (val < 0) {
+        *dst++ = '-';
+        uval = (u32)(-val);
+    } else {
+        uval = (u32) val;
+    }
+    if (uval == 0) {
+        *dst++ = '0';
+        return dst;
+    }
+    while (uval > 0) {
+        tmp[i++] = (char)('0' + (uval % 10));
+        uval /= 10;
+    }
+    while (i > 0) {
+        *dst++ = tmp[--i];
+    }
+    return dst;
+}
+
+static char *prof_append_hex(char *dst, u32 val) {
+    static const char hex[] = "0123456789abcdef";
+    s32 shift;
+
+    *dst++ = '0';
+    *dst++ = 'x';
+    for (shift = 28; shift >= 0; shift -= 4) {
+        *dst++ = hex[(val >> shift) & 0xF];
+    }
+    return dst;
+}
+
+static u32 prof_cycles_to_us(OSTime cycles) {
+    if ((s64) cycles < 0) {
+        return 0;
+    }
+    return (u32)((cycles * 1000000ULL) / osClockRate);
+}
+
+static OSTime sPrevFrameStart = 0;
+static u64 sSumFrameUs = 0;
+static u64 sSumCpuUs = 0;
+static u64 sSumLvlUs = 0;
+static u64 sSumObjUs = 0;
+static u64 sSumRendUs = 0;
+static u64 sSumAudTickUs = 0;
+static u64 sSumAudUs = 0;
+static u64 sSumRspUs = 0;
+static u64 sSumRdpUs = 0;
+static u64 sSumDlCmds = 0;
+static u32 sSampleCount = 0;
+
+void profiler_log_frame_isviewer(void) {
+    struct ProfilerFrameData *prof = &gProfilerFrameData[gCurrentFrameIndex1 ^ 1];
+    struct ProfilerFrameData *gfx = &gProfilerFrameData[gCurrentFrameIndex2 ^ 1];
+    OSTime frameStart = prof->gameTimes[THREAD5_START];
+    OSTime frameDelta = (sPrevFrameStart != 0) ? (frameStart - sPrevFrameStart) : 0;
+    u32 frameUs = prof_cycles_to_us(frameDelta);
+    u32 cpuUs = prof_cycles_to_us(prof->gameTimes[BEFORE_DISPLAY_LISTS] - prof->gameTimes[THREAD5_START]);
+    u32 lvlUs = prof_cycles_to_us(prof->gameTimes[LEVEL_SCRIPT_EXECUTE] - prof->gameTimes[THREAD5_START]);
+    u32 objUs = prof_cycles_to_us(sStageTotal[PROF_STAGE_OBJECTS]);
+    u32 rendUs = prof_cycles_to_us(sStageTotal[PROF_STAGE_RENDER]);
+    u32 audTickUs = prof_cycles_to_us(sStageTotal[PROF_STAGE_AUDIO_TICK]);
+    OSTime audCycles = 0;
+    u32 audUs;
+    u32 rspUs = prof_cycles_to_us(gfx->gfxTimes[RSP_COMPLETE] - gfx->gfxTimes[TASKS_QUEUED]);
+    u32 rdpUs = prof_cycles_to_us(gfx->gfxTimes[RDP_COMPLETE] - gfx->gfxTimes[TASKS_QUEUED]);
+    u32 dlCmds = (u32)(gDisplayListHead - gGfxPool->buffer);
+    s32 i;
+    char line[256];
+    char *p;
+
+    sPrevFrameStart = frameStart;
+    for (i = 0; i < (prof->numSoundTimes & ~1); i += 2) {
+        audCycles += prof->soundTimes[i + 1] - prof->soundTimes[i];
+    }
+    audUs = prof_cycles_to_us(audCycles);
+
+    for (i = 0; i < PROF_STAGE_COUNT; i++) {
+        sStageTotal[i] = 0;
+    }
+
+    if (gRenderFrame >= 60 && gRenderFrame < 180) {
+        sSumFrameUs += frameUs;
+        sSumCpuUs += cpuUs;
+        sSumLvlUs += lvlUs;
+        sSumObjUs += objUs;
+        sSumRendUs += rendUs;
+        sSumAudTickUs += audTickUs;
+        sSumAudUs += audUs;
+        sSumRspUs += rspUs;
+        sSumRdpUs += rdpUs;
+        sSumDlCmds += dlCmds;
+        sSampleCount++;
+    }
+
+    if (gRenderFrame == 60 || gRenderFrame == 120 || gRenderFrame == 179) {
+        p = line;
+        p = prof_append_str(p, "PROF f=");
+        p = prof_append_s32(p, (s32) gRenderFrame);
+        p = prof_append_str(p, " frame_us=");
+        p = prof_append_s32(p, (s32) frameUs);
+        p = prof_append_str(p, " cpu_us=");
+        p = prof_append_s32(p, (s32) cpuUs);
+        p = prof_append_str(p, " lvl_us=");
+        p = prof_append_s32(p, (s32) lvlUs);
+        p = prof_append_str(p, " obj_us=");
+        p = prof_append_s32(p, (s32) objUs);
+        p = prof_append_str(p, " rend_us=");
+        p = prof_append_s32(p, (s32) rendUs);
+        p = prof_append_str(p, " aud_us=");
+        p = prof_append_s32(p, (s32) audUs);
+        p = prof_append_str(p, " rsp_us=");
+        p = prof_append_s32(p, (s32) rspUs);
+        p = prof_append_str(p, " rdp_us=");
+        p = prof_append_s32(p, (s32) rdpUs);
+        p = prof_append_str(p, " dl=");
+        p = prof_append_s32(p, (s32) dlCmds);
+        p = prof_append_str(p, " pos=(");
+        p = prof_append_s32(p, (s32) gMarioState->pos[0]);
+        *p++ = ',';
+        p = prof_append_s32(p, (s32) gMarioState->pos[1]);
+        *p++ = ',';
+        p = prof_append_s32(p, (s32) gMarioState->pos[2]);
+        p = prof_append_str(p, ") act=");
+        p = prof_append_hex(p, gMarioState->action);
+        *p++ = '\n';
+        isviewer_write(line, (u32)(p - line));
+    }
+
+    if (gRenderFrame == 180 && sSampleCount > 0) {
+        u32 avgFrame = (u32)(sSumFrameUs / sSampleCount);
+        u32 fpsX10 = (avgFrame > 0) ? (10000000U / avgFrame) : 0;
+
+        p = line;
+        p = prof_append_str(p, "PROF_SUMMARY n=");
+        p = prof_append_s32(p, (s32) sSampleCount);
+        p = prof_append_str(p, " fps_x10=");
+        p = prof_append_s32(p, (s32) fpsX10);
+        p = prof_append_str(p, " frame_us=");
+        p = prof_append_s32(p, (s32) avgFrame);
+        p = prof_append_str(p, " cpu_us=");
+        p = prof_append_s32(p, (s32)(sSumCpuUs / sSampleCount));
+        p = prof_append_str(p, " lvl_us=");
+        p = prof_append_s32(p, (s32)(sSumLvlUs / sSampleCount));
+        p = prof_append_str(p, " obj_us=");
+        p = prof_append_s32(p, (s32)(sSumObjUs / sSampleCount));
+        p = prof_append_str(p, " rend_us=");
+        p = prof_append_s32(p, (s32)(sSumRendUs / sSampleCount));
+        p = prof_append_str(p, " audtick_us=");
+        p = prof_append_s32(p, (s32)(sSumAudTickUs / sSampleCount));
+        p = prof_append_str(p, " aud_us=");
+        p = prof_append_s32(p, (s32)(sSumAudUs / sSampleCount));
+        p = prof_append_str(p, " rsp_us=");
+        p = prof_append_s32(p, (s32)(sSumRspUs / sSampleCount));
+        p = prof_append_str(p, " rdp_us=");
+        p = prof_append_s32(p, (s32)(sSumRdpUs / sSampleCount));
+        p = prof_append_str(p, " dl=");
+        p = prof_append_s32(p, (s32)(sSumDlCmds / sSampleCount));
+        *p++ = '\n';
+        isviewer_write(line, (u32)(p - line));
+    }
+}
+#else
+void profiler_log_frame_isviewer(void) {
+    s32 i;
+    for (i = 0; i < PROF_STAGE_COUNT; i++) {
+        sStageTotal[i] = 0;
+    }
+}
+#endif

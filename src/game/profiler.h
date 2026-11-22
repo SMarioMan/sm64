@@ -42,10 +42,20 @@ enum ProfilerGfxEvent {
     RDP_COMPLETE
 };
 
+enum ProfilerStage {
+    PROF_STAGE_AUDIO_TICK,
+    PROF_STAGE_OBJECTS,
+    PROF_STAGE_RENDER,
+    PROF_STAGE_COUNT
+};
+
 void profiler_log_thread5_time(enum ProfilerGameEvent eventID);
 void profiler_log_thread4_time(void);
 void profiler_log_gfx_time(enum ProfilerGfxEvent eventID);
 void profiler_log_vblank_time(void);
+void profiler_stage_begin(enum ProfilerStage stage);
+void profiler_stage_end(enum ProfilerStage stage);
+void profiler_log_frame_isviewer(void);
 void draw_profiler(void);
 
 #endif // PROFILER_H
