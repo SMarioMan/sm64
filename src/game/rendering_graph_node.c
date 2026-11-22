@@ -905,8 +905,7 @@ static void geo_process_shadow(struct GraphNodeShadow *node) {
         if (shadowList != NULL) {
             mtx = alloc_display_list(sizeof(*mtx));
             gMatStackIndex++;
-            mtxf_translate(mtxf, shadowPos);
-            mtxf_mul(gMatStack[gMatStackIndex], mtxf, *gCurGraphNodeCamera->matrixPtr);
+            mtxf_translate_only(gMatStack[gMatStackIndex], *gCurGraphNodeCamera->matrixPtr, shadowPos);
             mtxf_to_mtx(mtx, gMatStack[gMatStackIndex]);
             gMatStackFixed[gMatStackIndex] = mtx;
             if (gShadowAboveWaterOrLava == TRUE) {

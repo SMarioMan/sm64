@@ -572,6 +572,10 @@ static struct Surface *find_floor_from_list(struct SurfaceNode *surfaceNode, s32
         surf = surfaceNode->surface;
         surfaceNode = surfaceNode->next;
 
+        if (y + 78 < surf->lowerY) {
+            continue;
+        }
+
         x1 = surf->vertex1[0];
         z1 = surf->vertex1[2];
         x2 = surf->vertex2[0];
