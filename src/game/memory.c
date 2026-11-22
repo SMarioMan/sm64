@@ -535,7 +535,7 @@ BAD_RETURN(s32) mem_pool_free(struct MemoryPool *pool, void *addr) {
 void *alloc_display_list(u32 size) {
     void *ptr = NULL;
 
-    size = ALIGN8(size);
+    size = ALIGN16(size);
     if (gGfxPoolEnd - size >= (u8 *) gDisplayListHead) {
         gGfxPoolEnd -= size;
         ptr = gGfxPoolEnd;

@@ -358,7 +358,7 @@ void select_gfx_pool(void) {
     set_segment_base_addr(1, gGfxPool->buffer);
     gGfxSPTask = &gGfxPool->spTask;
     gDisplayListHead = gGfxPool->buffer;
-    gGfxPoolEnd = (u8 *) (gGfxPool->buffer + GFX_POOL_SIZE);
+    gGfxPoolEnd = (u8 *)((uintptr_t)(gGfxPool->buffer + GFX_POOL_SIZE) & ~15);
 }
 
 /**

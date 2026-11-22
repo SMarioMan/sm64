@@ -578,6 +578,20 @@ void mtxf_to_mtx(Mtx *dest, Mat4 src) {
     s16 *intPart = (s16 *) dest;
     s16 *fracPart = intPart + 16;
 
+#ifdef __GNUC__
+    // Create Dirty Exclusive (CACHE 0x0D) avoids reading stale cache lines
+    // from RDRAM before overwriting the entire 64-byte Mtx buffer.
+    if (((uintptr_t) dest & 0xF) == 0) {
+        __asm__ volatile(
+            "cache 0x0d, 0(%0)\n"
+            "cache 0x0d, 16(%0)\n"
+            "cache 0x0d, 32(%0)\n"
+            "cache 0x0d, 48(%0)\n"
+            :: "r"(dest) : "memory"
+        );
+    }
+#endif
+
     // All matrices converted by mtxf_to_mtx are affine (column 3 is [0, 0, 0, 1]).
     for (i = 0; i < 4; i++) {
         s32 v0 = (s32)(src[i][0] * 65536.0f);

@@ -77,14 +77,31 @@ static struct Surface *alloc_surface(void) {
  * Iterates through the entire partition, clearing the surfaces.
  */
 static void clear_spatial_partition(SpatialPartitionCell *cells) {
-    register s32 i = NUM_CELLS * NUM_CELLS;
+#ifdef __GNUC__
+    if (((uintptr_t) cells & 0xF) == 0) {
+        u8 *p = (u8 *) cells;
+        u8 *end = p + (NUM_CELLS * NUM_CELLS * sizeof(SpatialPartitionCell));
+        while (p < end) {
+            __asm__ volatile("cache 0x0d, 0(%0)" :: "r"(p) : "memory");
+            *(u32 *)(p + 0) = 0;
+            *(u32 *)(p + 4) = 0;
+            *(u32 *)(p + 8) = 0;
+            *(u32 *)(p + 12) = 0;
+            p += 16;
+        }
+        return;
+    }
+#endif
+    {
+        register s32 i = NUM_CELLS * NUM_CELLS;
 
-    while (i--) {
-        (*cells)[SPATIAL_PARTITION_FLOORS].next = NULL;
-        (*cells)[SPATIAL_PARTITION_CEILS].next = NULL;
-        (*cells)[SPATIAL_PARTITION_WALLS].next = NULL;
+        while (i--) {
+            (*cells)[SPATIAL_PARTITION_FLOORS].next = NULL;
+            (*cells)[SPATIAL_PARTITION_CEILS].next = NULL;
+            (*cells)[SPATIAL_PARTITION_WALLS].next = NULL;
 
-        cells++;
+            cells++;
+        }
     }
 }
 
