@@ -7,10 +7,31 @@ static const Lights1 warp_pipe_seg3_lights_030079E8 = gdSPDefLights1(
 );
 
 // 0x03007A00
-static const Vtx warp_pipe_seg3_vertex_03007A00[] = {
+
+
+// 0x03007AF0
+
+
+// 0x03007BE0
+
+
+// 0x03007CD0
+
+
+// 0x03007DC0
+
+
+// 0x03007E40
+ALIGNED8 static const Texture warp_pipe_seg3_texture_03007E40[] = {
+#include "actors/warp_pipe/warp_pipe_side.rgba16.inc.c"
+};
+
+// 0x03008E40 - 0x03008F98
+static const Vtx warp_pipe_seg3_dl_03008E40_vtx32_0[] = {
     {{{  -101,      0,      0}, 0, {   990,   2012}, {0x7d, 0x00, 0xef, 0xff}}},
     {{{   -71,    205,     72}, 0, {     0,      0}, {0x65, 0x00, 0xb4, 0xff}}},
     {{{   -71,      0,     72}, 0, {     0,   2012}, {0x4d, 0x00, 0x9c, 0xff}}},
+    {{{  -101,    205,      0}, 0, {   990,      0}, {0x7d, 0x00, 0x11, 0xff}}},
     {{{    72,      0,     72}, 0, {   990,   2012}, {0x9b, 0x00, 0xb4, 0xff}}},
     {{{    72,    205,     72}, 0, {   990,      0}, {0xb4, 0x00, 0x9b, 0xff}}},
     {{{   102,    205,      0}, 0, {     0,      0}, {0x83, 0x00, 0xef, 0xff}}},
@@ -23,16 +44,10 @@ static const Vtx warp_pipe_seg3_vertex_03007A00[] = {
     {{{   -71,    205,     72}, 0, {   990,      0}, {0x65, 0x00, 0xb4, 0xff}}},
     {{{     0,    205,    102}, 0, {     0,      0}, {0x11, 0x00, 0x83, 0xff}}},
     {{{     0,      0,    102}, 0, {     0,   2012}, {0xef, 0x00, 0x83, 0xff}}},
-};
-
-// 0x03007AF0
-static const Vtx warp_pipe_seg3_vertex_03007AF0[] = {
     {{{    72,      0,    -71}, 0, {   990,   2012}, {0xb4, 0x00, 0x65, 0xff}}},
     {{{     0,    205,   -101}, 0, {     0,      0}, {0xef, 0x00, 0x7d, 0xff}}},
     {{{     0,      0,   -101}, 0, {     0,   2012}, {0x11, 0x00, 0x7d, 0xff}}},
-    {{{  -101,      0,      0}, 0, {   990,   2012}, {0x7d, 0x00, 0xef, 0xff}}},
-    {{{  -101,    205,      0}, 0, {   990,      0}, {0x7d, 0x00, 0x11, 0xff}}},
-    {{{   -71,    205,     72}, 0, {     0,      0}, {0x65, 0x00, 0xb4, 0xff}}},
+    {{{    72,    205,    -71}, 0, {   990,      0}, {0x9c, 0x00, 0x4d, 0xff}}},
     {{{   -71,      0,    -71}, 0, {   990,   2012}, {0x65, 0x00, 0x4c, 0xff}}},
     {{{  -101,    205,      0}, 0, {     0,      0}, {0x7d, 0x00, 0x11, 0xff}}},
     {{{  -101,      0,      0}, 0, {     0,   2012}, {0x7d, 0x00, 0xef, 0xff}}},
@@ -41,14 +56,10 @@ static const Vtx warp_pipe_seg3_vertex_03007AF0[] = {
     {{{   -71,    205,    -71}, 0, {     0,      0}, {0x4c, 0x00, 0x65, 0xff}}},
     {{{   -71,      0,    -71}, 0, {     0,   2012}, {0x65, 0x00, 0x4c, 0xff}}},
     {{{     0,    205,   -101}, 0, {   990,      0}, {0xef, 0x00, 0x7d, 0xff}}},
-    {{{    72,    205,    -71}, 0, {   990,      0}, {0x9c, 0x00, 0x4d, 0xff}}},
-};
-
-// 0x03007BE0
-static const Vtx warp_pipe_seg3_vertex_03007BE0[] = {
     {{{     0,      0,    154}, 0, {   990,   2012}, {0xef, 0x00, 0x7d, 0xff}}},
     {{{     0,    205,    154}, 0, {   990,      0}, {0x11, 0x00, 0x7d, 0xff}}},
     {{{  -108,    205,    109}, 0, {     0,      0}, {0xb4, 0x00, 0x65, 0xff}}},
+    {{{  -108,      0,    109}, 0, {     0,   2012}, {0x9b, 0x00, 0x4c, 0xff}}},
     {{{   102,      0,      0}, 0, {   990,   2012}, {0x83, 0x00, 0x11, 0xff}}},
     {{{   102,    205,      0}, 0, {   990,      0}, {0x83, 0x00, 0xef, 0xff}}},
     {{{    72,    205,    -71}, 0, {     0,      0}, {0x9c, 0x00, 0x4d, 0xff}}},
@@ -61,16 +72,10 @@ static const Vtx warp_pipe_seg3_vertex_03007BE0[] = {
     {{{   109,    205,    109}, 0, {   990,      0}, {0x65, 0x00, 0x4c, 0xff}}},
     {{{     0,    205,    154}, 0, {     0,      0}, {0x11, 0x00, 0x7d, 0xff}}},
     {{{     0,      0,    154}, 0, {     0,   2012}, {0xef, 0x00, 0x7d, 0xff}}},
-};
-
-// 0x03007CD0
-static const Vtx warp_pipe_seg3_vertex_03007CD0[] = {
     {{{  -108,      0,   -108}, 0, {   990,   2012}, {0xb4, 0x00, 0x9b, 0xff}}},
     {{{     0,    205,   -153}, 0, {     0,      0}, {0xef, 0x00, 0x83, 0xff}}},
     {{{     0,      0,   -153}, 0, {     0,   2012}, {0x11, 0x00, 0x83, 0xff}}},
-    {{{     0,      0,    154}, 0, {   990,   2012}, {0xef, 0x00, 0x7d, 0xff}}},
-    {{{  -108,    205,    109}, 0, {     0,      0}, {0xb4, 0x00, 0x65, 0xff}}},
-    {{{  -108,      0,    109}, 0, {     0,   2012}, {0x9b, 0x00, 0x4c, 0xff}}},
+    {{{  -108,    205,   -108}, 0, {   990,      0}, {0x9b, 0x00, 0xb4, 0xff}}},
     {{{  -108,      0,    109}, 0, {   990,   2012}, {0x9b, 0x00, 0x4c, 0xff}}},
     {{{  -108,    205,    109}, 0, {   990,      0}, {0xb4, 0x00, 0x65, 0xff}}},
     {{{  -153,    205,      0}, 0, {     0,      0}, {0x83, 0x00, 0x11, 0xff}}},
@@ -79,11 +84,6 @@ static const Vtx warp_pipe_seg3_vertex_03007CD0[] = {
     {{{  -108,    205,   -108}, 0, {     0,      0}, {0x9b, 0x00, 0xb4, 0xff}}},
     {{{  -108,      0,   -108}, 0, {     0,   2012}, {0xb4, 0x00, 0x9b, 0xff}}},
     {{{  -153,    205,      0}, 0, {   990,      0}, {0x83, 0x00, 0x11, 0xff}}},
-    {{{  -108,    205,   -108}, 0, {   990,      0}, {0x9b, 0x00, 0xb4, 0xff}}},
-};
-
-// 0x03007DC0
-static const Vtx warp_pipe_seg3_vertex_03007DC0[] = {
     {{{     0,      0,   -153}, 0, {   990,   2012}, {0x11, 0x00, 0x83, 0xff}}},
     {{{     0,    205,   -153}, 0, {   990,      0}, {0xef, 0x00, 0x83, 0xff}}},
     {{{   109,    205,   -108}, 0, {     0,      0}, {0x4c, 0x00, 0x9b, 0xff}}},
@@ -94,41 +94,30 @@ static const Vtx warp_pipe_seg3_vertex_03007DC0[] = {
     {{{   154,      0,      0}, 0, {     0,   2012}, {0x7d, 0x00, 0x11, 0xff}}},
 };
 
-// 0x03007E40
-ALIGNED8 static const Texture warp_pipe_seg3_texture_03007E40[] = {
-#include "actors/warp_pipe/warp_pipe_side.rgba16.inc.c"
-};
-
-// 0x03008E40 - 0x03008F98
 const Gfx warp_pipe_seg3_dl_03008E40[] = {
     gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, warp_pipe_seg3_texture_03007E40),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 64 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPLight(&warp_pipe_seg3_lights_030079E8.l, 1),
     gsSPLight(&warp_pipe_seg3_lights_030079E8.a, 2),
-    gsSPVertex(warp_pipe_seg3_vertex_03007A00, 15, 0),
-    gsSP2Triangles( 0,  1,  2, 0x0,  3,  4,  5, 0x0),
-    gsSP2Triangles( 3,  5,  6, 0x0,  7,  8,  9, 0x0),
-    gsSP2Triangles( 7,  9, 10, 0x0, 11, 12, 13, 0x0),
-    gsSP1Triangle(11, 13, 14, 0x0),
-    gsSPVertex(warp_pipe_seg3_vertex_03007AF0, 15, 0),
-    gsSP2Triangles( 0,  1,  2, 0x0,  3,  4,  5, 0x0),
-    gsSP2Triangles( 6,  7,  8, 0x0,  6,  9,  7, 0x0),
-    gsSP2Triangles(10, 11, 12, 0x0, 10, 13, 11, 0x0),
-    gsSP1Triangle( 0, 14,  1, 0x0),
-    gsSPVertex(warp_pipe_seg3_vertex_03007BE0, 15, 0),
-    gsSP2Triangles( 0,  1,  2, 0x0,  3,  4,  5, 0x0),
-    gsSP2Triangles( 3,  5,  6, 0x0,  7,  8,  9, 0x0),
-    gsSP2Triangles( 7,  9, 10, 0x0, 11, 12, 13, 0x0),
-    gsSP1Triangle(11, 13, 14, 0x0),
-    gsSPVertex(warp_pipe_seg3_vertex_03007CD0, 15, 0),
-    gsSP2Triangles( 0,  1,  2, 0x0,  3,  4,  5, 0x0),
-    gsSP2Triangles( 6,  7,  8, 0x0,  6,  8,  9, 0x0),
-    gsSP2Triangles(10, 11, 12, 0x0, 10, 13, 11, 0x0),
-    gsSP1Triangle( 0, 14,  1, 0x0),
-    gsSPVertex(warp_pipe_seg3_vertex_03007DC0, 8, 0),
+    gsSPVertex(&warp_pipe_seg3_dl_03008E40_vtx32_0[0], 32, 0),
+    gsSP2Triangles( 0,  1,  2, 0x0,  0,  3,  1, 0x0),
+    gsSP2Triangles( 4,  5,  6, 0x0,  4,  6,  7, 0x0),
+    gsSP2Triangles( 8,  9, 10, 0x0,  8, 10, 11, 0x0),
+    gsSP2Triangles(12, 13, 14, 0x0, 12, 14, 15, 0x0),
+    gsSP2Triangles(16, 17, 18, 0x0, 16, 19, 17, 0x0),
+    gsSP2Triangles(20, 21, 22, 0x0, 20, 23, 21, 0x0),
+    gsSP2Triangles(24, 25, 26, 0x0, 24, 27, 25, 0x0),
+    gsSP2Triangles(28, 29, 30, 0x0, 28, 30, 31, 0x0),
+    gsSPVertex(&warp_pipe_seg3_dl_03008E40_vtx32_0[32], 32, 0),
     gsSP2Triangles( 0,  1,  2, 0x0,  0,  2,  3, 0x0),
     gsSP2Triangles( 4,  5,  6, 0x0,  4,  6,  7, 0x0),
+    gsSP2Triangles( 8,  9, 10, 0x0,  8, 10, 11, 0x0),
+    gsSP2Triangles(12, 13, 14, 0x0, 12, 15, 13, 0x0),
+    gsSP2Triangles(16, 17, 18, 0x0, 16, 18, 19, 0x0),
+    gsSP2Triangles(20, 21, 22, 0x0, 20, 23, 21, 0x0),
+    gsSP2Triangles(24, 25, 26, 0x0, 24, 26, 27, 0x0),
+    gsSP2Triangles(28, 29, 30, 0x0, 28, 30, 31, 0x0),
     gsSPEndDisplayList(),
 };
 

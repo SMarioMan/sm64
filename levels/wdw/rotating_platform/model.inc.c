@@ -5,7 +5,13 @@ static const Lights1 wdw_seg7_lights_07013EB8 = gdSPDefLights1(
 );
 
 // 0x07013ED0 - 0x07013FC0
-static const Vtx wdw_seg7_vertex_07013ED0[] = {
+
+
+// 0x07013FC0 - 0x07014050
+
+
+// 0x07014050 - 0x070140E0
+static const Vtx wdw_seg7_dl_07014050_vtx32_0[] = {
     {{{     0,      0,      0}, 0, {  1738,      0}, {0x1f, 0x93, 0xc9, 0xff}}},
     {{{     0,    128,   -255}, 0, {  1738,  -2076}, {0x1f, 0x93, 0xc9, 0xff}}},
     {{{   222,    128,   -127}, 0, {     0,  -1054}, {0x1f, 0x93, 0xc9, 0xff}}},
@@ -21,10 +27,6 @@ static const Vtx wdw_seg7_vertex_07013ED0[] = {
     {{{     0,      0,      0}, 0, {  1738,      0}, {0xc1, 0x93, 0x00, 0xff}}},
     {{{  -221,    128,    128}, 0, {  3508,    990}, {0xc1, 0x93, 0x00, 0xff}}},
     {{{  -221,    128,   -127}, 0, {  3508,  -1054}, {0xc1, 0x93, 0x00, 0xff}}},
-};
-
-// 0x07013FC0 - 0x07014050
-static const Vtx wdw_seg7_vertex_07013FC0[] = {
     {{{     0,      0,      0}, 0, {  1738,      0}, {0xe1, 0x93, 0x36, 0xff}}},
     {{{     0,    128,    256}, 0, {  1738,   2010}, {0xe1, 0x93, 0x36, 0xff}}},
     {{{  -221,    128,    128}, 0, {  3508,    990}, {0xe1, 0x93, 0x36, 0xff}}},
@@ -36,21 +38,18 @@ static const Vtx wdw_seg7_vertex_07013FC0[] = {
     {{{   222,    128,    128}, 0, {     0,    990}, {0x3f, 0x92, 0x00, 0xff}}},
 };
 
-// 0x07014050 - 0x070140E0
 static const Gfx wdw_seg7_dl_07014050[] = {
     gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, grass_09008000),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPLight(&wdw_seg7_lights_07013EB8.l, 1),
     gsSPLight(&wdw_seg7_lights_07013EB8.a, 2),
-    gsSPVertex(wdw_seg7_vertex_07013ED0, 15, 0),
+    gsSPVertex(&wdw_seg7_dl_07014050_vtx32_0[0], 24, 0),
     gsSP2Triangles( 0,  1,  2, 0x0,  3,  4,  5, 0x0),
     gsSP2Triangles( 3,  5,  6, 0x0,  3,  6,  7, 0x0),
     gsSP2Triangles( 3,  7,  8, 0x0,  9, 10, 11, 0x0),
-    gsSP1Triangle(12, 13, 14, 0x0),
-    gsSPVertex(wdw_seg7_vertex_07013FC0, 9, 0),
-    gsSP2Triangles( 0,  1,  2, 0x0,  3,  4,  5, 0x0),
-    gsSP1Triangle( 6,  7,  8, 0x0),
+    gsSP2Triangles(12, 13, 14, 0x0, 15, 16, 17, 0x0),
+    gsSP2Triangles(18, 19, 20, 0x0, 21, 22, 23, 0x0),
     gsSPEndDisplayList(),
 };
 

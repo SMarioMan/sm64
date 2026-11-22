@@ -25,10 +25,17 @@ static const Lights1 exclamation_box_outline_seg8_lights_08024D00 = gdSPDefLight
 );
 
 // 0x08024D18
-static const Vtx exclamation_box_outline_seg8_vertex_08024D18[] = {
+
+
+// 0x08024E08
+
+
+// 0x08024EB8 - 0x08024F30
+static const Vtx exclamation_box_outline_seg8_dl_08024EB8_vtx32_0[] = {
     {{{    26,      1,    -25}, 0, {     0,      0}, {0x7f, 0x00, 0x00, 0x50}}},
     {{{    26,     52,     26}, 0, {     0,      0}, {0x7f, 0x00, 0x00, 0x50}}},
     {{{    26,      1,     26}, 0, {     0,      0}, {0x7f, 0x00, 0x00, 0x50}}},
+    {{{    26,     52,    -25}, 0, {     0,      0}, {0x7f, 0x00, 0x00, 0x50}}},
     {{{    26,      1,     26}, 0, {     0,      0}, {0x00, 0x81, 0x00, 0x50}}},
     {{{   -25,      1,     26}, 0, {     0,      0}, {0x00, 0x81, 0x00, 0x50}}},
     {{{   -25,      1,    -25}, 0, {     0,      0}, {0x00, 0x81, 0x00, 0x50}}},
@@ -41,34 +48,23 @@ static const Vtx exclamation_box_outline_seg8_vertex_08024D18[] = {
     {{{   -25,     52,     26}, 0, {     0,      0}, {0x81, 0x00, 0x00, 0x50}}},
     {{{   -25,     52,    -25}, 0, {     0,      0}, {0x81, 0x00, 0x00, 0x50}}},
     {{{   -25,      1,    -25}, 0, {     0,      0}, {0x81, 0x00, 0x00, 0x50}}},
-};
-
-// 0x08024E08
-static const Vtx exclamation_box_outline_seg8_vertex_08024E08[] = {
     {{{   -25,      1,    -25}, 0, {     0,      0}, {0x00, 0x00, 0x81, 0x50}}},
     {{{   -25,     52,    -25}, 0, {     0,      0}, {0x00, 0x00, 0x81, 0x50}}},
     {{{    26,     52,    -25}, 0, {     0,      0}, {0x00, 0x00, 0x81, 0x50}}},
     {{{    26,      1,    -25}, 0, {     0,      0}, {0x00, 0x00, 0x81, 0x50}}},
-    {{{    26,      1,    -25}, 0, {     0,      0}, {0x7f, 0x00, 0x00, 0x50}}},
-    {{{    26,     52,    -25}, 0, {     0,      0}, {0x7f, 0x00, 0x00, 0x50}}},
-    {{{    26,     52,     26}, 0, {     0,      0}, {0x7f, 0x00, 0x00, 0x50}}},
     {{{   -25,     52,     26}, 0, {     0,      0}, {0x00, 0x7f, 0x00, 0x50}}},
     {{{    26,     52,     26}, 0, {     0,      0}, {0x00, 0x7f, 0x00, 0x50}}},
     {{{    26,     52,    -25}, 0, {     0,      0}, {0x00, 0x7f, 0x00, 0x50}}},
     {{{   -25,     52,    -25}, 0, {     0,      0}, {0x00, 0x7f, 0x00, 0x50}}},
 };
 
-// 0x08024EB8 - 0x08024F30
-const Gfx exclamation_box_outline_seg8_dl_08024EB8[] = {
-    gsSPVertex(exclamation_box_outline_seg8_vertex_08024D18, 15, 0),
-    gsSP2Triangles( 0,  1,  2, 0x0,  3,  4,  5, 0x0),
-    gsSP2Triangles( 3,  5,  6, 0x0,  7,  8,  9, 0x0),
-    gsSP2Triangles( 7,  9, 10, 0x0, 11, 12, 13, 0x0),
-    gsSP1Triangle(11, 13, 14, 0x0),
-    gsSPVertex(exclamation_box_outline_seg8_vertex_08024E08, 11, 0),
-    gsSP2Triangles( 0,  1,  2, 0x0,  0,  2,  3, 0x0),
-    gsSP2Triangles( 4,  5,  6, 0x0,  7,  8,  9, 0x0),
-    gsSP1Triangle( 7,  9, 10, 0x0),
+const Gfx exclamation_box_outline_seg8_dl_08024EB8[] = {    gsSPVertex(&exclamation_box_outline_seg8_dl_08024EB8_vtx32_0[0], 24, 0),
+    gsSP2Triangles( 0,  1,  2, 0x0,  0,  3,  1, 0x0),
+    gsSP2Triangles( 4,  5,  6, 0x0,  4,  6,  7, 0x0),
+    gsSP2Triangles( 8,  9, 10, 0x0,  8, 10, 11, 0x0),
+    gsSP2Triangles(12, 13, 14, 0x0, 12, 14, 15, 0x0),
+    gsSP2Triangles(16, 17, 18, 0x0, 16, 18, 19, 0x0),
+    gsSP2Triangles(20, 21, 22, 0x0, 20, 22, 23, 0x0),
     gsSPEndDisplayList(),
 };
 
@@ -124,34 +120,10 @@ const Gfx exclamation_box_outline_seg8_dl_08024FE8[] = {
 };
 
 // 0x08025008
-static const Vtx exclamation_box_outline_seg8_vertex_08025008[] = {
-    {{{   -25,     52,     26}, 0, {   990,    990}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{    26,     52,     26}, 0, {   990,      0}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{    26,     52,    -25}, 0, {     0,      0}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{   -25,     52,    -25}, 0, {     0,    990}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{    26,      1,     26}, 0, {   990,    990}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{   -25,     52,     26}, 0, {     0,      0}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{   -25,      1,     26}, 0, {     0,    990}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{    26,      1,    -25}, 0, {   990,    990}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{    26,     52,    -25}, 0, {   990,      0}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{    26,     52,     26}, 0, {     0,      0}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{    26,      1,     26}, 0, {     0,    990}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{   -25,      1,    -25}, 0, {     0,    990}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{    26,      1,    -25}, 0, {     0,      0}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{   -25,     52,    -25}, 0, {   990,    990}, {0xff, 0xff, 0xff, 0xff}}},
-};
+
 
 // 0x080250E8
-static const Vtx exclamation_box_outline_seg8_vertex_080250E8[] = {
-    {{{   -25,      1,     26}, 0, {   990,    990}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{   -25,     52,     26}, 0, {   990,      0}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{   -25,     52,    -25}, 0, {     0,      0}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{   -25,      1,    -25}, 0, {     0,    990}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{   -25,      1,     26}, 0, {     0,    990}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{   -25,      1,    -25}, 0, {   990,    990}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{    26,      1,    -25}, 0, {   996,      0}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{    26,      1,     26}, 0, {   -26,      0}, {0xff, 0xff, 0xff, 0xff}}},
-};
+
 
 // 0x08025168
 ALIGNED8 static const Texture exclamation_box_outline_seg8_texture_08025168[] = {
@@ -159,18 +131,40 @@ ALIGNED8 static const Texture exclamation_box_outline_seg8_texture_08025168[] = 
 };
 
 // 0x08025968 - 0x080259F8
+static const Vtx exclamation_box_outline_seg8_dl_08025968_vtx32_0[] = {
+    {{{   -25,     52,     26}, 0, {   990,    990}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{    26,     52,     26}, 0, {   990,      0}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{    26,     52,    -25}, 0, {     0,      0}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{   -25,     52,    -25}, 0, {     0,    990}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{    26,      1,     26}, 0, {   990,    990}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{   -25,     52,     26}, 0, {     0,      0}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{   -25,      1,     26}, 0, {     0,    990}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{   -25,      1,    -25}, 0, {   990,    990}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{    26,      1,    -25}, 0, {   996,      0}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{    26,      1,     26}, 0, {   -26,      0}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{    26,      1,    -25}, 0, {   990,    990}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{    26,     52,    -25}, 0, {   990,      0}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{    26,     52,     26}, 0, {     0,      0}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{    26,      1,     26}, 0, {     0,    990}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{   -25,      1,    -25}, 0, {     0,    990}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{    26,      1,    -25}, 0, {     0,      0}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{   -25,     52,    -25}, 0, {   990,    990}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{   -25,      1,     26}, 0, {   990,    990}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{   -25,     52,    -25}, 0, {     0,      0}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{   -25,     52,     26}, 0, {   990,      0}, {0xff, 0xff, 0xff, 0xff}}},
+};
+
 const Gfx exclamation_box_outline_seg8_dl_08025968[] = {
     gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, exclamation_box_outline_seg8_texture_08025168),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
-    gsSPVertex(exclamation_box_outline_seg8_vertex_08025008, 14, 0),
+    gsSPVertex(&exclamation_box_outline_seg8_dl_08025968_vtx32_0[0], 20, 0),
     gsSP2Triangles( 0,  1,  2, 0x0,  0,  2,  3, 0x0),
     gsSP2Triangles( 4,  1,  5, 0x0,  4,  5,  6, 0x0),
-    gsSP2Triangles( 7,  8,  9, 0x0,  7,  9, 10, 0x0),
-    gsSP2Triangles(11,  8, 12, 0x0, 11, 13,  8, 0x0),
-    gsSPVertex(exclamation_box_outline_seg8_vertex_080250E8, 8, 0),
-    gsSP2Triangles( 0,  1,  2, 0x0,  0,  2,  3, 0x0),
-    gsSP2Triangles( 4,  5,  6, 0x0,  4,  6,  7, 0x0),
+    gsSP2Triangles( 6,  7,  8, 0x0,  6,  8,  9, 0x0),
+    gsSP2Triangles(10, 11, 12, 0x0, 10, 12, 13, 0x0),
+    gsSP2Triangles(14, 11, 15, 0x0, 14, 16, 11, 0x0),
+    gsSP2Triangles(17, 18, 14, 0x0, 17, 19, 18, 0x0),
     gsSPEndDisplayList(),
 };
 

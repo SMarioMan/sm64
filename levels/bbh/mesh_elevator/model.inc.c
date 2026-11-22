@@ -1,8 +1,15 @@
 // 0x0701FDB8 - 0x0701FEA8
-static const Vtx bbh_seg7_vertex_0701FDB8[] = {
+
+
+// 0x0701FEA8 - 0x0701FF58
+
+
+// 0x0701FF58 - 0x0701FFE8
+static const Vtx bbh_seg7_dl_0701FF58_vtx32_0[] = {
     {{{  -306,      0,    256}, 0, {     0,      0}, {0xff, 0xff, 0xff, 0xff}}},
     {{{   307,   -101,    256}, 0, {  6100,    990}, {0xff, 0xff, 0xff, 0xff}}},
     {{{   307,      0,    256}, 0, {  6100,      0}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{  -306,   -101,    256}, 0, {     0,    990}, {0xff, 0xff, 0xff, 0xff}}},
     {{{   307,      0,    256}, 0, {   990,      0}, {0xff, 0xff, 0xff, 0xff}}},
     {{{   307,   -101,    256}, 0, {   990,    990}, {0xff, 0xff, 0xff, 0xff}}},
     {{{   307,   -101,   -255}, 0, { -4118,    990}, {0xff, 0xff, 0xff, 0xff}}},
@@ -15,37 +22,27 @@ static const Vtx bbh_seg7_vertex_0701FDB8[] = {
     {{{  -306,   -101,   -255}, 0, { -4118,    990}, {0xff, 0xff, 0xff, 0xff}}},
     {{{  -306,   -101,    256}, 0, {   990,    990}, {0xff, 0xff, 0xff, 0xff}}},
     {{{  -306,      0,    256}, 0, {   990,      0}, {0xff, 0xff, 0xff, 0xff}}},
-};
-
-// 0x0701FEA8 - 0x0701FF58
-static const Vtx bbh_seg7_vertex_0701FEA8[] = {
     {{{   307,   -101,    256}, 0, { -2074,  -3608}, {0xff, 0xff, 0xff, 0xff}}},
     {{{  -306,   -101,    256}, 0, {  4056,  -3608}, {0xff, 0xff, 0xff, 0xff}}},
     {{{  -306,   -101,   -255}, 0, {  4056,   1500}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{  -306,      0,    256}, 0, {     0,      0}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{  -306,   -101,    256}, 0, {     0,    990}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{   307,   -101,    256}, 0, {  6100,    990}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{   307,   -101,   -255}, 0, { -2074,   1500}, {0xff, 0xff, 0xff, 0xff}}},
     {{{  -306,      0,   -255}, 0, {  4056,   1500}, {0xff, 0xff, 0xff, 0xff}}},
     {{{  -306,      0,    256}, 0, {  4056,  -3608}, {0xff, 0xff, 0xff, 0xff}}},
     {{{   307,      0,    256}, 0, { -2074,  -3608}, {0xff, 0xff, 0xff, 0xff}}},
     {{{   307,      0,   -255}, 0, { -2074,   1500}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{   307,   -101,   -255}, 0, { -2074,   1500}, {0xff, 0xff, 0xff, 0xff}}},
 };
 
-// 0x0701FF58 - 0x0701FFE8
 static const Gfx bbh_seg7_dl_0701FF58[] = {
     gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, spooky_09000000),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
-    gsSPVertex(bbh_seg7_vertex_0701FDB8, 15, 0),
-    gsSP2Triangles( 0,  1,  2, 0x0,  3,  4,  5, 0x0),
-    gsSP2Triangles( 3,  5,  6, 0x0,  7,  8,  9, 0x0),
-    gsSP2Triangles( 7,  9, 10, 0x0, 11, 12, 13, 0x0),
-    gsSP1Triangle(11, 13, 14, 0x0),
-    gsSPVertex(bbh_seg7_vertex_0701FEA8, 11, 0),
-    gsSP2Triangles( 0,  1,  2, 0x0,  3,  4,  5, 0x0),
-    gsSP2Triangles( 6,  7,  8, 0x0,  6,  8,  9, 0x0),
-    gsSP1Triangle(10,  0,  2, 0x0),
+    gsSPVertex(&bbh_seg7_dl_0701FF58_vtx32_0[0], 24, 0),
+    gsSP2Triangles( 0,  1,  2, 0x0,  0,  3,  1, 0x0),
+    gsSP2Triangles( 4,  5,  6, 0x0,  4,  6,  7, 0x0),
+    gsSP2Triangles( 8,  9, 10, 0x0,  8, 10, 11, 0x0),
+    gsSP2Triangles(12, 13, 14, 0x0, 12, 14, 15, 0x0),
+    gsSP2Triangles(16, 17, 18, 0x0, 19, 16, 18, 0x0),
+    gsSP2Triangles(20, 21, 22, 0x0, 20, 22, 23, 0x0),
     gsSPEndDisplayList(),
 };
 

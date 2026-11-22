@@ -98,25 +98,27 @@ static const Lights1 moneybag_seg6_lights_06005428 = gdSPDefLights1(
 );
 
 // 0x06005440
-static const Vtx moneybag_seg6_vertex_06005440[] = {
+
+
+// 0x06005520
+
+
+// 0x06005590 - 0x06005618
+static const Vtx moneybag_seg6_dl_06005590_vtx32_0[] = {
     {{{   418,     89,   -157}, 0, {   388,      0}, {0x46, 0x62, 0xdb, 0xff}}},
     {{{   261,    194,    175}, 0, {  1604,    408}, {0x46, 0x62, 0x25, 0xff}}},
     {{{   418,     89,    157}, 0, {  1540,      0}, {0x43, 0x5b, 0x39, 0xff}}},
+    {{{   261,    194,   -174}, 0, {   324,    408}, {0x43, 0x5b, 0xc7, 0xff}}},
     {{{   418,     89,    157}, 0, {   684,      0}, {0x43, 0x5b, 0x39, 0xff}}},
     {{{   261,    194,    175}, 0, {  1156,    392}, {0x46, 0x62, 0x25, 0xff}}},
     {{{   226,      1,    300}, 0, {  1988,      0}, {0x34, 0xf9, 0x73, 0xff}}},
+    {{{   278,   -190,    140}, 0, {   988,    390}, {0x40, 0xa1, 0x35, 0xff}}},
+    {{{   418,    -85,    157}, 0, {   684,      0}, {0x28, 0xba, 0x61, 0xff}}},
     {{{   418,     89,   -157}, 0, {  1296,      0}, {0x46, 0x62, 0xdb, 0xff}}},
     {{{   226,      1,   -299}, 0, {    -8,      0}, {0x33, 0xf9, 0x8d, 0xff}}},
     {{{   261,    194,   -174}, 0, {   824,    392}, {0x43, 0x5b, 0xc7, 0xff}}},
     {{{   418,    -85,   -157}, 0, {  1296,      0}, {0x28, 0xba, 0x9f, 0xff}}},
     {{{   278,   -190,   -139}, 0, {   992,    390}, {0x46, 0x9d, 0xdd, 0xff}}},
-    {{{   278,   -190,    140}, 0, {   988,    390}, {0x40, 0xa1, 0x35, 0xff}}},
-    {{{   418,    -85,    157}, 0, {   684,      0}, {0x28, 0xba, 0x61, 0xff}}},
-    {{{   261,    194,   -174}, 0, {   324,    408}, {0x43, 0x5b, 0xc7, 0xff}}},
-};
-
-// 0x06005520
-static const Vtx moneybag_seg6_vertex_06005520[] = {
     {{{   278,   -190,   -139}, 0, {  1512,    416}, {0x46, 0x9d, 0xdd, 0xff}}},
     {{{   418,    -85,   -156}, 0, {  1588,      0}, {0x4c, 0x9b, 0x00, 0xff}}},
     {{{   418,    -85,    158}, 0, {   248,      0}, {0x4c, 0x9b, 0x00, 0xff}}},
@@ -126,20 +128,18 @@ static const Vtx moneybag_seg6_vertex_06005520[] = {
     {{{   229,     73,    337}, 0, {   124,    436}, {0x3e, 0xce, 0x62, 0xff}}},
 };
 
-// 0x06005590 - 0x06005618
 const Gfx moneybag_seg6_dl_06005590[] = {
     gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, moneybag_seg6_texture_060039B0),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 64 * 32 - 1, CALC_DXT(64, G_IM_SIZ_16b_BYTES)),
     gsSPLight(&moneybag_seg6_lights_06005428.l, 1),
     gsSPLight(&moneybag_seg6_lights_06005428.a, 2),
-    gsSPVertex(moneybag_seg6_vertex_06005440, 14, 0),
-    gsSP2Triangles( 0,  1,  2, 0x0,  3,  4,  5, 0x0),
-    gsSP2Triangles( 6,  7,  8, 0x0,  9, 10,  7, 0x0),
-    gsSP2Triangles( 5, 11, 12, 0x0,  0, 13,  1, 0x0),
-    gsSPVertex(moneybag_seg6_vertex_06005520, 7, 0),
-    gsSP2Triangles( 0,  1,  2, 0x0,  0,  2,  3, 0x0),
-    gsSP1Triangle( 4,  5,  6, 0x0),
+    gsSPVertex(&moneybag_seg6_dl_06005590_vtx32_0[0], 21, 0),
+    gsSP2Triangles( 0,  1,  2, 0x0,  0,  3,  1, 0x0),
+    gsSP2Triangles( 4,  5,  6, 0x0,  6,  7,  8, 0x0),
+    gsSP2Triangles( 9, 10, 11, 0x0, 12, 13, 10, 0x0),
+    gsSP2Triangles(14, 15, 16, 0x0, 14, 16, 17, 0x0),
+    gsSP1Triangle(18, 19, 20, 0x0),
     gsSPEndDisplayList(),
 };
 

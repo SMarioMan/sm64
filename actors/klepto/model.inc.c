@@ -53,30 +53,10 @@ static const Vtx klepto_seg5_vertex_05003838[] = {
 };
 
 // 0x05003898
-static const Vtx klepto_seg5_vertex_05003898[] = {
-    {{{   134,     -7,     32}, 0, {   496,   1112}, {0x1b, 0x59, 0x55, 0xff}}},
-    {{{   134,     -7,    -31}, 0, {   224,   1048}, {0x1a, 0x59, 0xab, 0xff}}},
-    {{{     0,     16,      0}, 0, {   454,   -308}, {0xf5, 0x7e, 0x00, 0xff}}},
-    {{{     0,     16,      0}, 0, {   480,   -328}, {0xf5, 0x7e, 0x00, 0xff}}},
-    {{{   134,     -7,    -31}, 0, {   684,   1248}, {0x1a, 0x59, 0xab, 0xff}}},
-    {{{    26,     -6,    -55}, 0, {   836,    324}, {0x0e, 0x06, 0x82, 0xff}}},
-    {{{    26,     -6,     56}, 0, {   836,    324}, {0x0e, 0x06, 0x7e, 0xff}}},
-    {{{   134,     -7,     32}, 0, {   684,   1248}, {0x1b, 0x59, 0x55, 0xff}}},
-    {{{   183,     18,      0}, 0, {   -34,   1968}, {0x72, 0x35, 0xff, 0xff}}},
-    {{{   134,     -7,     32}, 0, {   550,   1664}, {0x1b, 0x59, 0x55, 0xff}}},
-    {{{   158,    -40,      0}, 0, {   -34,   1564}, {0x36, 0x8e, 0x00, 0xff}}},
-    {{{    26,     -6,     56}, 0, {   982,    280}, {0x0e, 0x06, 0x7e, 0xff}}},
-    {{{    76,    -43,      0}, 0, {   -34,    256}, {0x5b, 0xa9, 0x00, 0xff}}},
-    {{{    26,     -6,    -55}, 0, {   982,    280}, {0x0e, 0x06, 0x82, 0xff}}},
-    {{{   134,     -7,    -31}, 0, {   550,   1664}, {0x1a, 0x59, 0xab, 0xff}}},
-};
+
 
 // 0x05003988
-static const Vtx klepto_seg5_vertex_05003988[] = {
-    {{{   134,     -7,    -31}, 0, {   558,   1256}, {0x1a, 0x59, 0xab, 0xff}}},
-    {{{   134,     -7,     32}, 0, {   318,   1032}, {0x1b, 0x59, 0x55, 0xff}}},
-    {{{   183,     18,      0}, 0, {   326,   1572}, {0x72, 0x35, 0xff, 0xff}}},
-};
+
 
 // 0x050039B8
 static const Vtx klepto_seg5_vertex_050039B8[] = {
@@ -107,18 +87,37 @@ const Gfx klepto_seg5_dl_05003A68[] = {
 };
 
 // 0x05003AC0 - 0x05003B40
+static const Vtx klepto_seg5_dl_05003AC0_vtx32_0[] = {
+    {{{   134,     -7,     32}, 0, {   496,   1112}, {0x1b, 0x59, 0x55, 0xff}}},
+    {{{   134,     -7,    -31}, 0, {   224,   1048}, {0x1a, 0x59, 0xab, 0xff}}},
+    {{{     0,     16,      0}, 0, {   454,   -308}, {0xf5, 0x7e, 0x00, 0xff}}},
+    {{{     0,     16,      0}, 0, {   480,   -328}, {0xf5, 0x7e, 0x00, 0xff}}},
+    {{{   134,     -7,    -31}, 0, {   684,   1248}, {0x1a, 0x59, 0xab, 0xff}}},
+    {{{    26,     -6,    -55}, 0, {   836,    324}, {0x0e, 0x06, 0x82, 0xff}}},
+    {{{    26,     -6,     56}, 0, {   836,    324}, {0x0e, 0x06, 0x7e, 0xff}}},
+    {{{   134,     -7,     32}, 0, {   684,   1248}, {0x1b, 0x59, 0x55, 0xff}}},
+    {{{   183,     18,      0}, 0, {   -34,   1968}, {0x72, 0x35, 0xff, 0xff}}},
+    {{{   134,     -7,     32}, 0, {   550,   1664}, {0x1b, 0x59, 0x55, 0xff}}},
+    {{{   158,    -40,      0}, 0, {   -34,   1564}, {0x36, 0x8e, 0x00, 0xff}}},
+    {{{    26,     -6,     56}, 0, {   982,    280}, {0x0e, 0x06, 0x7e, 0xff}}},
+    {{{    76,    -43,      0}, 0, {   -34,    256}, {0x5b, 0xa9, 0x00, 0xff}}},
+    {{{    26,     -6,    -55}, 0, {   982,    280}, {0x0e, 0x06, 0x82, 0xff}}},
+    {{{   134,     -7,    -31}, 0, {   550,   1664}, {0x1a, 0x59, 0xab, 0xff}}},
+    {{{   134,     -7,    -31}, 0, {   558,   1256}, {0x1a, 0x59, 0xab, 0xff}}},
+    {{{   134,     -7,     32}, 0, {   318,   1032}, {0x1b, 0x59, 0x55, 0xff}}},
+    {{{   183,     18,      0}, 0, {   326,   1572}, {0x72, 0x35, 0xff, 0xff}}},
+};
+
 const Gfx klepto_seg5_dl_05003AC0[] = {
     gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, klepto_seg5_texture_05001008),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 64 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
-    gsSPVertex(klepto_seg5_vertex_05003898, 15, 0),
+    gsSPVertex(&klepto_seg5_dl_05003AC0_vtx32_0[0], 18, 0),
     gsSP2Triangles( 0,  1,  2, 0x0,  3,  4,  5, 0x0),
     gsSP2Triangles( 6,  7,  3, 0x0,  8,  9, 10, 0x0),
     gsSP2Triangles(10,  9, 11, 0x0, 11, 12, 10, 0x0),
-    gsSP2Triangles(13, 14, 10, 0x0, 10, 12, 13, 0x0),
-    gsSP1Triangle(10, 14,  8, 0x0),
-    gsSPVertex(klepto_seg5_vertex_05003988, 3, 0),
-    gsSP1Triangle( 0,  1,  2, 0x0),
+    gsSP2Triangles(10, 12, 13, 0x0, 13, 14, 10, 0x0),
+    gsSP2Triangles(10, 14,  8, 0x0, 15, 16, 17, 0x0),
     gsSPEndDisplayList(),
 };
 
@@ -455,26 +454,28 @@ static const Vtx klepto_seg5_vertex_05004498[] = {
 };
 
 // 0x05004558
-static const Vtx klepto_seg5_vertex_05004558[] = {
+
+
+// 0x05004648
+
+
+// 0x05004698 - 0x050047C8
+static const Vtx klepto_seg5_dl_05004698_vtx32_0[] = {
     {{{     7,     -1,      6}, 0, {     0,      0}, {0xac, 0x4a, 0xc6, 0xff}}},
     {{{    33,    -13,     13}, 0, {     0,      0}, {0x35, 0x11, 0x8f, 0xff}}},
     {{{    20,    -24,     16}, 0, {     0,      0}, {0xdd, 0x87, 0xf3, 0xff}}},
+    {{{    24,    -12,     28}, 0, {     0,      0}, {0xb4, 0x24, 0x5e, 0xff}}},
+    {{{    43,    -19,     30}, 0, {     0,      0}, {0x50, 0xae, 0x35, 0xff}}},
     {{{    34,    -14,      9}, 0, {     0,      0}, {0xf0, 0x1c, 0x7a, 0xff}}},
     {{{    24,    -25,      0}, 0, {     0,      0}, {0xd9, 0x88, 0xfa, 0xff}}},
     {{{    51,    -21,      1}, 0, {     0,      0}, {0x55, 0xa2, 0xfc, 0xff}}},
-    {{{    34,    -14,     -7}, 0, {     0,      0}, {0xf6, 0x1d, 0x85, 0xff}}},
     {{{     8,     -2,      0}, 0, {     0,      0}, {0xa6, 0x57, 0xf4, 0xff}}},
+    {{{    34,    -14,     -7}, 0, {     0,      0}, {0xf6, 0x1d, 0x85, 0xff}}},
     {{{    33,    -14,    -11}, 0, {     0,      0}, {0x34, 0x11, 0x72, 0xff}}},
     {{{    20,    -24,    -14}, 0, {     0,      0}, {0xda, 0x88, 0x09, 0xff}}},
     {{{    44,    -19,    -28}, 0, {     0,      0}, {0x49, 0xaa, 0xc7, 0xff}}},
-    {{{    24,    -12,    -25}, 0, {     0,      0}, {0xb4, 0x24, 0xa2, 0xff}}},
     {{{     7,     -1,     -4}, 0, {     0,      0}, {0xaf, 0x4b, 0x3d, 0xff}}},
-    {{{    24,    -12,     28}, 0, {     0,      0}, {0xb4, 0x24, 0x5e, 0xff}}},
-    {{{    43,    -19,     30}, 0, {     0,      0}, {0x50, 0xae, 0x35, 0xff}}},
-};
-
-// 0x05004648
-static const Vtx klepto_seg5_vertex_05004648[] = {
+    {{{    24,    -12,    -25}, 0, {     0,      0}, {0xb4, 0x24, 0xa2, 0xff}}},
     {{{   -22,      7,      0}, 0, {     0,      0}, {0x9a, 0x4a, 0xf4, 0xff}}},
     {{{     2,    -10,      0}, 0, {     0,      0}, {0xe8, 0x84, 0xfe, 0xff}}},
     {{{    15,     -3,     17}, 0, {     0,      0}, {0x4b, 0x0d, 0x65, 0xff}}},
@@ -482,7 +483,6 @@ static const Vtx klepto_seg5_vertex_05004648[] = {
     {{{     6,      5,      0}, 0, {     0,      0}, {0x25, 0x79, 0xfe, 0xff}}},
 };
 
-// 0x05004698 - 0x050047C8
 const Gfx klepto_seg5_dl_05004698[] = {
     gsSPLight(&klepto_seg5_lights_05004468.l, 1),
     gsSPLight(&klepto_seg5_lights_05004468.a, 2),
@@ -494,19 +494,18 @@ const Gfx klepto_seg5_dl_05004698[] = {
     gsSP1Triangle(11,  0,  2, 0x0),
     gsSPLight(&klepto_seg5_lights_05004480.l, 1),
     gsSPLight(&klepto_seg5_lights_05004480.a, 2),
-    gsSPVertex(klepto_seg5_vertex_05004558, 15, 0),
-    gsSP2Triangles( 0,  1,  2, 0x0,  3,  4,  5, 0x0),
-    gsSP2Triangles( 6,  7,  3, 0x0,  7,  4,  3, 0x0),
-    gsSP2Triangles( 5,  4,  6, 0x0,  7,  6,  4, 0x0),
-    gsSP2Triangles( 8,  9, 10, 0x0, 11, 12,  8, 0x0),
-    gsSP2Triangles(12,  9,  8, 0x0, 12, 11,  9, 0x0),
-    gsSP2Triangles(10,  9, 11, 0x0,  0,  2, 13, 0x0),
-    gsSP2Triangles( 1,  0, 13, 0x0, 13,  2, 14, 0x0),
-    gsSP1Triangle(14,  2,  1, 0x0),
-    gsSPVertex(klepto_seg5_vertex_05004648, 5, 0),
-    gsSP2Triangles( 0,  1,  2, 0x0,  1,  0,  3, 0x0),
-    gsSP2Triangles( 3,  2,  1, 0x0,  4,  2,  3, 0x0),
-    gsSP2Triangles( 2,  4,  0, 0x0,  3,  0,  4, 0x0),
+    gsSPVertex(&klepto_seg5_dl_05004698_vtx32_0[0], 20, 0),
+    gsSP2Triangles( 0,  1,  2, 0x0,  0,  2,  3, 0x0),
+    gsSP2Triangles( 1,  0,  3, 0x0,  3,  2,  4, 0x0),
+    gsSP2Triangles( 4,  2,  1, 0x0,  5,  6,  7, 0x0),
+    gsSP2Triangles( 8,  6,  5, 0x0,  9,  8,  5, 0x0),
+    gsSP2Triangles( 7,  6,  9, 0x0,  8,  9,  6, 0x0),
+    gsSP2Triangles(10, 11, 12, 0x0, 13, 11, 10, 0x0),
+    gsSP2Triangles(14, 13, 10, 0x0, 13, 14, 11, 0x0),
+    gsSP2Triangles(12, 11, 14, 0x0, 15, 16, 17, 0x0),
+    gsSP2Triangles(16, 15, 18, 0x0, 18, 17, 16, 0x0),
+    gsSP2Triangles(19, 17, 18, 0x0, 17, 19, 15, 0x0),
+    gsSP1Triangle(18, 15, 19, 0x0),
     gsSPEndDisplayList(),
 };
 
@@ -549,26 +548,28 @@ static const Vtx klepto_seg5_vertex_05004828[] = {
 };
 
 // 0x050048E8
-static const Vtx klepto_seg5_vertex_050048E8[] = {
+
+
+// 0x050049D8
+
+
+// 0x05004A28 - 0x05004B58
+static const Vtx klepto_seg5_dl_05004A28_vtx32_0[] = {
     {{{     7,     -1,      6}, 0, {     0,      0}, {0xac, 0x4a, 0xc6, 0xff}}},
     {{{    33,    -13,     13}, 0, {     0,      0}, {0x35, 0x11, 0x8f, 0xff}}},
     {{{    20,    -24,     16}, 0, {     0,      0}, {0xdd, 0x87, 0xf3, 0xff}}},
+    {{{    24,    -12,     28}, 0, {     0,      0}, {0xb4, 0x24, 0x5e, 0xff}}},
+    {{{    43,    -19,     30}, 0, {     0,      0}, {0x50, 0xae, 0x35, 0xff}}},
     {{{    34,    -14,      9}, 0, {     0,      0}, {0xf0, 0x1c, 0x7a, 0xff}}},
     {{{    24,    -25,      0}, 0, {     0,      0}, {0xd9, 0x88, 0xfa, 0xff}}},
     {{{    51,    -21,      1}, 0, {     0,      0}, {0x55, 0xa2, 0xfc, 0xff}}},
-    {{{    34,    -14,     -7}, 0, {     0,      0}, {0xf6, 0x1d, 0x85, 0xff}}},
     {{{     8,     -2,      0}, 0, {     0,      0}, {0xa6, 0x57, 0xf4, 0xff}}},
+    {{{    34,    -14,     -7}, 0, {     0,      0}, {0xf6, 0x1d, 0x85, 0xff}}},
     {{{    33,    -14,    -11}, 0, {     0,      0}, {0x34, 0x11, 0x72, 0xff}}},
     {{{    20,    -24,    -14}, 0, {     0,      0}, {0xda, 0x88, 0x09, 0xff}}},
     {{{    44,    -19,    -28}, 0, {     0,      0}, {0x49, 0xaa, 0xc7, 0xff}}},
-    {{{    24,    -12,    -25}, 0, {     0,      0}, {0xb4, 0x24, 0xa2, 0xff}}},
     {{{     7,     -1,     -4}, 0, {     0,      0}, {0xaf, 0x4b, 0x3d, 0xff}}},
-    {{{    24,    -12,     28}, 0, {     0,      0}, {0xb4, 0x24, 0x5e, 0xff}}},
-    {{{    43,    -19,     30}, 0, {     0,      0}, {0x50, 0xae, 0x35, 0xff}}},
-};
-
-// 0x050049D8
-static const Vtx klepto_seg5_vertex_050049D8[] = {
+    {{{    24,    -12,    -25}, 0, {     0,      0}, {0xb4, 0x24, 0xa2, 0xff}}},
     {{{   -22,      7,      0}, 0, {     0,      0}, {0x9a, 0x4a, 0xf4, 0xff}}},
     {{{     2,    -10,      0}, 0, {     0,      0}, {0xe8, 0x84, 0xfe, 0xff}}},
     {{{    15,     -3,     17}, 0, {     0,      0}, {0x4b, 0x0d, 0x65, 0xff}}},
@@ -576,7 +577,6 @@ static const Vtx klepto_seg5_vertex_050049D8[] = {
     {{{     6,      5,      0}, 0, {     0,      0}, {0x25, 0x79, 0xfe, 0xff}}},
 };
 
-// 0x05004A28 - 0x05004B58
 const Gfx klepto_seg5_dl_05004A28[] = {
     gsSPLight(&klepto_seg5_lights_050047F8.l, 1),
     gsSPLight(&klepto_seg5_lights_050047F8.a, 2),
@@ -588,19 +588,18 @@ const Gfx klepto_seg5_dl_05004A28[] = {
     gsSP1Triangle(11,  0,  2, 0x0),
     gsSPLight(&klepto_seg5_lights_05004810.l, 1),
     gsSPLight(&klepto_seg5_lights_05004810.a, 2),
-    gsSPVertex(klepto_seg5_vertex_050048E8, 15, 0),
-    gsSP2Triangles( 0,  1,  2, 0x0,  3,  4,  5, 0x0),
-    gsSP2Triangles( 6,  7,  3, 0x0,  7,  4,  3, 0x0),
-    gsSP2Triangles( 5,  4,  6, 0x0,  7,  6,  4, 0x0),
-    gsSP2Triangles( 8,  9, 10, 0x0, 11, 12,  8, 0x0),
-    gsSP2Triangles(12,  9,  8, 0x0, 12, 11,  9, 0x0),
-    gsSP2Triangles(10,  9, 11, 0x0,  0,  2, 13, 0x0),
-    gsSP2Triangles( 1,  0, 13, 0x0, 13,  2, 14, 0x0),
-    gsSP1Triangle(14,  2,  1, 0x0),
-    gsSPVertex(klepto_seg5_vertex_050049D8, 5, 0),
-    gsSP2Triangles( 0,  1,  2, 0x0,  1,  0,  3, 0x0),
-    gsSP2Triangles( 3,  2,  1, 0x0,  4,  2,  3, 0x0),
-    gsSP2Triangles( 2,  4,  0, 0x0,  3,  0,  4, 0x0),
+    gsSPVertex(&klepto_seg5_dl_05004A28_vtx32_0[0], 20, 0),
+    gsSP2Triangles( 0,  1,  2, 0x0,  0,  2,  3, 0x0),
+    gsSP2Triangles( 1,  0,  3, 0x0,  3,  2,  4, 0x0),
+    gsSP2Triangles( 4,  2,  1, 0x0,  5,  6,  7, 0x0),
+    gsSP2Triangles( 8,  6,  5, 0x0,  9,  8,  5, 0x0),
+    gsSP2Triangles( 7,  6,  9, 0x0,  8,  9,  6, 0x0),
+    gsSP2Triangles(10, 11, 12, 0x0, 13, 11, 10, 0x0),
+    gsSP2Triangles(14, 13, 10, 0x0, 13, 14, 11, 0x0),
+    gsSP2Triangles(12, 11, 14, 0x0, 15, 16, 17, 0x0),
+    gsSP2Triangles(16, 15, 18, 0x0, 18, 17, 16, 0x0),
+    gsSP2Triangles(19, 17, 18, 0x0, 17, 19, 15, 0x0),
+    gsSP1Triangle(18, 15, 19, 0x0),
     gsSPEndDisplayList(),
 };
 

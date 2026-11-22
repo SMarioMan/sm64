@@ -1,5 +1,14 @@
 // 0x0700B070 - 0x0700B160
-static const Vtx pss_seg7_vertex_0700B070[] = {
+
+
+// 0x0700B160 - 0x0700B250
+
+
+// 0x0700B250 - 0x0700B340
+
+
+// 0x0700B340 - 0x0700B3F0
+static const Vtx pss_seg7_dl_0700B340_vtx32_0[] = {
     {{{ -5906,  -4217,   3701}, 0, {     0,    478}, {0xff, 0xff, 0xff, 0xff}}},
     {{{ -5845,  -4217,   3701}, 0, {   478,    480}, {0xff, 0xff, 0xff, 0xff}}},
     {{{ -5845,  -4252,   3701}, 0, {   478,    990}, {0xff, 0xff, 0xff, 0xff}}},
@@ -15,10 +24,6 @@ static const Vtx pss_seg7_vertex_0700B070[] = {
     {{{ -6869,  -4119,   2301}, 0, {   478,    990}, {0xff, 0xff, 0xff, 0xff}}},
     {{{ -6869,  -4084,   2301}, 0, {   478,    480}, {0xff, 0xff, 0xff, 0xff}}},
     {{{ -6808,  -4084,   2301}, 0, {     0,    478}, {0xff, 0xff, 0xff, 0xff}}},
-};
-
-// 0x0700B160 - 0x0700B250
-static const Vtx pss_seg7_vertex_0700B160[] = {
     {{{   558,  -1918,  -5339}, 0, {     0,    478}, {0xff, 0xff, 0xff, 0xff}}},
     {{{   527,  -1918,  -5286}, 0, {   478,    480}, {0xff, 0xff, 0xff, 0xff}}},
     {{{   527,  -1953,  -5286}, 0, {   478,    990}, {0xff, 0xff, 0xff, 0xff}}},
@@ -34,10 +39,6 @@ static const Vtx pss_seg7_vertex_0700B160[] = {
     {{{  2922,   6411,  -5180}, 0, {     0,    478}, {0xff, 0xff, 0xff, 0xff}}},
     {{{  2922,   6411,  -5119}, 0, {   478,    480}, {0xff, 0xff, 0xff, 0xff}}},
     {{{  2922,   6376,  -5119}, 0, {   478,    990}, {0xff, 0xff, 0xff, 0xff}}},
-};
-
-// 0x0700B250 - 0x0700B340
-static const Vtx pss_seg7_vertex_0700B250[] = {
     {{{ -5095,   3457,   2438}, 0, {   478,    990}, {0xff, 0xff, 0xff, 0xff}}},
     {{{ -5095,   3492,   2438}, 0, {   478,    480}, {0xff, 0xff, 0xff, 0xff}}},
     {{{ -5072,   3492,   2382}, 0, {     0,    478}, {0xff, 0xff, 0xff, 0xff}}},
@@ -55,20 +56,17 @@ static const Vtx pss_seg7_vertex_0700B250[] = {
     {{{ -6649,   3922,      0}, 0, {     0,    478}, {0xff, 0xff, 0xff, 0xff}}},
 };
 
-// 0x0700B340 - 0x0700B3F0
 static const Gfx pss_seg7_dl_0700B340[] = {
     gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, mountain_09007800),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
-    gsSPVertex(pss_seg7_vertex_0700B070, 15, 0),
+    gsSPVertex(&pss_seg7_dl_0700B340_vtx32_0[0], 30, 0),
     gsSP2Triangles( 0,  1,  2, 0x0,  3,  4,  5, 0x0),
     gsSP2Triangles( 6,  7,  8, 0x0,  9, 10, 11, 0x0),
-    gsSP1Triangle(12, 13, 14, 0x0),
-    gsSPVertex(pss_seg7_vertex_0700B160, 15, 0),
-    gsSP2Triangles( 0,  1,  2, 0x0,  3,  4,  5, 0x0),
-    gsSP2Triangles( 6,  7,  8, 0x0,  9, 10, 11, 0x0),
-    gsSP1Triangle(12, 13, 14, 0x0),
-    gsSPVertex(pss_seg7_vertex_0700B250, 15, 0),
+    gsSP2Triangles(12, 13, 14, 0x0, 15, 16, 17, 0x0),
+    gsSP2Triangles(18, 19, 20, 0x0, 21, 22, 23, 0x0),
+    gsSP2Triangles(24, 25, 26, 0x0, 27, 28, 29, 0x0),
+    gsSPVertex(&pss_seg7_dl_0700B340_vtx32_0[30], 15, 0),
     gsSP2Triangles( 0,  1,  2, 0x0,  3,  4,  5, 0x0),
     gsSP2Triangles( 6,  7,  8, 0x0,  9, 10, 11, 0x0),
     gsSP1Triangle(12, 13, 14, 0x0),

@@ -1,5 +1,11 @@
 // 0x0700B290 - 0x0700B380
-static const Vtx bitdw_seg7_vertex_0700B290[] = {
+
+
+// 0x0700B380 - 0x0700B410
+
+
+// 0x0700B410 - 0x0700B480
+static const Vtx bitdw_seg7_dl_0700B410_vtx32_0[] = {
     {{{     0,    102,      0}, 0, {   990,    -40}, {0xb4, 0xee, 0xfe, 0xff}}},
     {{{   307,      0,    307}, 0, {     0,   2012}, {0xb4, 0xee, 0xfe, 0xff}}},
     {{{   307,      0,   -306}, 0, {  2012,   2012}, {0xb4, 0xee, 0xfe, 0xff}}},
@@ -15,10 +21,6 @@ static const Vtx bitdw_seg7_vertex_0700B290[] = {
     {{{   307,      0,   -306}, 0, {  2012,   2012}, {0x67, 0x9b, 0xb0, 0xff}}},
     {{{   307,      0,    307}, 0, {     0,   2012}, {0x67, 0x9b, 0xb0, 0xff}}},
     {{{     0,   -306,      0}, 0, {   990,    -40}, {0x67, 0x9b, 0xb0, 0xff}}},
-};
-
-// 0x0700B380 - 0x0700B410
-static const Vtx bitdw_seg7_vertex_0700B380[] = {
     {{{  -306,      0,   -306}, 0, {  4056,   2012}, {0x67, 0x9b, 0xb0, 0xff}}},
     {{{   307,      0,   -306}, 0, {     0,   2012}, {0x67, 0x9b, 0xb0, 0xff}}},
     {{{     0,   -306,      0}, 0, {  2012,    -44}, {0x67, 0x9b, 0xb0, 0xff}}},
@@ -30,18 +32,15 @@ static const Vtx bitdw_seg7_vertex_0700B380[] = {
     {{{  -306,      0,    307}, 0, {     0,   2012}, {0x8c, 0xbf, 0xd8, 0xff}}},
 };
 
-// 0x0700B410 - 0x0700B480
 static const Gfx bitdw_seg7_dl_0700B410[] = {
     gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, sky_09002000),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 64 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
-    gsSPVertex(bitdw_seg7_vertex_0700B290, 15, 0),
+    gsSPVertex(&bitdw_seg7_dl_0700B410_vtx32_0[0], 24, 0),
     gsSP2Triangles( 0,  1,  2, 0x0,  3,  4,  5, 0x0),
     gsSP2Triangles( 6,  7,  8, 0x0,  9, 10, 11, 0x0),
-    gsSP1Triangle(12, 13, 14, 0x0),
-    gsSPVertex(bitdw_seg7_vertex_0700B380, 9, 0),
-    gsSP2Triangles( 0,  1,  2, 0x0,  3,  4,  5, 0x0),
-    gsSP1Triangle( 6,  7,  8, 0x0),
+    gsSP2Triangles(12, 13, 14, 0x0, 15, 16, 17, 0x0),
+    gsSP2Triangles(18, 19, 20, 0x0, 21, 22, 23, 0x0),
     gsSPEndDisplayList(),
 };
 

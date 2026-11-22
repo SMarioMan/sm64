@@ -11,10 +11,31 @@ static const Vtx bob_seg7_vertex_0700A4E0[] = {
 };
 
 // 0x0700A560 - 0x0700A650
-static const Vtx bob_seg7_vertex_0700A560[] = {
+
+
+// 0x0700A650 - 0x0700A740
+
+
+// 0x0700A740 - 0x0700A800
+
+
+// 0x0700A800 - 0x0700A848
+static const Gfx bob_seg7_dl_0700A800[] = {
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, generic_09008800),
+    gsDPLoadSync(),
+    gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
+    gsSPVertex(bob_seg7_vertex_0700A4E0, 8, 0),
+    gsSP2Triangles( 0,  1,  2, 0x0,  0,  2,  3, 0x0),
+    gsSP2Triangles( 4,  5,  6, 0x0,  7,  4,  6, 0x0),
+    gsSPEndDisplayList(),
+};
+
+// 0x0700A848 - 0x0700A920
+static const Vtx bob_seg7_dl_0700A848_vtx32_0[] = {
     {{{ -3071,    768,   1536}, 0, {  6100,    990}, {0xff, 0xff, 0xff, 0xff}}},
     {{{ -3071,   1024,   3072}, 0, {     0,      0}, {0xff, 0xff, 0xff, 0xff}}},
     {{{ -3071,    768,   3072}, 0, {     0,    990}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{ -3071,   1024,   1536}, 0, {  6100,      0}, {0xff, 0xff, 0xff, 0xff}}},
     {{{   768,    870,   5847}, 0, {   990,      0}, {0xff, 0xff, 0xff, 0xff}}},
     {{{  1751,    768,   5335}, 0, {-10434,    990}, {0xff, 0xff, 0xff, 0xff}}},
     {{{   768,    768,   5847}, 0, {   990,    990}, {0xff, 0xff, 0xff, 0xff}}},
@@ -27,16 +48,10 @@ static const Vtx bob_seg7_vertex_0700A560[] = {
     {{{  2263,    870,   4480}, 0, {     0,      0}, {0xff, 0xff, 0xff, 0xff}}},
     {{{  2262,    768,   4480}, 0, {     0,    990}, {0xff, 0xff, 0xff, 0xff}}},
     {{{  2263,    768,   4864}, 0, {  3800,    990}, {0xff, 0xff, 0xff, 0xff}}},
-};
-
-// 0x0700A650 - 0x0700A740
-static const Vtx bob_seg7_vertex_0700A650[] = {
     {{{  3078,   1741,   -756}, 0, {   990,    990}, {0xff, 0xff, 0xff, 0xff}}},
     {{{  3078,   1869,   -756}, 0, {   990,      0}, {0xff, 0xff, 0xff, 0xff}}},
     {{{  6271,   2064,  -2677}, 0, {-23536,      0}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{ -3071,    768,   1536}, 0, {  6100,    990}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{ -3071,   1024,   1536}, 0, {  6100,      0}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{ -3071,   1024,   3072}, 0, {     0,      0}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{  6270,   1936,  -2677}, 0, {-23536,    990}, {0xff, 0xff, 0xff, 0xff}}},
     {{{ -4095,   1024,   4096}, 0, {   990,      0}, {0xff, 0xff, 0xff, 0xff}}},
     {{{ -7167,   1024,   4096}, 0, {-11272,      0}, {0xff, 0xff, 0xff, 0xff}}},
     {{{ -7167,    768,   4096}, 0, {-11274,    990}, {0xff, 0xff, 0xff, 0xff}}},
@@ -45,11 +60,6 @@ static const Vtx bob_seg7_vertex_0700A650[] = {
     {{{ -3071,    768,   3072}, 0, {  6100,    990}, {0xff, 0xff, 0xff, 0xff}}},
     {{{ -3071,   1024,   3072}, 0, {  6100,      0}, {0xff, 0xff, 0xff, 0xff}}},
     {{{ -4095,   1024,   4096}, 0, {   318,    -24}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{  6270,   1936,  -2677}, 0, {-23536,    990}, {0xff, 0xff, 0xff, 0xff}}},
-};
-
-// 0x0700A740 - 0x0700A800
-static const Vtx bob_seg7_vertex_0700A740[] = {
     {{{  6271,   2064,  -2677}, 0, { 11912,      0}, {0xff, 0xff, 0xff, 0xff}}},
     {{{  8093,   2064,  -5982}, 0, {-18564,      0}, {0xff, 0xff, 0xff, 0xff}}},
     {{{  6270,   1936,  -2677}, 0, { 11890,    990}, {0xff, 0xff, 0xff, 0xff}}},
@@ -64,36 +74,22 @@ static const Vtx bob_seg7_vertex_0700A740[] = {
     {{{   768,    768,   5847}, 0, {-12192,    990}, {0xff, 0xff, 0xff, 0xff}}},
 };
 
-// 0x0700A800 - 0x0700A848
-static const Gfx bob_seg7_dl_0700A800[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, generic_09008800),
-    gsDPLoadSync(),
-    gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
-    gsSPVertex(bob_seg7_vertex_0700A4E0, 8, 0),
-    gsSP2Triangles( 0,  1,  2, 0x0,  0,  2,  3, 0x0),
-    gsSP2Triangles( 4,  5,  6, 0x0,  7,  4,  6, 0x0),
-    gsSPEndDisplayList(),
-};
-
-// 0x0700A848 - 0x0700A920
 static const Gfx bob_seg7_dl_0700A848[] = {
     gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, bob_seg7_texture_07000000),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
-    gsSPVertex(bob_seg7_vertex_0700A560, 15, 0),
-    gsSP2Triangles( 0,  1,  2, 0x0,  3,  4,  5, 0x0),
-    gsSP2Triangles( 3,  6,  4, 0x0,  7,  8,  9, 0x0),
-    gsSP2Triangles( 7, 10,  8, 0x0, 11, 12, 13, 0x0),
-    gsSP1Triangle(14, 11, 13, 0x0),
-    gsSPVertex(bob_seg7_vertex_0700A650, 15, 0),
-    gsSP2Triangles( 0,  1,  2, 0x0,  3,  4,  5, 0x0),
-    gsSP2Triangles( 6,  7,  8, 0x0,  6,  8,  9, 0x0),
-    gsSP2Triangles(10, 11, 12, 0x0, 10, 12, 13, 0x0),
-    gsSP1Triangle(14,  0,  2, 0x0),
-    gsSPVertex(bob_seg7_vertex_0700A740, 12, 0),
-    gsSP2Triangles( 0,  1,  2, 0x0,  1,  3,  2, 0x0),
+    gsSPVertex(&bob_seg7_dl_0700A848_vtx32_0[0], 32, 0),
+    gsSP2Triangles( 0,  1,  2, 0x0,  0,  3,  1, 0x0),
     gsSP2Triangles( 4,  5,  6, 0x0,  4,  7,  5, 0x0),
-    gsSP2Triangles( 8,  9, 10, 0x0,  8, 10, 11, 0x0),
+    gsSP2Triangles( 8,  9, 10, 0x0,  8, 11,  9, 0x0),
+    gsSP2Triangles(12, 13, 14, 0x0, 15, 12, 14, 0x0),
+    gsSP2Triangles(16, 17, 18, 0x0, 19, 16, 18, 0x0),
+    gsSP2Triangles(20, 21, 22, 0x0, 20, 22, 23, 0x0),
+    gsSP2Triangles(24, 25, 26, 0x0, 24, 26, 27, 0x0),
+    gsSP2Triangles(28, 29, 30, 0x0, 29, 31, 30, 0x0),
+    gsSPVertex(&bob_seg7_dl_0700A848_vtx32_0[32], 8, 0),
+    gsSP2Triangles( 0,  1,  2, 0x0,  0,  3,  1, 0x0),
+    gsSP2Triangles( 4,  5,  6, 0x0,  4,  6,  7, 0x0),
     gsSPEndDisplayList(),
 };
 

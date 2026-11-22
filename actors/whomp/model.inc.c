@@ -131,10 +131,17 @@ static const Lights1 whomp_seg6_lights_0601F678 = gdSPDefLights1(
 );
 
 // 0x0601F690
-static const Vtx whomp_seg6_vertex_0601F690[] = {
+
+
+// 0x0601F780
+
+
+// 0x0601F7F0 - 0x0601F880
+static const Vtx whomp_seg6_dl_0601F7F0_vtx32_0[] = {
     {{{   290,      0,     85}, 0, {   952,      0}, {0xed, 0x1c, 0x7a, 0xff}}},
     {{{   -10,     35,     13}, 0, {   246,    976}, {0xed, 0x6a, 0x41, 0xff}}},
     {{{   -10,      0,     38}, 0, {   672,    976}, {0xed, 0xe3, 0x79, 0xff}}},
+    {{{   290,     80,     28}, 0, {     0,      0}, {0xed, 0x7d, 0x08, 0xff}}},
     {{{   290,     80,     28}, 0, {   952,      0}, {0xed, 0x7d, 0x08, 0xff}}},
     {{{   -10,     21,    -27}, 0, {   246,    976}, {0xed, 0x5e, 0xae, 0xff}}},
     {{{   -10,     35,     13}, 0, {   672,    976}, {0xed, 0x6a, 0x41, 0xff}}},
@@ -147,34 +154,24 @@ static const Vtx whomp_seg6_vertex_0601F690[] = {
     {{{   290,      0,     85}, 0, {     0,      0}, {0xed, 0x1c, 0x7a, 0xff}}},
     {{{   -10,      0,     38}, 0, {   246,    976}, {0xed, 0xe3, 0x79, 0xff}}},
     {{{   -10,    -34,     13}, 0, {   672,    976}, {0xed, 0x83, 0x08, 0xff}}},
-};
-
-// 0x0601F780
-static const Vtx whomp_seg6_vertex_0601F780[] = {
     {{{   290,    -48,    -65}, 0, {   952,      0}, {0xed, 0xa2, 0xae, 0xff}}},
     {{{   290,    -79,     28}, 0, {     0,      0}, {0xed, 0x95, 0x41, 0xff}}},
     {{{   -10,    -34,     13}, 0, {   246,    976}, {0xed, 0x83, 0x08, 0xff}}},
-    {{{   290,      0,     85}, 0, {   952,      0}, {0xed, 0x1c, 0x7a, 0xff}}},
-    {{{   290,     80,     28}, 0, {     0,      0}, {0xed, 0x7d, 0x08, 0xff}}},
-    {{{   -10,     35,     13}, 0, {   246,    976}, {0xed, 0x6a, 0x41, 0xff}}},
     {{{   -10,    -20,    -27}, 0, {   672,    976}, {0xed, 0xd1, 0x8c, 0xff}}},
 };
 
-// 0x0601F7F0 - 0x0601F880
 const Gfx whomp_seg6_dl_0601F7F0[] = {
     gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, whomp_seg6_texture_0601EB60),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPLight(&whomp_seg6_lights_0601F678.l, 1),
     gsSPLight(&whomp_seg6_lights_0601F678.a, 2),
-    gsSPVertex(whomp_seg6_vertex_0601F690, 15, 0),
-    gsSP2Triangles( 0,  1,  2, 0x0,  3,  4,  5, 0x0),
-    gsSP2Triangles( 3,  6,  4, 0x0,  7,  8,  9, 0x0),
-    gsSP2Triangles( 7, 10,  8, 0x0, 11, 12, 13, 0x0),
-    gsSP1Triangle(11, 13, 14, 0x0),
-    gsSPVertex(whomp_seg6_vertex_0601F780, 7, 0),
-    gsSP2Triangles( 0,  1,  2, 0x0,  3,  4,  5, 0x0),
-    gsSP1Triangle( 0,  2,  6, 0x0),
+    gsSPVertex(&whomp_seg6_dl_0601F7F0_vtx32_0[0], 20, 0),
+    gsSP2Triangles( 0,  1,  2, 0x0,  0,  3,  1, 0x0),
+    gsSP2Triangles( 4,  5,  6, 0x0,  4,  7,  5, 0x0),
+    gsSP2Triangles( 8,  9, 10, 0x0,  8, 11,  9, 0x0),
+    gsSP2Triangles(12, 13, 14, 0x0, 12, 14, 15, 0x0),
+    gsSP2Triangles(16, 17, 18, 0x0, 16, 18, 19, 0x0),
     gsSPEndDisplayList(),
 };
 
@@ -201,10 +198,17 @@ static const Lights1 whomp_seg6_lights_0601F8E0 = gdSPDefLights1(
 );
 
 // 0x0601F8F8
-static const Vtx whomp_seg6_vertex_0601F8F8[] = {
+
+
+// 0x0601F9E8
+
+
+// 0x0601FA58 - 0x0601FAE8
+static const Vtx whomp_seg6_dl_0601FA58_vtx32_0[] = {
     {{{   -10,      0,    -37}, 0, {   246,    976}, {0xed, 0x1c, 0x86, 0xff}}},
     {{{   290,     80,    -26}, 0, {   952,      0}, {0xed, 0x6a, 0xbf, 0xff}}},
     {{{   290,      0,    -84}, 0, {     0,      0}, {0xed, 0xe2, 0x87, 0xff}}},
+    {{{   -10,     35,    -12}, 0, {   672,    976}, {0xed, 0x7d, 0xf8, 0xff}}},
     {{{   -10,     35,    -12}, 0, {   246,    976}, {0xed, 0x7d, 0xf8, 0xff}}},
     {{{   290,     49,     66}, 0, {   952,      0}, {0xed, 0x5e, 0x52, 0xff}}},
     {{{   290,     80,    -26}, 0, {     0,      0}, {0xed, 0x6a, 0xbf, 0xff}}},
@@ -217,34 +221,24 @@ static const Vtx whomp_seg6_vertex_0601F8F8[] = {
     {{{   -10,      0,    -37}, 0, {   672,    976}, {0xed, 0x1c, 0x86, 0xff}}},
     {{{   290,      0,    -84}, 0, {   952,      0}, {0xed, 0xe2, 0x87, 0xff}}},
     {{{   290,    -79,    -26}, 0, {     0,      0}, {0xed, 0x83, 0xf9, 0xff}}},
-};
-
-// 0x0601F9E8
-static const Vtx whomp_seg6_vertex_0601F9E8[] = {
     {{{   -10,    -20,     28}, 0, {   246,    976}, {0xed, 0xa2, 0x52, 0xff}}},
     {{{   -10,    -34,    -12}, 0, {   672,    976}, {0xed, 0x95, 0xc0, 0xff}}},
     {{{   290,    -79,    -26}, 0, {   952,      0}, {0xed, 0x83, 0xf9, 0xff}}},
-    {{{   -10,      0,    -37}, 0, {   246,    976}, {0xed, 0x1c, 0x86, 0xff}}},
-    {{{   -10,     35,    -12}, 0, {   672,    976}, {0xed, 0x7d, 0xf8, 0xff}}},
-    {{{   290,     80,    -26}, 0, {   952,      0}, {0xed, 0x6a, 0xbf, 0xff}}},
     {{{   290,    -48,     66}, 0, {     0,      0}, {0xed, 0xd1, 0x74, 0xff}}},
 };
 
-// 0x0601FA58 - 0x0601FAE8
 const Gfx whomp_seg6_dl_0601FA58[] = {
     gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, whomp_seg6_texture_0601EB60),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPLight(&whomp_seg6_lights_0601F8E0.l, 1),
     gsSPLight(&whomp_seg6_lights_0601F8E0.a, 2),
-    gsSPVertex(whomp_seg6_vertex_0601F8F8, 15, 0),
-    gsSP2Triangles( 0,  1,  2, 0x0,  3,  4,  5, 0x0),
-    gsSP2Triangles( 3,  6,  4, 0x0,  7,  8,  9, 0x0),
-    gsSP2Triangles( 7, 10,  8, 0x0, 11, 12, 13, 0x0),
-    gsSP1Triangle(11, 13, 14, 0x0),
-    gsSPVertex(whomp_seg6_vertex_0601F9E8, 7, 0),
-    gsSP2Triangles( 0,  1,  2, 0x0,  3,  4,  5, 0x0),
-    gsSP1Triangle( 0,  2,  6, 0x0),
+    gsSPVertex(&whomp_seg6_dl_0601FA58_vtx32_0[0], 20, 0),
+    gsSP2Triangles( 0,  1,  2, 0x0,  0,  3,  1, 0x0),
+    gsSP2Triangles( 4,  5,  6, 0x0,  4,  7,  5, 0x0),
+    gsSP2Triangles( 8,  9, 10, 0x0,  8, 11,  9, 0x0),
+    gsSP2Triangles(12, 13, 14, 0x0, 12, 14, 15, 0x0),
+    gsSP2Triangles(16, 17, 18, 0x0, 16, 18, 19, 0x0),
     gsSPEndDisplayList(),
 };
 

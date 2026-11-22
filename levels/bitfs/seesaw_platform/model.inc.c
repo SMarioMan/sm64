@@ -1,5 +1,11 @@
 // 0x07011C18 - 0x07011D18
-static const Vtx bitfs_seg7_vertex_07011C18[] = {
+
+
+// 0x07011D18 - 0x07011D98
+
+
+// 0x07011D98 - 0x07011E28
+static const Vtx bitfs_seg7_dl_07011D98_vtx32_0[] = {
     {{{  -511,    179,    307}, 0, {     0,    990}, {0xc8, 0xc8, 0xc8, 0xff}}},
     {{{   512,    179,    307}, 0, {  1672,   -714}, {0xc8, 0xc8, 0xc8, 0xff}}},
     {{{   512,    179,   -306}, 0, {  2694,    308}, {0xc8, 0xc8, 0xc8, 0xff}}},
@@ -16,10 +22,6 @@ static const Vtx bitfs_seg7_vertex_07011C18[] = {
     {{{  -511,    179,   -306}, 0, {  1500,   1498}, {0x64, 0x64, 0x64, 0xff}}},
     {{{  -511,     26,   -306}, 0, {  1246,   1754}, {0x64, 0x64, 0x64, 0xff}}},
     {{{  -511,     26,    307}, 0, {   224,    734}, {0x64, 0x64, 0x64, 0xff}}},
-};
-
-// 0x07011D18 - 0x07011D98
-static const Vtx bitfs_seg7_vertex_07011D18[] = {
     {{{  -511,     26,    307}, 0, { -1988,  -1480}, {0x8c, 0x8c, 0x8c, 0xff}}},
     {{{   512,    179,    307}, 0, {     0,      0}, {0x8c, 0x8c, 0x8c, 0xff}}},
     {{{  -511,    179,    307}, 0, { -1734,  -1736}, {0x8c, 0x8c, 0x8c, 0xff}}},
@@ -30,19 +32,17 @@ static const Vtx bitfs_seg7_vertex_07011D18[] = {
     {{{   512,    179,   -306}, 0, {     0,      0}, {0x8c, 0x8c, 0x8c, 0xff}}},
 };
 
-// 0x07011D98 - 0x07011E28
 const Gfx bitfs_seg7_dl_07011D98[] = {
     gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, sky_09001800),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
-    gsSPVertex(bitfs_seg7_vertex_07011C18, 16, 0),
+    gsSPVertex(&bitfs_seg7_dl_07011D98_vtx32_0[0], 24, 0),
     gsSP2Triangles( 0,  1,  2, 0x0,  0,  2,  3, 0x0),
     gsSP2Triangles( 4,  5,  6, 0x0,  4,  6,  7, 0x0),
     gsSP2Triangles( 8,  9, 10, 0x0,  8, 11,  9, 0x0),
     gsSP2Triangles(12, 13, 14, 0x0, 12, 14, 15, 0x0),
-    gsSPVertex(bitfs_seg7_vertex_07011D18, 8, 0),
-    gsSP2Triangles( 0,  1,  2, 0x0,  0,  3,  1, 0x0),
-    gsSP2Triangles( 4,  5,  6, 0x0,  4,  7,  5, 0x0),
+    gsSP2Triangles(16, 17, 18, 0x0, 16, 19, 17, 0x0),
+    gsSP2Triangles(20, 21, 22, 0x0, 20, 23, 21, 0x0),
     gsSPEndDisplayList(),
 };
 

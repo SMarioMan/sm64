@@ -94,63 +94,52 @@ const Gfx cap_switch_exclamation_seg5_dl_05002E00[] = {
 };
 
 // 0x05002E60
-static const Vtx capswitch_seg5_vertex_05002E60[] = {
+
+
+// 0x05002F60
+
+
+// 0x05003020 - 0x05003120
+static const Vtx capswitch_seg5_dl_05003020_vtx32_0[] = {
     {{{   147,      0,   -253}, 0, {     0,    499}, {0x29, 0x00, 0x88, 0xff}}},
     {{{  -146,      0,   -253}, 0, {     0,   -436}, {0xad, 0x00, 0xa1, 0xff}}},
     {{{  -146,    137,   -253}, 0, {   407,   -436}, {0xd3, 0x48, 0xa3, 0xff}}},
-    {{{  -146,      0,    254}, 0, {     0,   -436}, {0xd7, 0x00, 0x77, 0xff}}},
+    {{{   147,    137,   -253}, 0, {   407,    499}, {0x3a, 0x47, 0xaa, 0xff}}},
+    {{{   293,      0,      0}, 0, {     0,    967}, {0x7c, 0x00, 0xe8, 0xff}}},
+    {{{   293,    137,      0}, 0, {   407,    967}, {0x68, 0x48, 0x07, 0xff}}},
     {{{   147,      0,    254}, 0, {     0,    499}, {0x53, 0x00, 0x5f, 0xff}}},
     {{{   147,    137,    254}, 0, {   407,    499}, {0x2d, 0x48, 0x5d, 0xff}}},
-    {{{   293,    137,      0}, 0, {   407,    967}, {0x68, 0x48, 0x07, 0xff}}},
-    {{{   293,      0,      0}, 0, {     0,    967}, {0x7c, 0x00, 0xe8, 0xff}}},
-    {{{   147,    137,   -253}, 0, {   407,    499}, {0x3a, 0x47, 0xaa, 0xff}}},
+    {{{  -146,      0,    254}, 0, {     0,   -436}, {0xd7, 0x00, 0x77, 0xff}}},
     {{{   111,    170,   -192}, 0, {   510,    386}, {0x23, 0x72, 0xd7, 0xff}}},
     {{{   222,    170,      0}, 0, {   510,    741}, {0x35, 0x72, 0x0a, 0xff}}},
     {{{  -146,    137,    254}, 0, {   407,   -436}, {0xc6, 0x47, 0x56, 0xff}}},
     {{{   111,    170,    193}, 0, {   510,    386}, {0x11, 0x72, 0x33, 0xff}}},
     {{{  -292,    137,      0}, 0, {   407,   -904}, {0x98, 0x48, 0xf9, 0xff}}},
-    {{{  -110,    170,    193}, 0, {   510,   -323}, {0xdd, 0x72, 0x29, 0xff}}},
-    {{{  -221,    170,      0}, 0, {   510,   -678}, {0xcb, 0x72, 0xf6, 0xff}}},
-};
-
-// 0x05002F60
-static const Vtx capswitch_seg5_vertex_05002F60[] = {
-    {{{  -146,      0,   -253}, 0, {     0,   -436}, {0xad, 0x00, 0xa1, 0xff}}},
     {{{  -292,      0,      0}, 0, {     0,   -904}, {0x84, 0x00, 0x17, 0xff}}},
-    {{{  -292,    137,      0}, 0, {   407,   -904}, {0x98, 0x48, 0xf9, 0xff}}},
-    {{{   147,    137,   -253}, 0, {   407,    499}, {0x3a, 0x47, 0xaa, 0xff}}},
-    {{{  -146,    137,   -253}, 0, {   407,   -436}, {0xd3, 0x48, 0xa3, 0xff}}},
     {{{  -110,    170,   -192}, 0, {   510,   -323}, {0xef, 0x72, 0xcd, 0xff}}},
     {{{  -221,    170,      0}, 0, {   510,   -678}, {0xcb, 0x72, 0xf6, 0xff}}},
-    {{{   111,    170,   -192}, 0, {   510,    386}, {0x23, 0x72, 0xd7, 0xff}}},
-    {{{  -146,    137,    254}, 0, {   407,   -436}, {0xc6, 0x47, 0x56, 0xff}}},
-    {{{   111,    170,    193}, 0, {   510,    386}, {0x11, 0x72, 0x33, 0xff}}},
     {{{  -110,    170,    193}, 0, {   510,   -323}, {0xdd, 0x72, 0x29, 0xff}}},
-    {{{  -146,      0,    254}, 0, {     0,   -436}, {0xd7, 0x00, 0x77, 0xff}}},
 };
 
-// 0x05003020 - 0x05003120
 const Gfx capswitch_seg5_dl_05003020[] = {
     gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, capswitch_seg5_texture_05002C48),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 16 * 4 - 1, CALC_DXT(16, G_IM_SIZ_16b_BYTES)),
     gsSPLight(&capswitch_seg5_lights_05001BD0.l, 1),
     gsSPLight(&capswitch_seg5_lights_05001BD0.a, 2),
-    gsSPVertex(capswitch_seg5_vertex_05002E60, 16, 0),
-    gsSP2Triangles( 0,  1,  2, 0x0,  3,  4,  5, 0x0),
-    gsSP2Triangles( 4,  6,  5, 0x0,  4,  7,  6, 0x0),
-    gsSP2Triangles( 7,  8,  6, 0x0,  6,  9, 10, 0x0),
-    gsSP2Triangles( 6,  8,  9, 0x0,  5,  6, 10, 0x0),
-    gsSP2Triangles(11,  5, 12, 0x0,  3,  5, 11, 0x0),
-    gsSP2Triangles( 5, 10, 12, 0x0,  7,  0,  8, 0x0),
-    gsSP2Triangles( 0,  2,  8, 0x0, 13, 14, 15, 0x0),
-    gsSP1Triangle( 1, 13,  2, 0x0),
-    gsSPVertex(capswitch_seg5_vertex_05002F60, 12, 0),
-    gsSP2Triangles( 0,  1,  2, 0x0,  3,  4,  5, 0x0),
-    gsSP2Triangles( 4,  6,  5, 0x0,  4,  2,  6, 0x0),
-    gsSP2Triangles( 3,  5,  7, 0x0,  8,  9, 10, 0x0),
-    gsSP2Triangles( 1,  8,  2, 0x0,  1, 11,  8, 0x0),
-    gsSP1Triangle( 2,  8, 10, 0x0),
+    gsSPVertex(&capswitch_seg5_dl_05003020_vtx32_0[0], 18, 0),
+    gsSP2Triangles( 0,  1,  2, 0x0,  0,  2,  3, 0x0),
+    gsSP2Triangles( 4,  0,  3, 0x0,  4,  3,  5, 0x0),
+    gsSP2Triangles( 6,  4,  5, 0x0,  6,  5,  7, 0x0),
+    gsSP2Triangles( 8,  6,  7, 0x0,  5,  3,  9, 0x0),
+    gsSP2Triangles( 5,  9, 10, 0x0,  7,  5, 10, 0x0),
+    gsSP2Triangles( 8,  7, 11, 0x0, 11,  7, 12, 0x0),
+    gsSP2Triangles( 7, 10, 12, 0x0,  1, 13,  2, 0x0),
+    gsSP2Triangles( 1, 14, 13, 0x0, 14, 11, 13, 0x0),
+    gsSP2Triangles(14,  8, 11, 0x0,  3,  2, 15, 0x0),
+    gsSP2Triangles( 3, 15,  9, 0x0,  2, 16, 15, 0x0),
+    gsSP2Triangles( 2, 13, 16, 0x0, 13, 17, 16, 0x0),
+    gsSP2Triangles(11, 12, 17, 0x0, 13, 11, 17, 0x0),
     gsSPEndDisplayList(),
 };
 

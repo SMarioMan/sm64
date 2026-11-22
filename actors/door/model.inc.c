@@ -509,10 +509,25 @@ static const Vtx door_seg3_vertex_03014658[] = {
 };
 
 // 0x030146D8
-static const Vtx door_seg3_vertex_030146D8[] = {
+
+
+// 0x030147C8
+
+
+// 0x03014888 - 0x030149C0
+static const Vtx door_seg3_dl_03014888_vtx32_0[] = {
     {{{   492,    468,   -152}, 0, {     0,      0}, {0xe8, 0x47, 0x9a, 0xff}}},
     {{{   414,    412,    -98}, 0, {     0,      0}, {0x82, 0x00, 0x00, 0xff}}},
     {{{   492,    491,    -98}, 0, {     0,      0}, {0x00, 0x7e, 0x00, 0xff}}},
+    {{{   437,    412,   -152}, 0, {     0,      0}, {0xa6, 0xe2, 0xad, 0xff}}},
+    {{{   546,    412,   -152}, 0, {     0,      0}, {0x5b, 0x1d, 0xae, 0xff}}},
+    {{{   492,    357,   -152}, 0, {     0,      0}, {0x18, 0xb9, 0x9b, 0xff}}},
+    {{{   569,    412,    -98}, 0, {     0,      0}, {0x7e, 0x00, 0x00, 0xff}}},
+    {{{   492,    334,    -98}, 0, {     0,      0}, {0x00, 0x82, 0x00, 0xff}}},
+    {{{   492,    357,    -43}, 0, {     0,      0}, {0xdb, 0x90, 0x2e, 0xff}}},
+    {{{   546,    412,    -43}, 0, {     0,      0}, {0x70, 0xdb, 0x2e, 0xff}}},
+    {{{   437,    412,    -43}, 0, {     0,      0}, {0x90, 0x24, 0x2e, 0xff}}},
+    {{{   492,    468,    -43}, 0, {     0,      0}, {0x26, 0x6f, 0x2f, 0xff}}},
     {{{   492,    468,    153}, 0, {     0,      0}, {0x18, 0x47, 0x66, 0xff}}},
     {{{   492,    357,    153}, 0, {     0,      0}, {0xe9, 0xb8, 0x65, 0xff}}},
     {{{   546,    412,    153}, 0, {     0,      0}, {0x5b, 0xe2, 0x53, 0xff}}},
@@ -527,45 +542,25 @@ static const Vtx door_seg3_vertex_030146D8[] = {
     {{{   546,    412,     44}, 0, {     0,      0}, {0x70, 0x24, 0xd2, 0xff}}},
 };
 
-// 0x030147C8
-static const Vtx door_seg3_vertex_030147C8[] = {
-    {{{   492,    491,    -98}, 0, {     0,      0}, {0x00, 0x7e, 0x00, 0xff}}},
-    {{{   437,    412,    -43}, 0, {     0,      0}, {0x90, 0x24, 0x2e, 0xff}}},
-    {{{   492,    468,    -43}, 0, {     0,      0}, {0x26, 0x6f, 0x2f, 0xff}}},
-    {{{   492,    468,   -152}, 0, {     0,      0}, {0xe8, 0x47, 0x9a, 0xff}}},
-    {{{   546,    412,   -152}, 0, {     0,      0}, {0x5b, 0x1d, 0xae, 0xff}}},
-    {{{   492,    357,   -152}, 0, {     0,      0}, {0x18, 0xb9, 0x9b, 0xff}}},
-    {{{   437,    412,   -152}, 0, {     0,      0}, {0xa6, 0xe2, 0xad, 0xff}}},
-    {{{   414,    412,    -98}, 0, {     0,      0}, {0x82, 0x00, 0x00, 0xff}}},
-    {{{   569,    412,    -98}, 0, {     0,      0}, {0x7e, 0x00, 0x00, 0xff}}},
-    {{{   492,    334,    -98}, 0, {     0,      0}, {0x00, 0x82, 0x00, 0xff}}},
-    {{{   492,    357,    -43}, 0, {     0,      0}, {0xdb, 0x90, 0x2e, 0xff}}},
-    {{{   546,    412,    -43}, 0, {     0,      0}, {0x70, 0xdb, 0x2e, 0xff}}},
-};
-
-// 0x03014888 - 0x030149C0
-const Gfx door_seg3_dl_03014888[] = {
-    gsSPVertex(door_seg3_vertex_030146D8, 15, 0),
-    gsSP2Triangles( 0,  1,  2, 0x0,  3,  4,  5, 0x0),
-    gsSP2Triangles( 3,  6,  4, 0x0,  7,  6,  3, 0x0),
-    gsSP2Triangles( 8,  3,  5, 0x0,  8,  7,  3, 0x0),
-    gsSP2Triangles( 9,  5,  4, 0x0, 10,  9,  4, 0x0),
-    gsSP2Triangles(10,  4,  6, 0x0,  9,  8,  5, 0x0),
-    gsSP2Triangles( 7, 10,  6, 0x0, 11, 12, 10, 0x0),
-    gsSP2Triangles(11, 10,  7, 0x0, 12,  9, 10, 0x0),
-    gsSP2Triangles(12, 13,  9, 0x0, 13,  8,  9, 0x0),
-    gsSP2Triangles(14,  7,  8, 0x0, 13, 14,  8, 0x0),
-    gsSP1Triangle(14, 11,  7, 0x0),
-    gsSPVertex(door_seg3_vertex_030147C8, 12, 0),
-    gsSP2Triangles( 0,  1,  2, 0x0,  3,  4,  5, 0x0),
-    gsSP2Triangles( 3,  6,  7, 0x0,  4,  3,  0, 0x0),
-    gsSP2Triangles( 5,  4,  8, 0x0,  6,  5,  9, 0x0),
-    gsSP2Triangles( 5,  8,  9, 0x0,  3,  5,  6, 0x0),
-    gsSP2Triangles( 6,  9,  7, 0x0,  4,  0,  8, 0x0),
-    gsSP2Triangles( 7,  9, 10, 0x0,  9, 11, 10, 0x0),
-    gsSP2Triangles( 9,  8, 11, 0x0,  0,  7,  1, 0x0),
-    gsSP2Triangles( 7, 10,  1, 0x0,  8,  0,  2, 0x0),
-    gsSP1Triangle( 8,  2, 11, 0x0),
+const Gfx door_seg3_dl_03014888[] = {    gsSPVertex(&door_seg3_dl_03014888_vtx32_0[0], 24, 0),
+    gsSP2Triangles( 0,  1,  2, 0x0,  0,  3,  1, 0x0),
+    gsSP2Triangles( 4,  0,  2, 0x0,  0,  4,  5, 0x0),
+    gsSP2Triangles( 0,  5,  3, 0x0,  5,  4,  6, 0x0),
+    gsSP2Triangles( 4,  2,  6, 0x0,  3,  5,  7, 0x0),
+    gsSP2Triangles( 5,  6,  7, 0x0,  3,  7,  1, 0x0),
+    gsSP2Triangles( 1,  7,  8, 0x0,  7,  9,  8, 0x0),
+    gsSP2Triangles( 7,  6,  9, 0x0,  2,  1, 10, 0x0),
+    gsSP2Triangles( 1,  8, 10, 0x0,  2, 10, 11, 0x0),
+    gsSP2Triangles( 6,  2, 11, 0x0,  6, 11,  9, 0x0),
+    gsSP2Triangles(12, 13, 14, 0x0, 12, 15, 13, 0x0),
+    gsSP2Triangles(16, 15, 12, 0x0, 17, 12, 14, 0x0),
+    gsSP2Triangles(17, 16, 12, 0x0, 18, 14, 13, 0x0),
+    gsSP2Triangles(18, 17, 14, 0x0, 19, 18, 13, 0x0),
+    gsSP2Triangles(19, 13, 15, 0x0, 16, 19, 15, 0x0),
+    gsSP2Triangles(20, 19, 16, 0x0, 20, 21, 19, 0x0),
+    gsSP2Triangles(21, 18, 19, 0x0, 21, 22, 18, 0x0),
+    gsSP2Triangles(22, 17, 18, 0x0, 23, 16, 17, 0x0),
+    gsSP2Triangles(22, 23, 17, 0x0, 23, 20, 16, 0x0),
     gsSPEndDisplayList(),
 };
 

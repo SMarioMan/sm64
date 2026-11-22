@@ -7,7 +7,35 @@ static const Vtx bits_seg7_vertex_07015438[] = {
 };
 
 // 0x07015478 - 0x07015578
-static const Vtx bits_seg7_vertex_07015478[] = {
+
+
+// 0x07015578 - 0x07015668
+
+
+// 0x07015668 - 0x07015748
+
+
+// 0x07015748 - 0x07015828
+
+
+// 0x07015828 - 0x07015908
+
+
+// 0x07015908 - 0x070159B8
+
+
+// 0x070159B8 - 0x070159F0
+static const Gfx bits_seg7_dl_070159B8[] = {
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, sky_09007000),
+    gsDPLoadSync(),
+    gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
+    gsSPVertex(bits_seg7_vertex_07015438, 4, 0),
+    gsSP2Triangles( 0,  1,  2, 0x0,  0,  3,  1, 0x0),
+    gsSPEndDisplayList(),
+};
+
+// 0x070159F0 - 0x07015B60
+static const Vtx bits_seg7_dl_070159F0_vtx32_0[] = {
     {{{ -1023,      0,   -306}, 0, {    32,    930}, {0xbf, 0xbf, 0x3f, 0xff}}},
     {{{ -1023,    215,   -306}, 0, {    32,    930}, {0xbf, 0xbf, 0x3f, 0xff}}},
     {{{  -716,    256,   -306}, 0, {    32,     28}, {0xbf, 0xbf, 0x3f, 0xff}}},
@@ -24,10 +52,6 @@ static const Vtx bits_seg7_vertex_07015478[] = {
     {{{  -409,    512,    307}, 0, {  1948,     28}, {0xaa, 0xbf, 0x3f, 0xff}}},
     {{{  -716,    471,    307}, 0, {  1948,    930}, {0xaa, 0xbf, 0x3f, 0xff}}},
     {{{  -716,    256,    307}, 0, {  1948,    930}, {0xaa, 0xbf, 0x3f, 0xff}}},
-};
-
-// 0x07015578 - 0x07015668
-static const Vtx bits_seg7_vertex_07015578[] = {
     {{{  -716,    256,    307}, 0, {  1948,    930}, {0xbf, 0xdf, 0x1f, 0xff}}},
     {{{  -716,    471,    307}, 0, {  1948,    930}, {0xbf, 0xdf, 0x1f, 0xff}}},
     {{{  -716,    471,   -306}, 0, {    32,    930}, {0xbf, 0xdf, 0x1f, 0xff}}},
@@ -43,10 +67,6 @@ static const Vtx bits_seg7_vertex_07015578[] = {
     {{{  -716,    471,    307}, 0, {  1948,    930}, {0xaa, 0xff, 0x00, 0xff}}},
     {{{  -409,    512,    307}, 0, {  1948,     28}, {0xaa, 0xff, 0x00, 0xff}}},
     {{{  -716,    471,   -306}, 0, {    32,    930}, {0xaa, 0xff, 0x00, 0xff}}},
-};
-
-// 0x07015668 - 0x07015748
-static const Vtx bits_seg7_vertex_07015668[] = {
     {{{  -409,    727,    307}, 0, {  1948,    930}, {0x7f, 0xbf, 0x3f, 0xff}}},
     {{{  -409,    512,    307}, 0, {  1948,    930}, {0x7f, 0xbf, 0x3f, 0xff}}},
     {{{  -101,    768,    307}, 0, {  1948,     28}, {0x7f, 0xbf, 0x3f, 0xff}}},
@@ -61,10 +81,6 @@ static const Vtx bits_seg7_vertex_07015668[] = {
     {{{  -101,    768,   -306}, 0, {    32,    930}, {0x6a, 0xbf, 0x3f, 0xff}}},
     {{{  -101,    983,   -306}, 0, {    32,    930}, {0x6a, 0xbf, 0x3f, 0xff}}},
     {{{   205,   1024,   -306}, 0, {    32,     28}, {0x6a, 0xbf, 0x3f, 0xff}}},
-};
-
-// 0x07015748 - 0x07015828
-static const Vtx bits_seg7_vertex_07015748[] = {
     {{{  -101,    983,    307}, 0, {  1948,    930}, {0x6a, 0xbf, 0x3f, 0xff}}},
     {{{  -101,    768,    307}, 0, {  1948,    930}, {0x6a, 0xbf, 0x3f, 0xff}}},
     {{{   205,   1024,    307}, 0, {  1948,     28}, {0x6a, 0xbf, 0x3f, 0xff}}},
@@ -79,10 +95,6 @@ static const Vtx bits_seg7_vertex_07015748[] = {
     {{{   205,   1024,   -306}, 0, {    32,    930}, {0x3f, 0xbf, 0x55, 0xff}}},
     {{{   205,   1239,   -306}, 0, {    32,    930}, {0x3f, 0xbf, 0x55, 0xff}}},
     {{{   512,   1280,   -306}, 0, {    32,     28}, {0x3f, 0xbf, 0x55, 0xff}}},
-};
-
-// 0x07015828 - 0x07015908
-static const Vtx bits_seg7_vertex_07015828[] = {
     {{{   205,   1239,    307}, 0, {  1948,    930}, {0x3f, 0xbf, 0x55, 0xff}}},
     {{{   205,   1024,    307}, 0, {  1948,    930}, {0x3f, 0xbf, 0x55, 0xff}}},
     {{{   512,   1280,    307}, 0, {  1948,     28}, {0x3f, 0xbf, 0x55, 0xff}}},
@@ -97,10 +109,6 @@ static const Vtx bits_seg7_vertex_07015828[] = {
     {{{   512,   1495,    307}, 0, {  1948,    930}, {0x3f, 0xbf, 0x7f, 0xff}}},
     {{{   512,   1280,    307}, 0, {  1948,    930}, {0x3f, 0xbf, 0x7f, 0xff}}},
     {{{   819,   1536,    307}, 0, {  1948,     28}, {0x3f, 0xbf, 0x7f, 0xff}}},
-};
-
-// 0x07015908 - 0x070159B8
-static const Vtx bits_seg7_vertex_07015908[] = {
     {{{   512,   1280,   -306}, 0, {    32,    930}, {0x3f, 0xbf, 0x7f, 0xff}}},
     {{{   512,   1495,   -306}, 0, {    32,    930}, {0x3f, 0xbf, 0x7f, 0xff}}},
     {{{   819,   1536,   -306}, 0, {    32,     28}, {0x3f, 0xbf, 0x7f, 0xff}}},
@@ -114,46 +122,32 @@ static const Vtx bits_seg7_vertex_07015908[] = {
     {{{   512,   1495,    307}, 0, {  1948,    930}, {0x00, 0xff, 0x7f, 0xff}}},
 };
 
-// 0x070159B8 - 0x070159F0
-static const Gfx bits_seg7_dl_070159B8[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, sky_09007000),
-    gsDPLoadSync(),
-    gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
-    gsSPVertex(bits_seg7_vertex_07015438, 4, 0),
-    gsSP2Triangles( 0,  1,  2, 0x0,  0,  3,  1, 0x0),
-    gsSPEndDisplayList(),
-};
-
-// 0x070159F0 - 0x07015B60
 static const Gfx bits_seg7_dl_070159F0[] = {
     gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, sky_09008000),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
-    gsSPVertex(bits_seg7_vertex_07015478, 16, 0),
+    gsSPVertex(&bits_seg7_dl_070159F0_vtx32_0[0], 31, 0),
     gsSP2Triangles( 0,  1,  2, 0x0,  3,  4,  5, 0x0),
     gsSP2Triangles( 6,  7,  8, 0x0,  6,  9,  7, 0x0),
     gsSP2Triangles(10, 11, 12, 0x0, 13, 14, 15, 0x0),
-    gsSPVertex(bits_seg7_vertex_07015578, 15, 0),
-    gsSP2Triangles( 0,  1,  2, 0x0,  0,  2,  3, 0x0),
-    gsSP2Triangles( 4,  5,  6, 0x0,  4,  7,  5, 0x0),
-    gsSP2Triangles( 8,  9, 10, 0x0, 11, 12, 13, 0x0),
-    gsSP1Triangle(11, 14, 12, 0x0),
-    gsSPVertex(bits_seg7_vertex_07015668, 14, 0),
+    gsSP2Triangles(16, 17, 18, 0x0, 16, 18, 19, 0x0),
+    gsSP2Triangles(20, 21, 22, 0x0, 20, 23, 21, 0x0),
+    gsSP2Triangles(24, 25, 26, 0x0, 27, 28, 29, 0x0),
+    gsSP1Triangle(27, 30, 28, 0x0),
+    gsSPVertex(&bits_seg7_dl_070159F0_vtx32_0[31], 31, 0),
     gsSP2Triangles( 0,  1,  2, 0x0,  3,  4,  5, 0x0),
     gsSP2Triangles( 3,  5,  6, 0x0,  7,  8,  9, 0x0),
     gsSP2Triangles( 7, 10,  8, 0x0, 11, 12, 13, 0x0),
-    gsSPVertex(bits_seg7_vertex_07015748, 14, 0),
-    gsSP2Triangles( 0,  1,  2, 0x0,  3,  4,  5, 0x0),
-    gsSP2Triangles( 3,  5,  6, 0x0,  7,  8,  9, 0x0),
-    gsSP2Triangles( 7,  9, 10, 0x0, 11, 12, 13, 0x0),
-    gsSPVertex(bits_seg7_vertex_07015828, 14, 0),
-    gsSP2Triangles( 0,  1,  2, 0x0,  3,  4,  5, 0x0),
-    gsSP2Triangles( 3,  5,  6, 0x0,  7,  8,  9, 0x0),
-    gsSP2Triangles( 7,  9, 10, 0x0, 11, 12, 13, 0x0),
-    gsSPVertex(bits_seg7_vertex_07015908, 11, 0),
-    gsSP2Triangles( 0,  1,  2, 0x0,  3,  4,  5, 0x0),
-    gsSP2Triangles( 3,  5,  6, 0x0,  7,  8,  9, 0x0),
-    gsSP1Triangle( 7,  9, 10, 0x0),
+    gsSP2Triangles(14, 15, 16, 0x0, 17, 18, 19, 0x0),
+    gsSP2Triangles(17, 19, 20, 0x0, 21, 22, 23, 0x0),
+    gsSP2Triangles(21, 23, 24, 0x0, 25, 26, 27, 0x0),
+    gsSP1Triangle(28, 29, 30, 0x0),
+    gsSPVertex(&bits_seg7_dl_070159F0_vtx32_0[62], 22, 0),
+    gsSP2Triangles( 0,  1,  2, 0x0,  0,  2,  3, 0x0),
+    gsSP2Triangles( 4,  5,  6, 0x0,  4,  6,  7, 0x0),
+    gsSP2Triangles( 8,  9, 10, 0x0, 11, 12, 13, 0x0),
+    gsSP2Triangles(14, 15, 16, 0x0, 14, 16, 17, 0x0),
+    gsSP2Triangles(18, 19, 20, 0x0, 18, 20, 21, 0x0),
     gsSPEndDisplayList(),
 };
 

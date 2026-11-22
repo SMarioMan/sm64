@@ -243,10 +243,23 @@ static const Lights1 scuttlebug_seg6_lights_06013E10 = gdSPDefLights1(
 );
 
 // 0x06013E28
-static const Vtx scuttlebug_seg6_vertex_06013E28[] = {
+
+
+// 0x06013F28
+
+
+// 0x06013FC8 - 0x060140F0
+static const Vtx scuttlebug_seg6_dl_06013FC8_vtx32_0[] = {
     {{{  -111,     85,    293}, 0, {     0,      0}, {0x7e, 0x06, 0x0b, 0xff}}},
     {{{  -120,    127,    192}, 0, {     0,      0}, {0x34, 0x64, 0xc8, 0xff}}},
     {{{  -120,    103,    301}, 0, {     0,      0}, {0xc9, 0x62, 0x3a, 0xff}}},
+    {{{  -103,     89,    199}, 0, {     0,      0}, {0x7c, 0xee, 0xf3, 0xff}}},
+    {{{  -120,     68,    284}, 0, {     0,      0}, {0x32, 0x8c, 0xf8, 0xff}}},
+    {{{  -120,     30,    351}, 0, {     0,      0}, {0xf4, 0xc3, 0x6e, 0xff}}},
+    {{{  -120,     59,    167}, 0, {     0,      0}, {0xfe, 0xe1, 0x85, 0xff}}},
+    {{{  -136,     89,    199}, 0, {     0,      0}, {0x82, 0x06, 0xf4, 0xff}}},
+    {{{  -128,     85,    293}, 0, {     0,      0}, {0x83, 0xf1, 0x0b, 0xff}}},
+    {{{  -120,     50,    205}, 0, {     0,      0}, {0xcd, 0x8c, 0x03, 0xff}}},
     {{{  -128,    -84,    293}, 0, {     0,      0}, {0x82, 0xfa, 0x0b, 0xff}}},
     {{{  -120,   -126,    192}, 0, {     0,      0}, {0xc7, 0x9e, 0xc8, 0xff}}},
     {{{  -120,   -102,    301}, 0, {     0,      0}, {0x32, 0x9c, 0x3b, 0xff}}},
@@ -257,47 +270,28 @@ static const Vtx scuttlebug_seg6_vertex_06013E28[] = {
     {{{  -120,    -58,    167}, 0, {     0,      0}, {0xfe, 0x1f, 0x85, 0xff}}},
     {{{  -120,    -49,    205}, 0, {     0,      0}, {0x2f, 0x75, 0x04, 0xff}}},
     {{{  -120,    -67,    284}, 0, {     0,      0}, {0xc9, 0x72, 0xf9, 0xff}}},
-    {{{  -120,     68,    284}, 0, {     0,      0}, {0x32, 0x8c, 0xf8, 0xff}}},
-    {{{  -103,     89,    199}, 0, {     0,      0}, {0x7c, 0xee, 0xf3, 0xff}}},
-    {{{  -120,     30,    351}, 0, {     0,      0}, {0xf4, 0xc3, 0x6e, 0xff}}},
 };
 
-// 0x06013F28
-static const Vtx scuttlebug_seg6_vertex_06013F28[] = {
-    {{{  -103,     89,    199}, 0, {     0,      0}, {0x7c, 0xee, 0xf3, 0xff}}},
-    {{{  -120,     59,    167}, 0, {     0,      0}, {0xfe, 0xe1, 0x85, 0xff}}},
-    {{{  -120,    127,    192}, 0, {     0,      0}, {0x34, 0x64, 0xc8, 0xff}}},
-    {{{  -136,     89,    199}, 0, {     0,      0}, {0x82, 0x06, 0xf4, 0xff}}},
-    {{{  -120,    103,    301}, 0, {     0,      0}, {0xc9, 0x62, 0x3a, 0xff}}},
-    {{{  -111,     85,    293}, 0, {     0,      0}, {0x7e, 0x06, 0x0b, 0xff}}},
-    {{{  -120,     30,    351}, 0, {     0,      0}, {0xf4, 0xc3, 0x6e, 0xff}}},
-    {{{  -128,     85,    293}, 0, {     0,      0}, {0x83, 0xf1, 0x0b, 0xff}}},
-    {{{  -120,     50,    205}, 0, {     0,      0}, {0xcd, 0x8c, 0x03, 0xff}}},
-    {{{  -120,     68,    284}, 0, {     0,      0}, {0x32, 0x8c, 0xf8, 0xff}}},
-};
-
-// 0x06013FC8 - 0x060140F0
 const Gfx scuttlebug_seg6_dl_06013FC8[] = {
     gsSPLight(&scuttlebug_seg6_lights_06013E10.l, 1),
     gsSPLight(&scuttlebug_seg6_lights_06013E10.a, 2),
-    gsSPVertex(scuttlebug_seg6_vertex_06013E28, 16, 0),
-    gsSP2Triangles( 0,  1,  2, 0x0,  3,  4,  5, 0x0),
-    gsSP2Triangles( 5,  6,  7, 0x0,  5,  4,  6, 0x0),
-    gsSP2Triangles( 8,  5,  7, 0x0,  3,  5,  8, 0x0),
-    gsSP2Triangles( 9, 10,  4, 0x0,  3,  9,  4, 0x0),
-    gsSP2Triangles(10,  6,  4, 0x0, 10, 11,  6, 0x0),
-    gsSP2Triangles(11,  7,  6, 0x0, 12,  7, 11, 0x0),
-    gsSP2Triangles(12,  8,  7, 0x0, 12,  9,  3, 0x0),
-    gsSP2Triangles( 3,  8, 12, 0x0, 11, 10,  9, 0x0),
-    gsSP2Triangles(11,  9, 12, 0x0, 13, 14,  0, 0x0),
-    gsSP2Triangles( 0, 14,  1, 0x0, 15, 13,  0, 0x0),
-    gsSPVertex(scuttlebug_seg6_vertex_06013F28, 10, 0),
-    gsSP2Triangles( 0,  1,  2, 0x0,  3,  2,  1, 0x0),
-    gsSP2Triangles( 4,  2,  3, 0x0,  5,  4,  6, 0x0),
-    gsSP2Triangles( 6,  4,  7, 0x0,  4,  3,  7, 0x0),
-    gsSP2Triangles( 1,  8,  3, 0x0,  8,  7,  3, 0x0),
-    gsSP2Triangles( 8,  1,  0, 0x0,  8,  0,  9, 0x0),
-    gsSP2Triangles( 9,  7,  8, 0x0,  7,  9,  6, 0x0),
+    gsSPVertex(&scuttlebug_seg6_dl_06013FC8_vtx32_0[0], 20, 0),
+    gsSP2Triangles( 0,  1,  2, 0x0,  0,  3,  1, 0x0),
+    gsSP2Triangles( 4,  3,  0, 0x0,  5,  4,  0, 0x0),
+    gsSP2Triangles( 0,  2,  5, 0x0,  3,  6,  1, 0x0),
+    gsSP2Triangles( 7,  1,  6, 0x0,  2,  1,  7, 0x0),
+    gsSP2Triangles( 5,  2,  8, 0x0,  2,  7,  8, 0x0),
+    gsSP2Triangles( 8,  4,  5, 0x0,  6,  9,  7, 0x0),
+    gsSP2Triangles( 9,  8,  7, 0x0,  9,  6,  3, 0x0),
+    gsSP2Triangles( 9,  3,  4, 0x0,  4,  8,  9, 0x0),
+    gsSP2Triangles(10, 11, 12, 0x0, 12, 11, 13, 0x0),
+    gsSP2Triangles(12, 13, 14, 0x0, 15, 12, 14, 0x0),
+    gsSP2Triangles(10, 12, 15, 0x0, 10, 16, 11, 0x0),
+    gsSP2Triangles(16, 17, 11, 0x0, 17, 13, 11, 0x0),
+    gsSP2Triangles(17, 18, 13, 0x0, 18, 14, 13, 0x0),
+    gsSP2Triangles(18, 17, 16, 0x0, 19, 14, 18, 0x0),
+    gsSP2Triangles(19, 15, 14, 0x0, 19, 16, 10, 0x0),
+    gsSP2Triangles(10, 15, 19, 0x0, 18, 16, 19, 0x0),
     gsSPEndDisplayList(),
 };
 

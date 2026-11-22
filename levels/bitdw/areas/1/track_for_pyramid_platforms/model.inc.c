@@ -1,8 +1,15 @@
 // 0x0700A3F8 - 0x0700A4F8
-static const Vtx bitdw_seg7_vertex_0700A3F8[] = {
+
+
+// 0x0700A4F8 - 0x0700A5F8
+
+
+// 0x0700A5F8 - 0x0700A6A8
+static const Vtx bitdw_seg7_dl_0700A5F8_vtx32_0[] = {
     {{{  -562,     57,   -568}, 0, {   260,  -6504}, {0xe6, 0xee, 0x91, 0xff}}},
     {{{   614,     57,   -620}, 0, {   -76,   1328}, {0xe6, 0xee, 0x91, 0xff}}},
     {{{  -613,     57,   -620}, 0, {   -76,  -6846}, {0xe6, 0xee, 0x91, 0xff}}},
+    {{{   563,     57,   -568}, 0, {   260,    990}, {0xe6, 0xee, 0x91, 0xff}}},
     {{{   563,     57,    558}, 0, {   260,    990}, {0xe6, 0xee, 0x91, 0xff}}},
     {{{  -562,     57,    558}, 0, {   260,   8482}, {0xe6, 0xee, 0x91, 0xff}}},
     {{{  -613,     57,    609}, 0, {   -76,   8824}, {0xe6, 0xee, 0x91, 0xff}}},
@@ -15,11 +22,6 @@ static const Vtx bitdw_seg7_vertex_0700A3F8[] = {
     {{{  -562,     57,    558}, 0, {   260,   1328}, {0xe6, 0xee, 0x91, 0xff}}},
     {{{  -562,     57,   -568}, 0, {   260,  10186}, {0xe6, 0xee, 0x91, 0xff}}},
     {{{  -613,     57,   -620}, 0, {   -76,  10526}, {0xe6, 0xee, 0x91, 0xff}}},
-    {{{   563,     57,   -568}, 0, {   260,    990}, {0xe6, 0xee, 0x91, 0xff}}},
-};
-
-// 0x0700A4F8 - 0x0700A5F8
-static const Vtx bitdw_seg7_vertex_0700A4F8[] = {
     {{{   563,     57,    558}, 0, {   404,   1328}, {0xb7, 0xc2, 0x52, 0xff}}},
     {{{   512,      0,    513}, 0, {   -76,    990}, {0xb7, 0xc2, 0x52, 0xff}}},
     {{{  -511,      0,    513}, 0, {   -76,  -5824}, {0xb7, 0xc2, 0x52, 0xff}}},
@@ -38,21 +40,19 @@ static const Vtx bitdw_seg7_vertex_0700A4F8[] = {
     {{{  -562,     57,    558}, 0, {   432,   1254}, {0x8e, 0xac, 0x52, 0xff}}},
 };
 
-// 0x0700A5F8 - 0x0700A6A8
 static const Gfx bitdw_seg7_dl_0700A5F8[] = {
     gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, sky_09003800),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 64 * 32 - 1, CALC_DXT(64, G_IM_SIZ_16b_BYTES)),
-    gsSPVertex(bitdw_seg7_vertex_0700A3F8, 16, 0),
-    gsSP2Triangles( 0,  1,  2, 0x0,  3,  4,  5, 0x0),
-    gsSP2Triangles( 3,  5,  6, 0x0,  7,  8,  9, 0x0),
-    gsSP2Triangles( 7, 10,  8, 0x0, 11, 12, 13, 0x0),
-    gsSP2Triangles(11, 13, 14, 0x0,  0, 15,  1, 0x0),
-    gsSPVertex(bitdw_seg7_vertex_0700A4F8, 16, 0),
-    gsSP2Triangles( 0,  1,  2, 0x0,  0,  2,  3, 0x0),
-    gsSP2Triangles( 4,  5,  6, 0x0,  4,  7,  5, 0x0),
+    gsSPVertex(&bitdw_seg7_dl_0700A5F8_vtx32_0[0], 32, 0),
+    gsSP2Triangles( 0,  1,  2, 0x0,  0,  3,  1, 0x0),
+    gsSP2Triangles( 4,  5,  6, 0x0,  4,  6,  7, 0x0),
     gsSP2Triangles( 8,  9, 10, 0x0,  8, 11,  9, 0x0),
-    gsSP2Triangles(12, 13, 14, 0x0, 15, 12, 14, 0x0),
+    gsSP2Triangles(12, 13, 14, 0x0, 12, 14, 15, 0x0),
+    gsSP2Triangles(16, 17, 18, 0x0, 16, 18, 19, 0x0),
+    gsSP2Triangles(20, 21, 22, 0x0, 20, 23, 21, 0x0),
+    gsSP2Triangles(24, 25, 26, 0x0, 24, 27, 25, 0x0),
+    gsSP2Triangles(28, 29, 30, 0x0, 31, 28, 30, 0x0),
     gsSPEndDisplayList(),
 };
 

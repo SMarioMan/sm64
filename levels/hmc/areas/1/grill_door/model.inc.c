@@ -1,8 +1,15 @@
 // 0x0701FDC8 - 0x0701FEB8
-static const Vtx hmc_seg7_vertex_0701FDC8[] = {
+
+
+// 0x0701FEB8 - 0x0701FF68
+
+
+// 0x0701FF68 - 0x0701FFF8
+static const Vtx hmc_seg7_dl_0701FF68_vtx32_0[] = {
     {{{   410,      0,     51}, 0, {     0,   4054}, {0xff, 0xff, 0xff, 0xff}}},
     {{{   410,    717,    -50}, 0, {   990,  -3098}, {0xff, 0xff, 0xff, 0xff}}},
     {{{   410,    717,     51}, 0, {     0,  -3098}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{   410,      0,    -50}, 0, {   990,   4054}, {0xff, 0xff, 0xff, 0xff}}},
     {{{   410,    717,     51}, 0, {  3034,      0}, {0xff, 0xff, 0xff, 0xff}}},
     {{{   410,    717,    -50}, 0, {  3034,    990}, {0xff, 0xff, 0xff, 0xff}}},
     {{{     0,    717,    -50}, 0, { -1052,    990}, {0xff, 0xff, 0xff, 0xff}}},
@@ -15,37 +22,27 @@ static const Vtx hmc_seg7_vertex_0701FDC8[] = {
     {{{     0,      0,    -50}, 0, { -1052,    990}, {0xff, 0xff, 0xff, 0xff}}},
     {{{   410,      0,    -50}, 0, {  3034,    990}, {0xff, 0xff, 0xff, 0xff}}},
     {{{   410,      0,     51}, 0, {  3034,      0}, {0xff, 0xff, 0xff, 0xff}}},
-};
-
-// 0x0701FEB8 - 0x0701FF68
-static const Vtx hmc_seg7_vertex_0701FEB8[] = {
     {{{   410,    717,     51}, 0, {  2012,  -3098}, {0xff, 0xff, 0xff, 0xff}}},
     {{{     0,      0,     51}, 0, { -2074,   4054}, {0xff, 0xff, 0xff, 0xff}}},
     {{{   410,      0,     51}, 0, {  2012,   4054}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{   410,      0,     51}, 0, {     0,   4054}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{   410,      0,    -50}, 0, {   990,   4054}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{   410,    717,    -50}, 0, {   990,  -3098}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{     0,    717,     51}, 0, { -2074,  -3098}, {0xff, 0xff, 0xff, 0xff}}},
     {{{   410,      0,    -50}, 0, {  2012,   4054}, {0xff, 0xff, 0xff, 0xff}}},
     {{{     0,      0,    -50}, 0, { -2074,   4054}, {0xff, 0xff, 0xff, 0xff}}},
     {{{     0,    717,    -50}, 0, { -2074,  -3098}, {0xff, 0xff, 0xff, 0xff}}},
     {{{   410,    717,    -50}, 0, {  2012,  -3098}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{     0,    717,     51}, 0, { -2074,  -3098}, {0xff, 0xff, 0xff, 0xff}}},
 };
 
-// 0x0701FF68 - 0x0701FFF8
 static const Gfx hmc_seg7_dl_0701FF68[] = {
     gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, cave_09001000),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
-    gsSPVertex(hmc_seg7_vertex_0701FDC8, 15, 0),
-    gsSP2Triangles( 0,  1,  2, 0x0,  3,  4,  5, 0x0),
-    gsSP2Triangles( 3,  5,  6, 0x0,  7,  8,  9, 0x0),
-    gsSP2Triangles( 7,  9, 10, 0x0, 11, 12, 13, 0x0),
-    gsSP1Triangle(11, 13, 14, 0x0),
-    gsSPVertex(hmc_seg7_vertex_0701FEB8, 11, 0),
-    gsSP2Triangles( 0,  1,  2, 0x0,  3,  4,  5, 0x0),
-    gsSP2Triangles( 6,  7,  8, 0x0,  6,  8,  9, 0x0),
-    gsSP1Triangle( 0, 10,  1, 0x0),
+    gsSPVertex(&hmc_seg7_dl_0701FF68_vtx32_0[0], 24, 0),
+    gsSP2Triangles( 0,  1,  2, 0x0,  0,  3,  1, 0x0),
+    gsSP2Triangles( 4,  5,  6, 0x0,  4,  6,  7, 0x0),
+    gsSP2Triangles( 8,  9, 10, 0x0,  8, 10, 11, 0x0),
+    gsSP2Triangles(12, 13, 14, 0x0, 12, 14, 15, 0x0),
+    gsSP2Triangles(16, 17, 18, 0x0, 16, 19, 17, 0x0),
+    gsSP2Triangles(20, 21, 22, 0x0, 20, 22, 23, 0x0),
     gsSPEndDisplayList(),
 };
 

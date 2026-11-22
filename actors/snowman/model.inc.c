@@ -189,12 +189,18 @@ static const Lights1 snowman_seg5_lights_0500C7D0 = gdSPDefLights1(
 );
 
 // 0x0500C7E8
-static const Vtx snowman_seg5_vertex_0500C7E8[] = {
+
+
+// 0x0500C8E8
+
+
+// 0x0500C978 - 0x0500CAA8
+static const Vtx snowman_seg5_dl_0500C978_vtx32_0[] = {
     {{{     3,    -44,    -24}, 0, {   672,   1148}, {0xc1, 0xb9, 0xad, 0xff}}},
     {{{   105,    -63,    -17}, 0, {   720,    626}, {0x31, 0xca, 0x99, 0xff}}},
     {{{   116,   -101,     11}, 0, {   888,    570}, {0x2d, 0x8c, 0xeb, 0xff}}},
-    {{{    -4,      4,    -29}, 0, {   458,   1184}, {0xad, 0x03, 0xa1, 0xff}}},
     {{{    96,    -30,    -36}, 0, {   578,    662}, {0x1e, 0xde, 0x8a, 0xff}}},
+    {{{    -4,      4,    -29}, 0, {   458,   1184}, {0xad, 0x03, 0xa1, 0xff}}},
     {{{    97,     16,    -36}, 0, {   364,    654}, {0x13, 0x2a, 0x8a, 0xff}}},
     {{{   208,    -42,     25}, 0, {   588,     84}, {0x57, 0xa8, 0x19, 0xff}}},
     {{{   128,    -61,      9}, 0, {   704,    502}, {0x69, 0xbf, 0x1b, 0xff}}},
@@ -206,45 +212,31 @@ static const Vtx snowman_seg5_vertex_0500C7E8[] = {
     {{{    33,     83,     26}, 0, {    88,    974}, {0xcd, 0x72, 0x0f, 0xff}}},
     {{{   107,     63,     -2}, 0, {   148,    596}, {0x0f, 0x52, 0xa1, 0xff}}},
     {{{    36,    -86,     11}, 0, {   850,    988}, {0xbd, 0xa8, 0x3d, 0xff}}},
-};
-
-// 0x0500C8E8
-static const Vtx snowman_seg5_vertex_0500C8E8[] = {
-    {{{    69,    -56,     36}, 0, {   704,    810}, {0x04, 0xe8, 0x7c, 0xff}}},
-    {{{    57,    -20,     36}, 0, {   546,    864}, {0x02, 0xf8, 0x7e, 0xff}}},
     {{{     6,      0,     28}, 0, {   472,   1124}, {0xa3, 0xf5, 0x55, 0xff}}},
-    {{{    33,     83,     26}, 0, {    88,    974}, {0xcd, 0x72, 0x0f, 0xff}}},
-    {{{    -4,      4,    -29}, 0, {   458,   1184}, {0xad, 0x03, 0xa1, 0xff}}},
-    {{{     3,    -44,    -24}, 0, {   672,   1148}, {0xc1, 0xb9, 0xad, 0xff}}},
-    {{{    -2,     45,    -14}, 0, {   270,   1168}, {0xa1, 0x42, 0xce, 0xff}}},
-    {{{    36,    -86,     11}, 0, {   850,    988}, {0xbd, 0xa8, 0x3d, 0xff}}},
-    {{{   116,   -101,     11}, 0, {   888,    570}, {0x2d, 0x8c, 0xeb, 0xff}}},
 };
 
-// 0x0500C978 - 0x0500CAA8
 const Gfx snowman_seg5_dl_0500C978[] = {
     gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, snowman_seg5_texture_05008C70),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPLight(&snowman_seg5_lights_0500C7D0.l, 1),
     gsSPLight(&snowman_seg5_lights_0500C7D0.a, 2),
-    gsSPVertex(snowman_seg5_vertex_0500C7E8, 16, 0),
-    gsSP2Triangles( 0,  1,  2, 0x0,  0,  3,  4, 0x0),
-    gsSP2Triangles( 4,  1,  0, 0x0,  5,  4,  3, 0x0),
-    gsSP2Triangles( 5,  6,  4, 0x0,  4,  6,  7, 0x0),
-    gsSP2Triangles( 7,  1,  4, 0x0,  7,  6,  8, 0x0),
-    gsSP2Triangles( 9,  8,  6, 0x0,  9,  6, 10, 0x0),
-    gsSP2Triangles( 5, 10,  6, 0x0,  7,  2,  1, 0x0),
+    gsSPVertex(&snowman_seg5_dl_0500C978_vtx32_0[0], 17, 0),
+    gsSP2Triangles( 0,  1,  2, 0x0,  3,  1,  0, 0x0),
+    gsSP2Triangles( 0,  4,  3, 0x0,  5,  3,  4, 0x0),
+    gsSP2Triangles( 5,  6,  3, 0x0,  3,  6,  7, 0x0),
+    gsSP2Triangles( 7,  1,  3, 0x0,  7,  2,  1, 0x0),
+    gsSP2Triangles( 7,  6,  8, 0x0,  9,  8,  6, 0x0),
+    gsSP2Triangles( 9,  6, 10, 0x0,  5, 10,  6, 0x0),
     gsSP2Triangles( 8, 11,  7, 0x0, 11,  2,  7, 0x0),
-    gsSP2Triangles( 5, 12, 13, 0x0, 13, 14,  5, 0x0),
-    gsSP2Triangles( 5,  3, 12, 0x0,  5, 14, 10, 0x0),
-    gsSP2Triangles(10, 14,  9, 0x0, 13,  9, 14, 0x0),
-    gsSP2Triangles( 8,  9, 13, 0x0,  2, 15,  0, 0x0),
-    gsSPVertex(snowman_seg5_vertex_0500C8E8, 9, 0),
-    gsSP2Triangles( 0,  1,  2, 0x0,  3,  2,  1, 0x0),
-    gsSP2Triangles( 4,  5,  2, 0x0,  2,  6,  4, 0x0),
-    gsSP2Triangles( 2,  5,  7, 0x0,  0,  2,  7, 0x0),
-    gsSP2Triangles( 3,  6,  2, 0x0,  7,  8,  0, 0x0),
+    gsSP2Triangles( 5,  4, 12, 0x0,  5, 12, 13, 0x0),
+    gsSP2Triangles( 8,  9, 13, 0x0, 13, 14,  5, 0x0),
+    gsSP2Triangles( 5, 14, 10, 0x0, 10, 14,  9, 0x0),
+    gsSP2Triangles(13,  9, 14, 0x0,  2, 15,  0, 0x0),
+    gsSP2Triangles(15,  2, 11, 0x0, 11,  8, 16, 0x0),
+    gsSP2Triangles(13, 16,  8, 0x0,  4,  0, 16, 0x0),
+    gsSP2Triangles(16, 12,  4, 0x0, 16,  0, 15, 0x0),
+    gsSP2Triangles(11, 16, 15, 0x0, 13, 12, 16, 0x0),
     gsSPEndDisplayList(),
 };
 

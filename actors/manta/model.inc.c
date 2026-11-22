@@ -823,37 +823,10 @@ static const Vtx manta_seg5_vertex_050061A0[] = {
 };
 
 // 0x05006290
-static const Vtx manta_seg5_vertex_05006290[] = {
-    {{{   740,    120,     26}, 0, {   144,     40}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{   560,    220,     36}, 0, {    28,    254}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{   500,      0,     56}, 0, {   288,    324}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{   532,   -287,      6}, 0, {   628,    286}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{   600,   -219,      6}, 0, {   548,    206}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{   560,   -219,     36}, 0, {   548,    254}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{   260,   -219,     36}, 0, {   548,    610}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{   300,   -287,      6}, 0, {   628,    562}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{   740,   -119,     26}, 0, {   428,     40}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{   260,    220,     36}, 0, {    28,    610}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{    20,   -109,      6}, 0, {   416,    894}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{    90,   -219,      6}, 0, {   548,    812}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{   770,      0,     16}, 0, {   288,      4}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{   600,    220,      6}, 0, {    28,    206}, {0xff, 0xff, 0xff, 0xff}}},
-};
+
 
 // 0x05006370
-static const Vtx manta_seg5_vertex_05006370[] = {
-    {{{   560,    220,     36}, 0, {   536,    250}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{   600,    220,      6}, 0, {   536,    202}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{   532,    288,      6}, 0, {   616,    284}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{   260,    220,     36}, 0, {    28,    610}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{    20,    120,     16}, 0, {   144,    894}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{    20,   -109,      6}, 0, {   416,    894}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{   -39,      0,      6}, 0, {   288,    966}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{    90,    220,      6}, 0, {    28,    812}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{    90,    220,      6}, 0, {   536,    810}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{   260,    220,     36}, 0, {   536,    608}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{   300,    288,      6}, 0, {   616,    560}, {0xff, 0xff, 0xff, 0xff}}},
-};
+
 
 // 0x05006420
 static const Vtx manta_seg5_vertex_05006420[] = {
@@ -902,24 +875,48 @@ const Gfx manta_seg5_dl_05006588[] = {
 };
 
 // 0x050065F0 - 0x050066D0
+static const Vtx manta_seg5_dl_050065F0_vtx32_0[] = {
+    {{{   740,    120,     26}, 0, {   144,     40}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{   560,    220,     36}, 0, {    28,    254}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{   500,      0,     56}, 0, {   288,    324}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{   740,   -119,     26}, 0, {   428,     40}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{   560,   -219,     36}, 0, {   548,    254}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{   600,   -219,      6}, 0, {   548,    206}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{   532,   -287,      6}, 0, {   628,    286}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{   260,   -219,     36}, 0, {   548,    610}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{   300,   -287,      6}, 0, {   628,    562}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{   260,    220,     36}, 0, {    28,    610}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{    20,   -109,      6}, 0, {   416,    894}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{    90,   -219,      6}, 0, {   548,    812}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{   770,      0,     16}, 0, {   288,      4}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{   600,    220,      6}, 0, {    28,    206}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{    20,    120,     16}, 0, {   144,    894}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{   -39,      0,      6}, 0, {   288,    966}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{    90,    220,      6}, 0, {    28,    812}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{   560,    220,     36}, 0, {   536,    250}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{   600,    220,      6}, 0, {   536,    202}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{   532,    288,      6}, 0, {   616,    284}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{   300,    288,      6}, 0, {   616,    560}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{   260,    220,     36}, 0, {   536,    608}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{    90,    220,      6}, 0, {   536,    810}, {0xff, 0xff, 0xff, 0xff}}},
+};
+
 const Gfx manta_seg5_dl_050065F0[] = {
     gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, manta_seg5_texture_050037A0),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 64 * 32 - 1, CALC_DXT(64, G_IM_SIZ_16b_BYTES)),
-    gsSPVertex(manta_seg5_vertex_05006290, 14, 0),
-    gsSP2Triangles( 0,  1,  2, 0x0,  3,  4,  5, 0x0),
-    gsSP2Triangles( 5,  6,  7, 0x0,  2,  5,  8, 0x0),
-    gsSP2Triangles( 8,  5,  4, 0x0,  6,  5,  2, 0x0),
-    gsSP2Triangles( 5,  7,  3, 0x0,  6,  2,  9, 0x0),
-    gsSP2Triangles(10,  6,  9, 0x0,  7,  6, 11, 0x0),
-    gsSP2Triangles(10, 11,  6, 0x0,  8, 12,  0, 0x0),
-    gsSP2Triangles( 0,  2,  8, 0x0, 13,  1,  0, 0x0),
-    gsSP1Triangle( 2,  1,  9, 0x0),
-    gsSPVertex(manta_seg5_vertex_05006370, 11, 0),
-    gsSP2Triangles( 0,  1,  2, 0x0,  3,  4,  5, 0x0),
-    gsSP2Triangles( 4,  6,  5, 0x0,  3,  7,  4, 0x0),
-    gsSP2Triangles( 8,  9, 10, 0x0, 10,  9,  0, 0x0),
-    gsSP1Triangle( 2, 10,  0, 0x0),
+    gsSPVertex(&manta_seg5_dl_050065F0_vtx32_0[0], 23, 0),
+    gsSP2Triangles( 0,  1,  2, 0x0,  0,  2,  3, 0x0),
+    gsSP2Triangles( 2,  4,  3, 0x0,  3,  4,  5, 0x0),
+    gsSP2Triangles( 6,  5,  4, 0x0,  7,  4,  2, 0x0),
+    gsSP2Triangles( 4,  7,  8, 0x0,  4,  8,  6, 0x0),
+    gsSP2Triangles( 7,  2,  9, 0x0,  2,  1,  9, 0x0),
+    gsSP2Triangles(10,  7,  9, 0x0,  8,  7, 11, 0x0),
+    gsSP2Triangles(10, 11,  7, 0x0,  3, 12,  0, 0x0),
+    gsSP2Triangles(13,  1,  0, 0x0,  9, 14, 10, 0x0),
+    gsSP2Triangles(14, 15, 10, 0x0,  9, 16, 14, 0x0),
+    gsSP2Triangles(17, 18, 19, 0x0, 19, 20, 17, 0x0),
+    gsSP2Triangles(20, 21, 17, 0x0, 22, 21, 20, 0x0),
     gsSPEndDisplayList(),
 };
 

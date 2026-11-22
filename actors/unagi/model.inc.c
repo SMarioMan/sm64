@@ -486,42 +486,10 @@ static const Vtx unagi_seg5_vertex_0500D8E0[] = {
 };
 
 // 0x0500D980
-static const Vtx unagi_seg5_vertex_0500D980[] = {
-    {{{   679,     53,     96}, 0, {    26,    592}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{   405,    108,    160}, 0, {   414,    710}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{   506,    -68,    121}, 0, {   272,    332}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{   700,    -50,     39}, 0, {    -4,    370}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{   224,   -180,     55}, 0, {   672,     92}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{   470,   -137,      0}, 0, {   322,    186}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{   599,    -87,      0}, 0, {   140,    292}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{   226,     66,    170}, 0, {   668,    620}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{   506,    -68,   -116}, 0, {   272,    332}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{   700,    -50,    -38}, 0, {    -4,    370}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{   768,     55,      0}, 0, {   -98,    596}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{   679,     53,    -95}, 0, {    26,    592}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{   224,   -180,    -54}, 0, {   672,     92}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{   226,     66,   -164}, 0, {   668,    620}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{     0,      0,   -112}, 0, {   990,    478}, {0xff, 0xff, 0xff, 0xff}}},
-};
+
 
 // 0x0500DA70
-static const Vtx unagi_seg5_vertex_0500DA70[] = {
-    {{{     3,    208,    -60}, 0, {   986,    922}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{   221,    236,    -60}, 0, {   676,    980}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{   226,     66,   -164}, 0, {   668,    620}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{     0,      0,   -112}, 0, {   990,    478}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{  -112,      0,      0}, 0, {  1150,    478}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{   224,   -180,    -54}, 0, {   672,     92}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{   -68,   -121,      0}, 0, {  1088,    220}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{     3,    208,     61}, 0, {   986,    922}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{   506,    -68,   -116}, 0, {   272,    332}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{   405,    108,   -150}, 0, {   414,    710}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{   679,     53,    -95}, 0, {    26,    592}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{     0,      0,    118}, 0, {   990,    478}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{   226,     66,    170}, 0, {   668,    620}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{   221,    236,     61}, 0, {   676,    980}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{   224,   -180,     55}, 0, {   672,     92}, {0xff, 0xff, 0xff, 0xff}}},
-};
+
 
 // 0x0500DB60 - 0x0500DBC0
 const Gfx unagi_seg5_dl_0500DB60[] = {
@@ -537,30 +505,55 @@ const Gfx unagi_seg5_dl_0500DB60[] = {
 };
 
 // 0x0500DBC0 - 0x0500DD08
+static const Vtx unagi_seg5_dl_0500DBC0_vtx32_0[] = {
+    {{{   679,     53,     96}, 0, {    26,    592}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{   405,    108,    160}, 0, {   414,    710}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{   506,    -68,    121}, 0, {   272,    332}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{   700,    -50,     39}, 0, {    -4,    370}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{   599,    -87,      0}, 0, {   140,    292}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{   470,   -137,      0}, 0, {   322,    186}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{   224,   -180,     55}, 0, {   672,     92}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{   226,     66,    170}, 0, {   668,    620}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{   506,    -68,   -116}, 0, {   272,    332}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{   700,    -50,    -38}, 0, {    -4,    370}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{   768,     55,      0}, 0, {   -98,    596}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{   679,     53,    -95}, 0, {    26,    592}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{   224,   -180,    -54}, 0, {   672,     92}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{   226,     66,   -164}, 0, {   668,    620}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{     0,      0,   -112}, 0, {   990,    478}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{   -68,   -121,      0}, 0, {  1088,    220}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{  -112,      0,      0}, 0, {  1150,    478}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{     3,    208,    -60}, 0, {   986,    922}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{   221,    236,    -60}, 0, {   676,    980}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{     3,    208,     61}, 0, {   986,    922}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{   405,    108,   -150}, 0, {   414,    710}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{     0,      0,    118}, 0, {   990,    478}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{   221,    236,     61}, 0, {   676,    980}, {0xff, 0xff, 0xff, 0xff}}},
+};
+
 const Gfx unagi_seg5_dl_0500DBC0[] = {
     gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, unagi_seg5_texture_0500B920),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
-    gsSPVertex(unagi_seg5_vertex_0500D980, 15, 0),
+    gsSPVertex(&unagi_seg5_dl_0500DBC0_vtx32_0[0], 23, 0),
     gsSP2Triangles( 0,  1,  2, 0x0,  3,  0,  2, 0x0),
-    gsSP2Triangles( 2,  4,  5, 0x0,  2,  6,  3, 0x0),
-    gsSP2Triangles( 5,  6,  2, 0x0,  7,  4,  2, 0x0),
-    gsSP2Triangles( 1,  7,  2, 0x0,  8,  6,  5, 0x0),
-    gsSP2Triangles( 9,  6,  8, 0x0,  6,  9,  3, 0x0),
+    gsSP2Triangles( 2,  4,  3, 0x0,  5,  4,  2, 0x0),
+    gsSP2Triangles( 2,  6,  5, 0x0,  7,  6,  2, 0x0),
+    gsSP2Triangles( 1,  7,  2, 0x0,  8,  4,  5, 0x0),
+    gsSP2Triangles( 9,  4,  8, 0x0,  4,  9,  3, 0x0),
     gsSP2Triangles( 3,  9, 10, 0x0, 10,  0,  3, 0x0),
-    gsSP2Triangles( 9, 11, 10, 0x0,  8, 12, 13, 0x0),
-    gsSP2Triangles(14, 13, 12, 0x0,  5,  4, 12, 0x0),
-    gsSP2Triangles( 5, 12,  8, 0x0,  8, 11,  9, 0x0),
-    gsSPVertex(unagi_seg5_vertex_0500DA70, 15, 0),
-    gsSP2Triangles( 0,  1,  2, 0x0,  3,  4,  0, 0x0),
-    gsSP2Triangles( 5,  6,  3, 0x0,  6,  4,  3, 0x0),
-    gsSP2Triangles( 2,  3,  0, 0x0,  1,  0,  7, 0x0),
-    gsSP2Triangles( 0,  4,  7, 0x0,  8,  9, 10, 0x0),
-    gsSP2Triangles( 8,  2,  9, 0x0,  7,  4, 11, 0x0),
-    gsSP2Triangles(11,  4,  6, 0x0,  7, 11, 12, 0x0),
-    gsSP2Triangles( 7, 13,  1, 0x0, 12, 13,  7, 0x0),
-    gsSP2Triangles(14,  6,  5, 0x0, 14, 12, 11, 0x0),
-    gsSP1Triangle(11,  6, 14, 0x0),
+    gsSP2Triangles( 9, 11, 10, 0x0,  8, 11,  9, 0x0),
+    gsSP2Triangles( 5,  6, 12, 0x0,  5, 12,  8, 0x0),
+    gsSP2Triangles( 8, 12, 13, 0x0, 14, 13, 12, 0x0),
+    gsSP2Triangles(12, 15, 14, 0x0,  6, 15, 12, 0x0),
+    gsSP2Triangles(15, 16, 14, 0x0, 14, 16, 17, 0x0),
+    gsSP2Triangles(13, 14, 17, 0x0, 17, 18, 13, 0x0),
+    gsSP2Triangles(18, 17, 19, 0x0, 17, 16, 19, 0x0),
+    gsSP2Triangles( 8, 20, 11, 0x0,  8, 13, 20, 0x0),
+    gsSP2Triangles(19, 16, 21, 0x0, 21, 16, 15, 0x0),
+    gsSP2Triangles(19, 21,  7, 0x0,  6,  7, 21, 0x0),
+    gsSP2Triangles(21, 15,  6, 0x0, 19, 22, 18, 0x0),
+    gsSP1Triangle( 7, 22, 19, 0x0),
     gsSPEndDisplayList(),
 };
 

@@ -1,5 +1,11 @@
 // 0x070115D8 - 0x070116D8
-static const Vtx bitfs_seg7_vertex_070115D8[] = {
+
+
+// 0x070116D8 - 0x07011718
+
+
+// 0x07011718 - 0x07011798
+static const Vtx bitfs_seg7_dl_07011718_vtx32_0[] = {
     {{{   307,    205,   -306}, 0, {  4056,   5076}, {0xad, 0xbb, 0xd1, 0xff}}},
     {{{  -306,    205,   -306}, 0, {     0,   5076}, {0xad, 0xbb, 0xd1, 0xff}}},
     {{{  -306,    205,    307}, 0, {     0,    990}, {0xad, 0xbb, 0xd1, 0xff}}},
@@ -16,28 +22,22 @@ static const Vtx bitfs_seg7_vertex_070115D8[] = {
     {{{   307,    205,    307}, 0, {     0,      0}, {0x52, 0x61, 0xac, 0xff}}},
     {{{   307,      0,    307}, 0, {     0,    990}, {0x52, 0x61, 0xac, 0xff}}},
     {{{   307,    205,   -306}, 0, {  4056,      0}, {0x52, 0x61, 0xac, 0xff}}},
-};
-
-// 0x070116D8 - 0x07011718
-static const Vtx bitfs_seg7_vertex_070116D8[] = {
     {{{  -306,      0,    307}, 0, {     0,    990}, {0x52, 0x61, 0xac, 0xff}}},
     {{{  -306,    205,    307}, 0, {     0,      0}, {0x52, 0x61, 0xac, 0xff}}},
     {{{  -306,    205,   -306}, 0, {  4056,      0}, {0x52, 0x61, 0xac, 0xff}}},
     {{{  -306,      0,   -306}, 0, {  4056,    990}, {0x52, 0x61, 0xac, 0xff}}},
 };
 
-// 0x07011718 - 0x07011798
 static const Gfx bitfs_seg7_dl_07011718[] = {
     gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, bitfs_seg7_texture_07000000),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 64 * 32 - 1, CALC_DXT(64, G_IM_SIZ_16b_BYTES)),
-    gsSPVertex(bitfs_seg7_vertex_070115D8, 16, 0),
+    gsSPVertex(&bitfs_seg7_dl_07011718_vtx32_0[0], 20, 0),
     gsSP2Triangles( 0,  1,  2, 0x0,  0,  2,  3, 0x0),
     gsSP2Triangles( 4,  5,  6, 0x0,  4,  7,  5, 0x0),
     gsSP2Triangles( 8,  9, 10, 0x0,  8, 11,  9, 0x0),
     gsSP2Triangles(12, 13, 14, 0x0, 12, 15, 13, 0x0),
-    gsSPVertex(bitfs_seg7_vertex_070116D8, 4, 0),
-    gsSP2Triangles( 0,  1,  2, 0x0,  0,  2,  3, 0x0),
+    gsSP2Triangles(16, 17, 18, 0x0, 16, 18, 19, 0x0),
     gsSPEndDisplayList(),
 };
 

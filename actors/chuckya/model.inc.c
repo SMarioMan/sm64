@@ -463,7 +463,13 @@ static const Lights1 chuckya_seg8_lights_0800A9B8 = gdSPDefLights1(
 );
 
 // 0x0800A9D0
-static const Vtx chuckya_seg8_vertex_0800A9D0[] = {
+
+
+// 0x0800AAC0
+
+
+// 0x0800AB70 - 0x0800ABE8
+static const Vtx chuckya_seg8_dl_0800AB70_vtx32_0[] = {
     {{{   -99,   -129,    130}, 0, {     0,      0}, {0x24, 0xa9, 0x54, 0xff}}},
     {{{  -135,   -173,    100}, 0, {     0,      0}, {0x24, 0xa9, 0x54, 0xff}}},
     {{{   -55,   -236,      0}, 0, {     0,      0}, {0x24, 0xa9, 0x54, 0xff}}},
@@ -479,10 +485,6 @@ static const Vtx chuckya_seg8_vertex_0800A9D0[] = {
     {{{  -135,   -173,    100}, 0, {     0,      0}, {0xb3, 0x9c, 0x00, 0xff}}},
     {{{  -213,   -113,      1}, 0, {     0,      0}, {0xb3, 0x9c, 0x00, 0xff}}},
     {{{  -132,   -175,   -100}, 0, {     0,      0}, {0xb3, 0x9c, 0x00, 0xff}}},
-};
-
-// 0x0800AAC0
-static const Vtx chuckya_seg8_vertex_0800AAC0[] = {
     {{{  -213,   -113,      1}, 0, {     0,      0}, {0xa3, 0x0e, 0xac, 0xff}}},
     {{{  -202,    -49,      0}, 0, {     0,      0}, {0xa3, 0x0e, 0xac, 0xff}}},
     {{{   -98,   -130,   -130}, 0, {     0,      0}, {0xa3, 0x0e, 0xac, 0xff}}},
@@ -496,18 +498,15 @@ static const Vtx chuckya_seg8_vertex_0800AAC0[] = {
     {{{   -98,   -130,   -130}, 0, {     0,      0}, {0x28, 0xaa, 0xad, 0xff}}},
 };
 
-// 0x0800AB70 - 0x0800ABE8
 const Gfx chuckya_seg8_dl_0800AB70[] = {
     gsSPLight(&chuckya_seg8_lights_0800A9B8.l, 1),
     gsSPLight(&chuckya_seg8_lights_0800A9B8.a, 2),
-    gsSPVertex(chuckya_seg8_vertex_0800A9D0, 15, 0),
+    gsSPVertex(&chuckya_seg8_dl_0800AB70_vtx32_0[0], 26, 0),
     gsSP2Triangles( 0,  1,  2, 0x0,  3,  4,  5, 0x0),
     gsSP2Triangles( 6,  7,  8, 0x0,  9, 10, 11, 0x0),
-    gsSP1Triangle(12, 13, 14, 0x0),
-    gsSPVertex(chuckya_seg8_vertex_0800AAC0, 11, 0),
-    gsSP2Triangles( 0,  1,  2, 0x0,  0,  2,  3, 0x0),
-    gsSP2Triangles( 4,  5,  6, 0x0,  7,  8,  9, 0x0),
-    gsSP1Triangle( 7, 10,  8, 0x0),
+    gsSP2Triangles(12, 13, 14, 0x0, 15, 16, 17, 0x0),
+    gsSP2Triangles(15, 17, 18, 0x0, 19, 20, 21, 0x0),
+    gsSP2Triangles(22, 23, 24, 0x0, 22, 25, 23, 0x0),
     gsSPEndDisplayList(),
 };
 

@@ -1,8 +1,30 @@
 // 0x0701E958 - 0x0701EA58
-static const Vtx hmc_seg7_vertex_0701E958[] = {
+
+
+// 0x0701EA58 - 0x0701EB38
+
+
+// 0x0701EB38 - 0x0701EC28
+
+
+// 0x0701EC28 - 0x0701ED28
+
+
+// 0x0701ED28 - 0x0701EDB8
+
+
+// 0x0701EDB8 - 0x0701EEB8
+
+
+// 0x0701EEB8 - 0x0701EF78
+
+
+// 0x0701EF78 - 0x0701F0D0
+static const Vtx hmc_seg7_dl_0701EF78_vtx32_0[] = {
     {{{ -1391,  -4587,   6251}, 0, {  6156,   1102}, {0xff, 0xff, 0xff, 0xff}}},
     {{{ -1822,  -4484,   5893}, 0, {     0,      0}, {0xff, 0xff, 0xff, 0xff}}},
     {{{ -1749,  -4587,   5893}, 0, {   536,   1102}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{ -1427,  -4484,   6288}, 0, {  6156,      0}, {0xff, 0xff, 0xff, 0xff}}},
     {{{ -1779,   1843,  -6545}, 0, { 16358,  10186}, {0xff, 0xff, 0xff, 0xff}}},
     {{{ -1779,   2867,  -6545}, 0, { 16358,      0}, {0xff, 0xff, 0xff, 0xff}}},
     {{{ -2830,   2867,  -7807}, 0, {     0,      0}, {0xff, 0xff, 0xff, 0xff}}},
@@ -11,18 +33,14 @@ static const Vtx hmc_seg7_vertex_0701E958[] = {
     {{{  -851,  -4587,   5712}, 0, {  6156,   1102}, {0xff, 0xff, 0xff, 0xff}}},
     {{{ -1209,  -4587,   5353}, 0, {   536,   1102}, {0xff, 0xff, 0xff, 0xff}}},
     {{{  -815,  -4484,   5676}, 0, {  6156,      0}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{ -1749,  -4587,   5893}, 0, {  9000,   1102}, {0xff, 0xff, 0xff, 0xff}}},
     {{{ -1822,  -4484,   5893}, 0, {  9568,      0}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{ -1749,  -4587,   5893}, 0, {  9000,   1102}, {0xff, 0xff, 0xff, 0xff}}},
     {{{ -4290,   -511,  -5769}, 0, {  7158,   1028}, {0xff, 0xff, 0xff, 0xff}}},
     {{{ -4290,   -511,  -7285}, 0, {     0,   1028}, {0xff, 0xff, 0xff, 0xff}}},
     {{{ -4290,   -204,  -7285}, 0, {     0,      0}, {0xff, 0xff, 0xff, 0xff}}},
-};
-
-// 0x0701EA58 - 0x0701EB38
-static const Vtx hmc_seg7_vertex_0701EA58[] = {
-    {{{ -1391,  -4587,   6251}, 0, {  6156,   1102}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{ -1427,  -4484,   6288}, 0, {  6156,      0}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{ -1822,  -4484,   5893}, 0, {     0,      0}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{ -4290,   -204,  -5769}, 0, {  7158,      0}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{ -2774,   -204,  -7285}, 0, {  7158,      0}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{ -2774,   -511,  -7285}, 0, {  7158,   1028}, {0xff, 0xff, 0xff, 0xff}}},
     {{{ -1209,  -4484,   5281}, 0, {  3034,   4518}, {0xff, 0xff, 0xff, 0xff}}},
     {{{ -1822,  -4484,   5893}, 0, {  3034,  -4120}, {0xff, 0xff, 0xff, 0xff}}},
     {{{ -1427,  -4484,   6288}, 0, { -2534,  -4120}, {0xff, 0xff, 0xff, 0xff}}},
@@ -31,65 +49,62 @@ static const Vtx hmc_seg7_vertex_0701EA58[] = {
     {{{ -4290,   -511,  -5769}, 0, {     0,   1028}, {0xff, 0xff, 0xff, 0xff}}},
     {{{ -4290,   -204,  -5769}, 0, {     0,      0}, {0xff, 0xff, 0xff, 0xff}}},
     {{{ -2774,   -204,  -5769}, 0, {  7158,      0}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{ -4290,   -511,  -5769}, 0, {  7158,   1028}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{ -4290,   -204,  -7285}, 0, {     0,      0}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{ -4290,   -204,  -5769}, 0, {  7158,      0}, {0xff, 0xff, 0xff, 0xff}}},
-};
-
-// 0x0701EB38 - 0x0701EC28
-static const Vtx hmc_seg7_vertex_0701EB38[] = {
+    {{{ -2774,   -511,  -7285}, 0, {     0,   1028}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{ -2774,   -204,  -7285}, 0, {     0,      0}, {0xff, 0xff, 0xff, 0xff}}},
     {{{ -2774,    819,  -7285}, 0, {  7158,      0}, {0xff, 0xff, 0xff, 0xff}}},
     {{{ -4290,    512,  -7285}, 0, {     0,   1028}, {0xff, 0xff, 0xff, 0xff}}},
     {{{ -2774,    512,  -7285}, 0, {  7158,   1028}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{ -2774,   -204,  -7285}, 0, {  7158,      0}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{ -4290,   -204,  -7285}, 0, {     0,      0}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{ -4290,   -511,  -7285}, 0, {     0,   1028}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{ -2774,   -511,  -7285}, 0, {  7158,   1028}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{ -2774,   -204,  -5769}, 0, {  7158,      0}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{ -2774,   -511,  -7285}, 0, {     0,   1028}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{ -2774,   -511,  -5769}, 0, {  7158,   1028}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{ -2774,   -204,  -7285}, 0, {     0,      0}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{ -4290,    819,  -7285}, 0, {     0,      0}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{ -4290,    512,  -5769}, 0, {  7158,   1028}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{ -4290,    819,  -5769}, 0, {  7158,      0}, {0xff, 0xff, 0xff, 0xff}}},
     {{{ -2774,    819,  -5769}, 0, {  7158,      0}, {0xff, 0xff, 0xff, 0xff}}},
     {{{ -2774,    512,  -7285}, 0, {     0,   1028}, {0xff, 0xff, 0xff, 0xff}}},
     {{{ -2774,    512,  -5769}, 0, {  7158,   1028}, {0xff, 0xff, 0xff, 0xff}}},
     {{{ -2774,    819,  -7285}, 0, {     0,      0}, {0xff, 0xff, 0xff, 0xff}}},
-};
-
-// 0x0701EC28 - 0x0701ED28
-static const Vtx hmc_seg7_vertex_0701EC28[] = {
+    {{{ -4290,    819,  -5769}, 0, {     0,      0}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{ -4290,    512,  -5769}, 0, {     0,   1028}, {0xff, 0xff, 0xff, 0xff}}},
     {{{ -2774,   1434,  -5769}, 0, {  7158,   1028}, {0xff, 0xff, 0xff, 0xff}}},
     {{{ -4290,   1741,  -5769}, 0, {     0,      0}, {0xff, 0xff, 0xff, 0xff}}},
     {{{ -2774,   1741,  -5769}, 0, {  7158,      0}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{ -2774,    819,  -7285}, 0, {  7158,      0}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{ -4290,    819,  -7285}, 0, {     0,      0}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{ -4290,    512,  -7285}, 0, {     0,   1028}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{ -4290,    512,  -5769}, 0, {  7158,   1028}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{ -4290,    819,  -5769}, 0, {  7158,      0}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{ -2774,    512,  -5769}, 0, {  7158,   1028}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{ -4290,    512,  -5769}, 0, {     0,   1028}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{ -4290,    819,  -5769}, 0, {     0,      0}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{ -2774,    819,  -5769}, 0, {  7158,      0}, {0xff, 0xff, 0xff, 0xff}}},
     {{{ -4290,   1434,  -5769}, 0, {     0,   1028}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{ -2774,   1434,  -7285}, 0, {     0,   1028}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{ -2774,   1741,  -7285}, 0, {     0,      0}, {0xff, 0xff, 0xff, 0xff}}},
     {{{ -4290,   1434,  -5769}, 0, {  7158,   1028}, {0xff, 0xff, 0xff, 0xff}}},
     {{{ -4290,   1741,  -7285}, 0, {     0,      0}, {0xff, 0xff, 0xff, 0xff}}},
     {{{ -4290,   1741,  -5769}, 0, {  7158,      0}, {0xff, 0xff, 0xff, 0xff}}},
-};
-
-// 0x0701ED28 - 0x0701EDB8
-static const Vtx hmc_seg7_vertex_0701ED28[] = {
-    {{{ -4290,   1434,  -5769}, 0, {  7158,   1028}, {0xff, 0xff, 0xff, 0xff}}},
     {{{ -4290,   1434,  -7285}, 0, {     0,   1028}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{ -4290,   1741,  -7285}, 0, {     0,      0}, {0xff, 0xff, 0xff, 0xff}}},
     {{{ -2774,   1741,  -7285}, 0, {  7158,      0}, {0xff, 0xff, 0xff, 0xff}}},
     {{{ -2774,   1434,  -7285}, 0, {  7158,   1028}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{ -2774,   1741,  -5769}, 0, {  7158,      0}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{ -2774,   1434,  -7285}, 0, {     0,   1028}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{ -2774,   1434,  -5769}, 0, {  7158,   1028}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{ -2774,   1741,  -7285}, 0, {     0,      0}, {0xff, 0xff, 0xff, 0xff}}},
 };
 
-// 0x0701EDB8 - 0x0701EEB8
-static const Vtx hmc_seg7_vertex_0701EDB8[] = {
+static const Gfx hmc_seg7_dl_0701EF78[] = {
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, cave_09001000),
+    gsDPLoadSync(),
+    gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
+    gsSPVertex(&hmc_seg7_dl_0701EF78_vtx32_0[0], 30, 0),
+    gsSP2Triangles( 0,  1,  2, 0x0,  0,  3,  1, 0x0),
+    gsSP2Triangles( 4,  5,  6, 0x0,  4,  6,  7, 0x0),
+    gsSP2Triangles( 8,  9, 10, 0x0,  8, 11,  9, 0x0),
+    gsSP2Triangles(12,  8, 10, 0x0, 13, 12, 10, 0x0),
+    gsSP2Triangles(14, 15, 16, 0x0, 14, 16, 17, 0x0),
+    gsSP2Triangles(18, 16, 15, 0x0, 18, 15, 19, 0x0),
+    gsSP2Triangles(20, 21, 22, 0x0, 20, 22, 23, 0x0),
+    gsSP2Triangles(24, 25, 26, 0x0, 24, 26, 27, 0x0),
+    gsSP2Triangles(27, 28, 24, 0x0, 27, 29, 28, 0x0),
+    gsSPVertex(&hmc_seg7_dl_0701EF78_vtx32_0[30], 24, 0),
+    gsSP2Triangles( 0,  1,  2, 0x0,  0,  3,  1, 0x0),
+    gsSP2Triangles( 4,  1,  3, 0x0,  4,  3,  5, 0x0),
+    gsSP2Triangles( 6,  7,  8, 0x0,  6,  9,  7, 0x0),
+    gsSP2Triangles( 8, 10,  6, 0x0,  8, 11, 10, 0x0),
+    gsSP2Triangles(12, 13, 14, 0x0, 12, 15, 13, 0x0),
+    gsSP2Triangles(14, 16, 12, 0x0, 14, 17, 16, 0x0),
+    gsSP2Triangles(18, 19, 20, 0x0, 18, 21, 19, 0x0),
+    gsSP2Triangles(22, 19, 21, 0x0, 22, 21, 23, 0x0),
+    gsSPEndDisplayList(),
+};
+
+// 0x0701F0D0 - 0x0701F1B0
+static const Vtx hmc_seg7_dl_0701F0D0_vtx32_0[] = {
     {{{ -4477,  -4587,   3950}, 0, { 26110,    990}, {0xff, 0xff, 0xff, 0xff}}},
     {{{ -4367,  -4279,   3245}, 0, { 23224,      0}, {0xff, 0xff, 0xff, 0xff}}},
     {{{ -4477,  -4587,   3167}, 0, { 23074,    990}, {0xff, 0xff, 0xff, 0xff}}},
@@ -102,17 +117,11 @@ static const Vtx hmc_seg7_vertex_0701EDB8[] = {
     {{{ -2696,  -4279,   3245}, 0, { 13534,      0}, {0xff, 0xff, 0xff, 0xff}}},
     {{{ -2587,  -4587,   3950}, 0, { 10586,    990}, {0xff, 0xff, 0xff, 0xff}}},
     {{{ -2696,  -4279,   3872}, 0, { 10702,      0}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{ -3219,  -4279,   4394}, 0, {  7418,      0}, {0xff, 0xff, 0xff, 0xff}}},
     {{{ -3140,  -4587,   4503}, 0, {  7558,    990}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{ -3219,  -4279,   4394}, 0, {  7418,      0}, {0xff, 0xff, 0xff, 0xff}}},
     {{{ -3845,  -4279,   4394}, 0, {  4700,      0}, {0xff, 0xff, 0xff, 0xff}}},
     {{{ -3923,  -4587,   4503}, 0, {  4570,    990}, {0xff, 0xff, 0xff, 0xff}}},
-};
-
-// 0x0701EEB8 - 0x0701EF78
-static const Vtx hmc_seg7_vertex_0701EEB8[] = {
     {{{ -4367,  -4279,   3872}, 0, {  1464,      0}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{ -3923,  -4587,   4503}, 0, {  4570,    990}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{ -3845,  -4279,   4394}, 0, {  4700,      0}, {0xff, 0xff, 0xff, 0xff}}},
     {{{ -4477,  -4587,   3950}, 0, {  1582,    990}, {0xff, 0xff, 0xff, 0xff}}},
     {{{  -819,  -4279,   5665}, 0, { -3606,      0}, {0xff, 0xff, 0xff, 0xff}}},
     {{{   563,  -4279,   5596}, 0, {-13860,      0}, {0xff, 0xff, 0xff, 0xff}}},
@@ -124,55 +133,22 @@ static const Vtx hmc_seg7_vertex_0701EEB8[] = {
     {{{ -1494,  -4535,   7654}, 0, { 15190,    990}, {0xff, 0xff, 0xff, 0xff}}},
 };
 
-// 0x0701EF78 - 0x0701F0D0
-static const Gfx hmc_seg7_dl_0701EF78[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, cave_09001000),
-    gsDPLoadSync(),
-    gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
-    gsSPVertex(hmc_seg7_vertex_0701E958, 16, 0),
-    gsSP2Triangles( 0,  1,  2, 0x0,  3,  4,  5, 0x0),
-    gsSP2Triangles( 3,  5,  6, 0x0,  7,  8,  9, 0x0),
-    gsSP2Triangles( 7, 10,  8, 0x0, 11, 12,  9, 0x0),
-    gsSP2Triangles(12,  7,  9, 0x0, 13, 14, 15, 0x0),
-    gsSPVertex(hmc_seg7_vertex_0701EA58, 14, 0),
-    gsSP2Triangles( 0,  1,  2, 0x0,  3,  4,  5, 0x0),
-    gsSP2Triangles( 3,  5,  6, 0x0,  7,  8,  9, 0x0),
-    gsSP2Triangles( 7,  9, 10, 0x0, 11, 12, 13, 0x0),
-    gsSPVertex(hmc_seg7_vertex_0701EB38, 15, 0),
-    gsSP2Triangles( 0,  1,  2, 0x0,  3,  4,  5, 0x0),
-    gsSP2Triangles( 3,  5,  6, 0x0,  7,  8,  9, 0x0),
-    gsSP2Triangles( 7, 10,  8, 0x0, 11, 12, 13, 0x0),
-    gsSP1Triangle(11, 14, 12, 0x0),
-    gsSPVertex(hmc_seg7_vertex_0701EC28, 16, 0),
-    gsSP2Triangles( 0,  1,  2, 0x0,  3,  4,  5, 0x0),
-    gsSP2Triangles( 6,  4,  7, 0x0,  6,  5,  4, 0x0),
-    gsSP2Triangles( 8,  9, 10, 0x0,  8, 10, 11, 0x0),
-    gsSP2Triangles( 0, 12,  1, 0x0, 13, 14, 15, 0x0),
-    gsSPVertex(hmc_seg7_vertex_0701ED28, 9, 0),
-    gsSP2Triangles( 0,  1,  2, 0x0,  3,  1,  4, 0x0),
-    gsSP2Triangles( 3,  2,  1, 0x0,  5,  6,  7, 0x0),
-    gsSP1Triangle( 5,  8,  6, 0x0),
-    gsSPEndDisplayList(),
-};
-
-// 0x0701F0D0 - 0x0701F1B0
 static const Gfx hmc_seg7_dl_0701F0D0[] = {
     gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, cave_09003000),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
-    gsSPVertex(hmc_seg7_vertex_0701EDB8, 16, 0),
+    gsSPVertex(&hmc_seg7_dl_0701F0D0_vtx32_0[0], 26, 0),
     gsSP2Triangles( 0,  1,  2, 0x0,  0,  3,  1, 0x0),
     gsSP2Triangles( 2,  1,  4, 0x0,  2,  4,  5, 0x0),
     gsSP2Triangles( 5,  4,  6, 0x0,  5,  6,  7, 0x0),
     gsSP2Triangles( 7,  6,  8, 0x0,  6,  9,  8, 0x0),
     gsSP2Triangles( 9, 10,  8, 0x0,  9, 11, 10, 0x0),
-    gsSP2Triangles(12, 13, 11, 0x0, 13, 10, 11, 0x0),
-    gsSP2Triangles(13, 14, 15, 0x0, 13, 12, 14, 0x0),
-    gsSPVertex(hmc_seg7_vertex_0701EEB8, 12, 0),
-    gsSP2Triangles( 0,  1,  2, 0x0,  0,  3,  1, 0x0),
-    gsSP2Triangles( 4,  5,  6, 0x0,  4,  6,  7, 0x0),
-    gsSP2Triangles( 7,  8,  4, 0x0,  7,  9,  8, 0x0),
-    gsSP2Triangles( 9, 10,  8, 0x0,  9, 11, 10, 0x0),
+    gsSP2Triangles(12, 10, 11, 0x0, 13, 12, 11, 0x0),
+    gsSP2Triangles(12, 13, 14, 0x0, 12, 14, 15, 0x0),
+    gsSP2Triangles(16, 15, 14, 0x0, 16, 17, 15, 0x0),
+    gsSP2Triangles(18, 19, 20, 0x0, 18, 20, 21, 0x0),
+    gsSP2Triangles(21, 22, 18, 0x0, 21, 23, 22, 0x0),
+    gsSP2Triangles(23, 24, 22, 0x0, 23, 25, 24, 0x0),
     gsSPEndDisplayList(),
 };
 

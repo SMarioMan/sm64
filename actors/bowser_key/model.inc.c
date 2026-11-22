@@ -7,7 +7,43 @@ static const Lights1 bowser_key_lights = gdSPDefLights1(
 );
 
 // 0x030156F8
-static const Vtx bowser_key_dl_vertex_group1[] = {
+
+
+// 0x030157F8
+
+
+// 0x030158F8
+
+
+// 0x030159F8
+
+
+// 0x03015AF8
+
+
+// 0x03015BF8
+
+
+// 0x03015CF8
+
+
+// 0x03015DD8
+
+
+// 0x03015ED8
+
+
+// 0x03015FD8
+
+
+// 0x030160B8
+
+
+// 0x030161B8
+
+
+// 0x030161F8 - 0x03016530
+static const Vtx bowser_key_dl_vtx32_0[] = {
     {{{   219,     22,    -17}, 0, {     0,      0}, {0x88, 0x26, 0x00, 0x00}}},
     {{{   219,     22,     17}, 0, {     0,      0}, {0x88, 0x26, 0x00, 0x00}}},
     {{{   230,     57,      7}, 0, {     0,      0}, {0x88, 0x26, 0x00, 0x00}}},
@@ -24,10 +60,6 @@ static const Vtx bowser_key_dl_vertex_group1[] = {
     {{{   257,     22,     17}, 0, {     0,      0}, {0x00, 0x23, 0x79, 0xff}}},
     {{{   249,     57,      7}, 0, {     0,      0}, {0x00, 0x23, 0x79, 0xff}}},
     {{{   230,     57,      7}, 0, {     0,      0}, {0x00, 0x23, 0x79, 0xff}}},
-};
-
-// 0x030157F8
-static const Vtx bowser_key_dl_vertex_group2[] = {
     {{{   230,     57,      7}, 0, {     0,      0}, {0x00, 0x7f, 0x00, 0xff}}},
     {{{   249,     57,      7}, 0, {     0,      0}, {0x00, 0x7f, 0x00, 0x00}}},
     {{{   249,     57,     -7}, 0, {     0,      0}, {0x00, 0x7f, 0x00, 0x00}}},
@@ -44,10 +76,6 @@ static const Vtx bowser_key_dl_vertex_group2[] = {
     {{{   317,     22,    -17}, 0, {     0,      0}, {0x7f, 0x00, 0x00, 0xff}}},
     {{{   318,     70,     -9}, 0, {     0,      0}, {0x7f, 0x00, 0x00, 0xff}}},
     {{{   318,     70,      9}, 0, {     0,      0}, {0x7f, 0x00, 0x00, 0xff}}},
-};
-
-// 0x030158F8
-static const Vtx bowser_key_dl_vertex_group3[] = {
     {{{   272,     22,     17}, 0, {     0,      0}, {0x00, 0x16, 0x7c, 0xff}}},
     {{{   317,     22,     17}, 0, {     0,      0}, {0x00, 0x16, 0x7c, 0x00}}},
     {{{   318,     70,      9}, 0, {     0,      0}, {0x00, 0x16, 0x7c, 0x00}}},
@@ -64,10 +92,6 @@ static const Vtx bowser_key_dl_vertex_group3[] = {
     {{{   318,     70,      9}, 0, {     0,      0}, {0x00, 0x7f, 0x00, 0xff}}},
     {{{   318,     70,     -9}, 0, {     0,      0}, {0x00, 0x7f, 0x00, 0xff}}},
     {{{   285,     70,     -9}, 0, {     0,      0}, {0x00, 0x7f, 0x00, 0xff}}},
-};
-
-// 0x030159F8
-static const Vtx bowser_key_dl_vertex_group4[] = {
     {{{   317,    -22,    -17}, 0, {     0,      0}, {0x00, 0x81, 0x00, 0xff}}},
     {{{   317,    -22,     17}, 0, {     0,      0}, {0x00, 0x81, 0x00, 0x00}}},
     {{{   131,    -22,     17}, 0, {     0,      0}, {0x00, 0x81, 0x00, 0x00}}},
@@ -76,18 +100,14 @@ static const Vtx bowser_key_dl_vertex_group4[] = {
     {{{    92,    113,    -34}, 0, {     0,      0}, {0x70, 0x3b, 0x00, 0xff}}},
     {{{    92,    113,     34}, 0, {     0,      0}, {0x70, 0x3b, 0x00, 0xff}}},
     {{{   130,     41,     53}, 0, {     0,      0}, {0x7d, 0x14, 0x00, 0xff}}},
-    {{{   130,    -39,     53}, 0, {     0,      0}, {0x78, 0xd8, 0x00, 0xff}}},
-    {{{    92,   -111,     34}, 0, {     0,      0}, {0x70, 0xc5, 0x00, 0xff}}},
-    {{{    92,   -111,    -34}, 0, {     0,      0}, {0x70, 0xc5, 0x00, 0xff}}},
     {{{   130,    -39,    -53}, 0, {     0,      0}, {0x7d, 0xec, 0x00, 0xff}}},
+    {{{   130,    -39,     53}, 0, {     0,      0}, {0x78, 0xd8, 0x00, 0xff}}},
+    {{{    92,   -111,    -34}, 0, {     0,      0}, {0x70, 0xc5, 0x00, 0xff}}},
+    {{{    92,   -111,     34}, 0, {     0,      0}, {0x70, 0xc5, 0x00, 0xff}}},
     {{{    92,   -111,    -34}, 0, {     0,      0}, {0xee, 0xe2, 0x86, 0xff}}},
     {{{    20,    -80,    -30}, 0, {     0,      0}, {0xeb, 0xde, 0x88, 0xff}}},
     {{{    -4,    -39,    -37}, 0, {     0,      0}, {0xf0, 0xf1, 0x84, 0xff}}},
     {{{   130,    -39,    -53}, 0, {     0,      0}, {0xf2, 0xf4, 0x83, 0xff}}},
-};
-
-// 0x03015AF8
-static const Vtx bowser_key_dl_vertex_group5[] = {
     {{{    -4,    -39,    -37}, 0, {     0,      0}, {0xf0, 0xf1, 0x84, 0xff}}},
     {{{    -4,     41,    -37}, 0, {     0,      0}, {0xef, 0x14, 0x84, 0x00}}},
     {{{   130,     41,    -53}, 0, {     0,      0}, {0xf2, 0x08, 0x83, 0x00}}},
@@ -98,40 +118,22 @@ static const Vtx bowser_key_dl_vertex_group5[] = {
     {{{    -4,    -39,     37}, 0, {     0,      0}, {0xef, 0xec, 0x7c, 0xff}}},
     {{{    92,    113,     34}, 0, {     0,      0}, {0xee, 0x1e, 0x7a, 0xff}}},
     {{{    20,     82,     30}, 0, {     0,      0}, {0xeb, 0x22, 0x78, 0xff}}},
+    {{{    92,   -111,     34}, 0, {     0,      0}, {0xee, 0xe2, 0x7a, 0x00}}},
+    {{{    20,    -80,     30}, 0, {     0,      0}, {0xeb, 0xde, 0x78, 0x00}}},
     {{{    -4,     41,    -37}, 0, {     0,      0}, {0x84, 0x16, 0x00, 0xff}}},
     {{{    -4,    -39,    -37}, 0, {     0,      0}, {0x8a, 0xd3, 0x00, 0xff}}},
     {{{    -4,    -39,     37}, 0, {     0,      0}, {0x84, 0xea, 0x00, 0xff}}},
     {{{    -4,     41,     37}, 0, {     0,      0}, {0x8a, 0x2d, 0x00, 0xff}}},
-    {{{    20,     82,     30}, 0, {     0,      0}, {0xad, 0x5f, 0x00, 0xff}}},
     {{{    20,     82,    -30}, 0, {     0,      0}, {0xad, 0x5f, 0x00, 0xff}}},
-};
-
-// 0x03015BF8
-static const Vtx bowser_key_dl_vertex_group6[] = {
-    {{{    -4,    -39,    -37}, 0, {     0,      0}, {0x8a, 0xd3, 0x00, 0xff}}},
-    {{{    20,    -80,    -30}, 0, {     0,      0}, {0xad, 0xa1, 0x00, 0x00}}},
+    {{{    20,     82,     30}, 0, {     0,      0}, {0xad, 0x5f, 0x00, 0xff}}},
     {{{    20,    -80,     30}, 0, {     0,      0}, {0xad, 0xa1, 0x00, 0x00}}},
-    {{{    -4,    -39,     37}, 0, {     0,      0}, {0x84, 0xea, 0x00, 0xff}}},
-    {{{   130,     41,     53}, 0, {     0,      0}, {0x7d, 0x14, 0x00, 0xff}}},
-    {{{   130,    -39,     53}, 0, {     0,      0}, {0x78, 0xd8, 0x00, 0xff}}},
-    {{{   130,    -39,    -53}, 0, {     0,      0}, {0x7d, 0xec, 0x00, 0xff}}},
-    {{{   130,     41,    -53}, 0, {     0,      0}, {0x78, 0x28, 0x00, 0xff}}},
+    {{{    20,    -80,    -30}, 0, {     0,      0}, {0xad, 0xa1, 0x00, 0x00}}},
+    {{{    92,    113,     34}, 0, {     0,      0}, {0xce, 0x74, 0x00, 0xff}}},
+    {{{    92,    113,    -34}, 0, {     0,      0}, {0xce, 0x74, 0x00, 0xff}}},
     {{{    -4,     41,    -37}, 0, {     0,      0}, {0xef, 0x14, 0x84, 0xff}}},
     {{{    20,     82,    -30}, 0, {     0,      0}, {0xeb, 0x22, 0x88, 0xff}}},
     {{{    92,    113,    -34}, 0, {     0,      0}, {0xee, 0x1e, 0x86, 0xff}}},
     {{{   130,     41,    -53}, 0, {     0,      0}, {0xf2, 0x08, 0x83, 0xff}}},
-    {{{    92,    113,     34}, 0, {     0,      0}, {0xce, 0x74, 0x00, 0xff}}},
-    {{{    92,    113,    -34}, 0, {     0,      0}, {0xce, 0x74, 0x00, 0xff}}},
-    {{{    20,     82,    -30}, 0, {     0,      0}, {0xad, 0x5f, 0x00, 0xff}}},
-    {{{    20,     82,     30}, 0, {     0,      0}, {0xad, 0x5f, 0x00, 0xff}}},
-};
-
-// 0x03015CF8
-static const Vtx bowser_key_dl_vertex_group7[] = {
-    {{{    -4,    -39,     37}, 0, {     0,      0}, {0xef, 0xec, 0x7c, 0xff}}},
-    {{{    20,    -80,     30}, 0, {     0,      0}, {0xeb, 0xde, 0x78, 0x00}}},
-    {{{    92,   -111,     34}, 0, {     0,      0}, {0xee, 0xe2, 0x7a, 0x00}}},
-    {{{   130,    -39,     53}, 0, {     0,      0}, {0xf2, 0xf8, 0x7d, 0xff}}},
     {{{    92,   -111,    -34}, 0, {     0,      0}, {0xce, 0x8c, 0x00, 0xff}}},
     {{{    92,   -111,     34}, 0, {     0,      0}, {0xce, 0x8c, 0x00, 0xff}}},
     {{{    20,    -80,     30}, 0, {     0,      0}, {0xad, 0xa1, 0x00, 0xff}}},
@@ -142,13 +144,15 @@ static const Vtx bowser_key_dl_vertex_group7[] = {
     {{{    12,   -121,    -15}, 0, {     0,      0}, {0xc8, 0x19, 0x92, 0xff}}},
     {{{    16,   -152,    -25}, 0, {     0,      0}, {0xce, 0x15, 0x8e, 0xff}}},
     {{{   -51,   -115,      0}, 0, {     0,      0}, {0xe6, 0x21, 0x89, 0xff}}},
-};
-
-// 0x03015DD8
-static const Vtx bowser_key_dl_vertex_group8[] = {
+    {{{    12,   -121,    -15}, 0, {     0,      0}, {0xc8, 0x19, 0x92, 0x00}}},
+    {{{    24,    -82,    -19}, 0, {     0,      0}, {0xc3, 0x0f, 0x93, 0x00}}},
+    {{{    57,    -96,    -31}, 0, {     0,      0}, {0xdb, 0x0e, 0x88, 0xff}}},
     {{{    16,   -152,     25}, 0, {     0,      0}, {0xce, 0x15, 0x72, 0xff}}},
     {{{    12,   -121,     15}, 0, {     0,      0}, {0xc8, 0x19, 0x6e, 0x00}}},
     {{{   -51,   -115,      0}, 0, {     0,      0}, {0xe6, 0x21, 0x77, 0x00}}},
+    {{{    24,    -82,     19}, 0, {     0,      0}, {0xc3, 0x0f, 0x6d, 0xff}}},
+    {{{    12,   -121,     15}, 0, {     0,      0}, {0xc8, 0x19, 0x6e, 0xff}}},
+    {{{    57,    -96,     31}, 0, {     0,      0}, {0xdb, 0x0e, 0x78, 0xff}}},
     {{{    21,   -171,      0}, 0, {     0,      0}, {0xb3, 0x9c, 0x00, 0xff}}},
     {{{    16,   -152,     25}, 0, {     0,      0}, {0xbb, 0xa7, 0x38, 0xff}}},
     {{{   -51,   -115,      0}, 0, {     0,      0}, {0xb3, 0x9c, 0x00, 0xff}}},
@@ -159,13 +163,13 @@ static const Vtx bowser_key_dl_vertex_group8[] = {
     {{{   -51,    115,      0}, 0, {     0,      0}, {0xe6, 0xdf, 0x89, 0xff}}},
     {{{    16,    152,    -25}, 0, {     0,      0}, {0xce, 0xeb, 0x8e, 0xff}}},
     {{{    12,    121,    -15}, 0, {     0,      0}, {0xa7, 0xde, 0xad, 0xff}}},
+    {{{    23,     83,    -19}, 0, {     0,      0}, {0x97, 0xe1, 0xc2, 0xff}}},
+    {{{    56,     97,    -31}, 0, {     0,      0}, {0xdb, 0xf2, 0x88, 0xff}}},
     {{{   -51,    115,      0}, 0, {     0,      0}, {0xe6, 0xdf, 0x77, 0xff}}},
     {{{    12,    121,     15}, 0, {     0,      0}, {0x99, 0xdc, 0x3f, 0xff}}},
     {{{    16,    152,     25}, 0, {     0,      0}, {0xce, 0xeb, 0x72, 0xff}}},
-};
-
-// 0x03015ED8
-static const Vtx bowser_key_dl_vertex_group9[] = {
+    {{{    23,     83,     19}, 0, {     0,      0}, {0xa4, 0xe6, 0x52, 0xff}}},
+    {{{    23,     83,    -19}, 0, {     0,      0}, {0x97, 0xe1, 0xc2, 0x00}}},
     {{{   -51,    115,      0}, 0, {     0,      0}, {0xb3, 0x64, 0x00, 0xff}}},
     {{{    16,    152,     25}, 0, {     0,      0}, {0xbb, 0x59, 0x38, 0x00}}},
     {{{    21,    171,      0}, 0, {     0,      0}, {0xb3, 0x64, 0x00, 0x00}}},
@@ -178,19 +182,11 @@ static const Vtx bowser_key_dl_vertex_group9[] = {
     {{{   317,    -22,    -17}, 0, {     0,      0}, {0x00, 0x00, 0x81, 0xff}}},
     {{{   131,    -22,    -17}, 0, {     0,      0}, {0x00, 0x00, 0x81, 0xff}}},
     {{{   131,     22,    -17}, 0, {     0,      0}, {0x00, 0x00, 0x81, 0xff}}},
-    {{{    16,    152,    -25}, 0, {     0,      0}, {0xce, 0xeb, 0x8e, 0xff}}},
-    {{{    56,     97,    -31}, 0, {     0,      0}, {0xdb, 0xf2, 0x88, 0xff}}},
-    {{{    23,     83,    -19}, 0, {     0,      0}, {0x97, 0xe1, 0xc2, 0xff}}},
-    {{{    12,    121,    -15}, 0, {     0,      0}, {0xa7, 0xde, 0xad, 0xff}}},
-};
-
-// 0x03015FD8
-static const Vtx bowser_key_dl_vertex_group10[] = {
     {{{    12,    121,     15}, 0, {     0,      0}, {0x99, 0xdc, 0x3f, 0xff}}},
     {{{    12,    121,    -15}, 0, {     0,      0}, {0xa7, 0xde, 0xad, 0x00}}},
     {{{    23,     83,    -19}, 0, {     0,      0}, {0x97, 0xe1, 0xc2, 0x00}}},
-    {{{    23,     83,     19}, 0, {     0,      0}, {0xa4, 0xe6, 0x52, 0xff}}},
     {{{    16,    152,     25}, 0, {     0,      0}, {0xce, 0xeb, 0x72, 0xff}}},
+    {{{    23,     83,     19}, 0, {     0,      0}, {0xa4, 0xe6, 0x52, 0xff}}},
     {{{    56,     97,     31}, 0, {     0,      0}, {0xdb, 0xf2, 0x78, 0xff}}},
     {{{    16,    152,    -25}, 0, {     0,      0}, {0x50, 0x43, 0xb9, 0xff}}},
     {{{    21,    171,      0}, 0, {     0,      0}, {0x50, 0x45, 0xbb, 0xff}}},
@@ -200,95 +196,72 @@ static const Vtx bowser_key_dl_vertex_group10[] = {
     {{{    56,     97,     31}, 0, {     0,      0}, {0x4f, 0x42, 0x49, 0xff}}},
     {{{    77,    106,      0}, 0, {     0,      0}, {0x50, 0x43, 0x47, 0xff}}},
     {{{    21,    171,      0}, 0, {     0,      0}, {0x50, 0x45, 0x45, 0xff}}},
-};
-
-// 0x030160B8
-static const Vtx bowser_key_dl_vertex_group11[] = {
-    {{{    16,   -152,    -25}, 0, {     0,      0}, {0xce, 0x15, 0x8e, 0xff}}},
-    {{{    12,   -121,    -15}, 0, {     0,      0}, {0xc8, 0x19, 0x92, 0x00}}},
-    {{{    24,    -82,    -19}, 0, {     0,      0}, {0xc3, 0x0f, 0x93, 0x00}}},
-    {{{    57,    -96,    -31}, 0, {     0,      0}, {0xdb, 0x0e, 0x88, 0xff}}},
     {{{    24,    -82,    -19}, 0, {     0,      0}, {0x87, 0x25, 0x00, 0xff}}},
     {{{    12,   -121,    -15}, 0, {     0,      0}, {0x87, 0x25, 0x00, 0xff}}},
     {{{    12,   -121,     15}, 0, {     0,      0}, {0x87, 0x25, 0x00, 0xff}}},
     {{{    24,    -82,     19}, 0, {     0,      0}, {0x87, 0x25, 0x00, 0xff}}},
-    {{{    24,    -82,     19}, 0, {     0,      0}, {0xc3, 0x0f, 0x6d, 0xff}}},
-    {{{    12,   -121,     15}, 0, {     0,      0}, {0xc8, 0x19, 0x6e, 0xff}}},
-    {{{    16,   -152,     25}, 0, {     0,      0}, {0xce, 0x15, 0x72, 0xff}}},
-    {{{    57,    -96,     31}, 0, {     0,      0}, {0xdb, 0x0e, 0x78, 0xff}}},
     {{{    78,   -105,      0}, 0, {     0,      0}, {0x50, 0xbd, 0xb9, 0xff}}},
     {{{    21,   -171,      0}, 0, {     0,      0}, {0x50, 0xbb, 0xbb, 0xff}}},
     {{{    16,   -152,    -25}, 0, {     0,      0}, {0x50, 0xbd, 0xb9, 0xff}}},
     {{{    57,    -96,    -31}, 0, {     0,      0}, {0x4f, 0xbe, 0xb7, 0xff}}},
-};
-
-// 0x030161B8
-static const Vtx bowser_key_dl_vertex_group12[] = {
     {{{    16,   -152,     25}, 0, {     0,      0}, {0x50, 0xbd, 0x47, 0xff}}},
     {{{    21,   -171,      0}, 0, {     0,      0}, {0x50, 0xbb, 0x45, 0x00}}},
     {{{    78,   -105,      0}, 0, {     0,      0}, {0x50, 0xbd, 0x47, 0x00}}},
     {{{    57,    -96,     31}, 0, {     0,      0}, {0x4f, 0xbe, 0x49, 0xff}}},
 };
 
-// 0x030161F8 - 0x03016530
 const Gfx bowser_key_dl[] = {
     gsSPLight(&bowser_key_lights.l, 1),
     gsSPLight(&bowser_key_lights.a, 2),
-    gsSPVertex(bowser_key_dl_vertex_group1, 16, 0),
+    gsSPVertex(&bowser_key_dl_vtx32_0[0], 32, 0),
     gsSP2Triangles( 0,  1,  2, 0x0,  0,  2,  3, 0x0),
     gsSP2Triangles( 4,  5,  6, 0x0,  4,  6,  7, 0x0),
     gsSP2Triangles( 8,  9, 10, 0x0,  8, 10, 11, 0x0),
     gsSP2Triangles(12, 13, 14, 0x0, 12, 14, 15, 0x0),
-    gsSPVertex(bowser_key_dl_vertex_group2, 16, 0),
+    gsSP2Triangles(16, 17, 18, 0x0, 16, 18, 19, 0x0),
+    gsSP2Triangles(20, 21, 22, 0x0, 20, 22, 23, 0x0),
+    gsSP2Triangles(24, 25, 26, 0x0, 24, 26, 27, 0x0),
+    gsSP2Triangles(28, 29, 30, 0x0, 28, 30, 31, 0x0),
+    gsSPVertex(&bowser_key_dl_vtx32_0[32], 32, 0),
     gsSP2Triangles( 0,  1,  2, 0x0,  0,  2,  3, 0x0),
     gsSP2Triangles( 4,  5,  6, 0x0,  4,  6,  7, 0x0),
     gsSP2Triangles( 8,  9, 10, 0x0,  8, 10, 11, 0x0),
     gsSP2Triangles(12, 13, 14, 0x0, 12, 14, 15, 0x0),
-    gsSPVertex(bowser_key_dl_vertex_group3, 16, 0),
+    gsSP2Triangles(16, 17, 18, 0x0, 16, 18, 19, 0x0),
+    gsSP2Triangles(20, 21, 22, 0x0, 20, 22, 23, 0x0),
+    gsSP2Triangles(23, 24, 20, 0x0, 23, 25, 24, 0x0),
+    gsSP2Triangles(25, 26, 24, 0x0, 25, 27, 26, 0x0),
+    gsSP2Triangles(28, 29, 30, 0x0, 31, 28, 30, 0x0),
+    gsSPVertex(&bowser_key_dl_vtx32_0[64], 30, 0),
     gsSP2Triangles( 0,  1,  2, 0x0,  0,  2,  3, 0x0),
     gsSP2Triangles( 4,  5,  6, 0x0,  4,  6,  7, 0x0),
-    gsSP2Triangles( 8,  9, 10, 0x0,  8, 10, 11, 0x0),
+    gsSP2Triangles( 5,  8,  6, 0x0,  8,  9,  6, 0x0),
+    gsSP2Triangles( 7, 10,  4, 0x0,  7, 11, 10, 0x0),
     gsSP2Triangles(12, 13, 14, 0x0, 12, 14, 15, 0x0),
-    gsSPVertex(bowser_key_dl_vertex_group4, 16, 0),
-    gsSP2Triangles( 0,  1,  2, 0x0,  0,  2,  3, 0x0),
-    gsSP2Triangles( 4,  5,  6, 0x0,  4,  6,  7, 0x0),
-    gsSP2Triangles( 8,  9, 10, 0x0,  8, 10, 11, 0x0),
-    gsSP2Triangles(12, 13, 14, 0x0, 15, 12, 14, 0x0),
-    gsSPVertex(bowser_key_dl_vertex_group5, 16, 0),
-    gsSP2Triangles( 0,  1,  2, 0x0,  0,  2,  3, 0x0),
-    gsSP2Triangles( 4,  5,  6, 0x0,  4,  6,  7, 0x0),
-    gsSP2Triangles( 8,  9,  6, 0x0,  5,  8,  6, 0x0),
-    gsSP2Triangles(10, 11, 12, 0x0, 10, 12, 13, 0x0),
-    gsSP2Triangles(13, 14, 15, 0x0, 13, 15, 10, 0x0),
-    gsSPVertex(bowser_key_dl_vertex_group6, 16, 0),
-    gsSP2Triangles( 0,  1,  2, 0x0,  0,  2,  3, 0x0),
-    gsSP2Triangles( 4,  5,  6, 0x0,  4,  6,  7, 0x0),
-    gsSP2Triangles( 8,  9, 10, 0x0,  8, 10, 11, 0x0),
-    gsSP2Triangles(12, 13, 14, 0x0, 12, 14, 15, 0x0),
-    gsSPVertex(bowser_key_dl_vertex_group7, 14, 0),
-    gsSP2Triangles( 0,  1,  2, 0x0,  0,  2,  3, 0x0),
-    gsSP2Triangles( 4,  5,  6, 0x0,  4,  6,  7, 0x0),
-    gsSP2Triangles( 8,  9, 10, 0x0, 11, 12, 13, 0x0),
-    gsSPVertex(bowser_key_dl_vertex_group8, 16, 0),
+    gsSP2Triangles(15, 16, 12, 0x0, 15, 17, 16, 0x0),
+    gsSP2Triangles(13, 18, 14, 0x0, 13, 19, 18, 0x0),
+    gsSP2Triangles(20, 16, 17, 0x0, 20, 21, 16, 0x0),
+    gsSP2Triangles(22, 23, 24, 0x0, 22, 24, 25, 0x0),
+    gsSP2Triangles(26, 27, 28, 0x0, 26, 28, 29, 0x0),
+    gsSPVertex(&bowser_key_dl_vtx32_0[94], 32, 0),
     gsSP2Triangles( 0,  1,  2, 0x0,  3,  4,  5, 0x0),
-    gsSP2Triangles( 6,  3,  5, 0x0,  7,  8,  9, 0x0),
-    gsSP2Triangles(10, 11, 12, 0x0, 13, 14, 15, 0x0),
-    gsSPVertex(bowser_key_dl_vertex_group9, 16, 0),
+    gsSP2Triangles( 4,  6,  7, 0x0,  8,  4,  7, 0x0),
+    gsSP2Triangles( 9, 10, 11, 0x0, 12, 13,  9, 0x0),
+    gsSP2Triangles(12,  9, 14, 0x0, 15, 16, 17, 0x0),
+    gsSP2Triangles(18, 15, 17, 0x0, 19, 20, 21, 0x0),
+    gsSP2Triangles(22, 23, 24, 0x0, 24, 23, 25, 0x0),
+    gsSP2Triangles(23, 26, 25, 0x0, 27, 28, 29, 0x0),
+    gsSP2Triangles(29, 28, 30, 0x0, 28, 31, 30, 0x0),
+    gsSPVertex(&bowser_key_dl_vtx32_0[126], 30, 0),
     gsSP2Triangles( 0,  1,  2, 0x0,  0,  2,  3, 0x0),
     gsSP2Triangles( 4,  5,  6, 0x0,  4,  6,  7, 0x0),
     gsSP2Triangles( 8,  9, 10, 0x0,  8, 10, 11, 0x0),
-    gsSP2Triangles(12, 13, 14, 0x0, 15, 12, 14, 0x0),
-    gsSPVertex(bowser_key_dl_vertex_group10, 14, 0),
+    gsSP2Triangles(12, 13, 14, 0x0, 15, 16, 17, 0x0),
+    gsSP2Triangles(18, 19, 20, 0x0, 18, 20, 21, 0x0),
+    gsSP2Triangles(22, 23, 24, 0x0, 25, 22, 24, 0x0),
+    gsSP2Triangles(26, 27, 28, 0x0, 26, 28, 29, 0x0),
+    gsSPVertex(&bowser_key_dl_vtx32_0[156], 8, 0),
     gsSP2Triangles( 0,  1,  2, 0x0,  0,  2,  3, 0x0),
-    gsSP2Triangles( 4,  0,  3, 0x0,  4,  3,  5, 0x0),
-    gsSP2Triangles( 6,  7,  8, 0x0,  6,  8,  9, 0x0),
-    gsSP2Triangles(10, 11, 12, 0x0, 13, 10, 12, 0x0),
-    gsSPVertex(bowser_key_dl_vertex_group11, 16, 0),
-    gsSP2Triangles( 0,  1,  2, 0x0,  3,  0,  2, 0x0),
-    gsSP2Triangles( 4,  5,  6, 0x0,  4,  6,  7, 0x0),
-    gsSP2Triangles( 8,  9, 10, 0x0,  8, 10, 11, 0x0),
-    gsSP2Triangles(12, 13, 14, 0x0, 12, 14, 15, 0x0),
-    gsSPVertex(bowser_key_dl_vertex_group12, 4, 0),
-    gsSP2Triangles( 0,  1,  2, 0x0,  3,  0,  2, 0x0),
+    gsSP2Triangles( 4,  5,  6, 0x0,  7,  4,  6, 0x0),
     gsSPEndDisplayList(),
 };
