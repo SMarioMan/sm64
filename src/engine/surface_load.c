@@ -201,7 +201,7 @@ static s16 lower_cell_index(TerrainData coord) {
     }
 
     // [0, 16)
-    index = coord / CELL_SIZE;
+    index = coord >> 10;
 
     if (index > NUM_CELLS_INDEX) {
         index = NUM_CELLS_INDEX;
@@ -225,7 +225,7 @@ static s16 upper_cell_index(TerrainData coord) {
     }
 
     // [0, 16)
-    index = coord / CELL_SIZE;
+    index = coord >> 10;
 
     if (index > NUM_CELLS_INDEX) {
         index = NUM_CELLS_INDEX;

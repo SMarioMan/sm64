@@ -200,10 +200,10 @@ s32 find_wall_collisions(struct WallCollisionData *colData) {
     // World (level) consists of a 16x16 grid. Check all cells overlapped by
     // [x - radius, x + radius] x [z - radius, z + radius] instead of relying
     // on the 50-unit surface cell overlap buffer.
-    minCellX = (x - r + LEVEL_BOUNDARY_MAX) / CELL_SIZE;
-    maxCellX = (x + r + LEVEL_BOUNDARY_MAX) / CELL_SIZE;
-    minCellZ = (z - r + LEVEL_BOUNDARY_MAX) / CELL_SIZE;
-    maxCellZ = (z + r + LEVEL_BOUNDARY_MAX) / CELL_SIZE;
+    minCellX = (x - r + LEVEL_BOUNDARY_MAX) >> 10;
+    maxCellX = (x + r + LEVEL_BOUNDARY_MAX) >> 10;
+    minCellZ = (z - r + LEVEL_BOUNDARY_MAX) >> 10;
+    maxCellZ = (z + r + LEVEL_BOUNDARY_MAX) >> 10;
 
     if (minCellX < 0) minCellX = 0;
     if (maxCellX > NUM_CELLS_INDEX) maxCellX = NUM_CELLS_INDEX;

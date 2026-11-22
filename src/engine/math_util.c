@@ -490,46 +490,49 @@ void mtxf_align_terrain_triangle(Mat4 mtx, Vec3f pos, s16 yaw, f32 radius) {
  */
 void mtxf_mul(Mat4 dest, Mat4 a, Mat4 b) {
     Mat4 temp;
+    f32 (*out)[4] = (dest == b) ? temp : dest;
     register f32 entry0;
     register f32 entry1;
     register f32 entry2;
 
-    // column 0
+    // row 0
     entry0 = a[0][0];
     entry1 = a[0][1];
     entry2 = a[0][2];
-    temp[0][0] = entry0 * b[0][0] + entry1 * b[1][0] + entry2 * b[2][0];
-    temp[0][1] = entry0 * b[0][1] + entry1 * b[1][1] + entry2 * b[2][1];
-    temp[0][2] = entry0 * b[0][2] + entry1 * b[1][2] + entry2 * b[2][2];
+    out[0][0] = entry0 * b[0][0] + entry1 * b[1][0] + entry2 * b[2][0];
+    out[0][1] = entry0 * b[0][1] + entry1 * b[1][1] + entry2 * b[2][1];
+    out[0][2] = entry0 * b[0][2] + entry1 * b[1][2] + entry2 * b[2][2];
 
-    // column 1
+    // row 1
     entry0 = a[1][0];
     entry1 = a[1][1];
     entry2 = a[1][2];
-    temp[1][0] = entry0 * b[0][0] + entry1 * b[1][0] + entry2 * b[2][0];
-    temp[1][1] = entry0 * b[0][1] + entry1 * b[1][1] + entry2 * b[2][1];
-    temp[1][2] = entry0 * b[0][2] + entry1 * b[1][2] + entry2 * b[2][2];
+    out[1][0] = entry0 * b[0][0] + entry1 * b[1][0] + entry2 * b[2][0];
+    out[1][1] = entry0 * b[0][1] + entry1 * b[1][1] + entry2 * b[2][1];
+    out[1][2] = entry0 * b[0][2] + entry1 * b[1][2] + entry2 * b[2][2];
 
-    // column 2
+    // row 2
     entry0 = a[2][0];
     entry1 = a[2][1];
     entry2 = a[2][2];
-    temp[2][0] = entry0 * b[0][0] + entry1 * b[1][0] + entry2 * b[2][0];
-    temp[2][1] = entry0 * b[0][1] + entry1 * b[1][1] + entry2 * b[2][1];
-    temp[2][2] = entry0 * b[0][2] + entry1 * b[1][2] + entry2 * b[2][2];
+    out[2][0] = entry0 * b[0][0] + entry1 * b[1][0] + entry2 * b[2][0];
+    out[2][1] = entry0 * b[0][1] + entry1 * b[1][1] + entry2 * b[2][1];
+    out[2][2] = entry0 * b[0][2] + entry1 * b[1][2] + entry2 * b[2][2];
 
-    // column 3
+    // row 3
     entry0 = a[3][0];
     entry1 = a[3][1];
     entry2 = a[3][2];
-    temp[3][0] = entry0 * b[0][0] + entry1 * b[1][0] + entry2 * b[2][0] + b[3][0];
-    temp[3][1] = entry0 * b[0][1] + entry1 * b[1][1] + entry2 * b[2][1] + b[3][1];
-    temp[3][2] = entry0 * b[0][2] + entry1 * b[1][2] + entry2 * b[2][2] + b[3][2];
+    out[3][0] = entry0 * b[0][0] + entry1 * b[1][0] + entry2 * b[2][0] + b[3][0];
+    out[3][1] = entry0 * b[0][1] + entry1 * b[1][1] + entry2 * b[2][1] + b[3][1];
+    out[3][2] = entry0 * b[0][2] + entry1 * b[1][2] + entry2 * b[2][2] + b[3][2];
 
-    temp[0][3] = temp[1][3] = temp[2][3] = 0;
-    temp[3][3] = 1;
+    out[0][3] = out[1][3] = out[2][3] = 0.0f;
+    out[3][3] = 1.0f;
 
-    mtxf_copy(dest, temp);
+    if (dest == b) {
+        mtxf_copy(dest, temp);
+    }
 }
 
 /**
@@ -571,23 +574,29 @@ void mtxf_mul_vec3s(Mat4 mtx, Vec3s b) {
  * and no crashes occur.
  */
 void mtxf_to_mtx(Mtx *dest, Mat4 src) {
-#ifdef AVOID_UB
-    // Avoid type-casting which is technically UB by calling the equivalent
-    // guMtxF2L function. This helps little-endian systems, as well.
-    guMtxF2L(src, dest);
-#else
-    s32 asFixedPoint;
-    register s32 i;
-    register s16 *a3 = (s16 *) dest;      // all integer parts stored in first 16 bytes
-    register s16 *t0 = (s16 *) dest + 16; // all fraction parts stored in last 16 bytes
-    register f32 *t1 = (f32 *) src;
+    s32 i;
+    s16 *intPart = (s16 *) dest;
+    s16 *fracPart = intPart + 16;
 
-    for (i = 0; i < 16; i++) {
-        asFixedPoint = *t1++ * (1 << 16); //! float-to-integer conversion responsible for PU crashes
-        *a3++ = GET_HIGH_S16_OF_32(asFixedPoint); // integer part
-        *t0++ = GET_LOW_S16_OF_32(asFixedPoint);  // fraction part
+    // All matrices converted by mtxf_to_mtx are affine (column 3 is [0, 0, 0, 1]).
+    for (i = 0; i < 4; i++) {
+        s32 v0 = (s32)(src[i][0] * 65536.0f);
+        s32 v1 = (s32)(src[i][1] * 65536.0f);
+        s32 v2 = (s32)(src[i][2] * 65536.0f);
+
+        intPart[0] = (s16)(v0 >> 16);
+        intPart[1] = (s16)(v1 >> 16);
+        intPart[2] = (s16)(v2 >> 16);
+        intPart[3] = (i == 3) ? 1 : 0;
+
+        fracPart[0] = (s16) v0;
+        fracPart[1] = (s16) v1;
+        fracPart[2] = (s16) v2;
+        fracPart[3] = 0;
+
+        intPart += 4;
+        fracPart += 4;
     }
-#endif
 }
 
 /**
