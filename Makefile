@@ -410,7 +410,7 @@ CC_CHECK_CFLAGS := -fsyntax-only -fsigned-char $(CC_CFLAGS) $(TARGET_CFLAGS) -st
 # C compiler options
 CFLAGS = -G 0 $(OPT_FLAGS) $(TARGET_CFLAGS) $(MIPSISET) $(DEF_INC_CFLAGS)
 ifeq ($(COMPILER),gcc)
-  CFLAGS += -mno-shared -march=vr4300 -mfix4300 -mabi=32 -mhard-float -mdivide-breaks -fno-math-errno -fno-trapping-math -fno-stack-protector -fno-common -fno-zero-initialized-in-bss -fno-PIC -mno-abicalls -fno-strict-aliasing -ffreestanding -fwrapv -Wall -Wextra
+  CFLAGS += -mno-shared -march=vr4300 -mfix4300 -mabi=32 -mhard-float -mdivide-breaks -fno-math-errno -fno-trapping-math -fsingle-precision-constant -fno-stack-protector -fno-common -fno-zero-initialized-in-bss -fno-PIC -mno-abicalls -fno-strict-aliasing -ffreestanding -fwrapv -Wall -Wextra
   $(BUILD_DIR)/src/engine/math_util.o: OPT_FLAGS := -O2
   $(BUILD_DIR)/src/engine/surface_collision.o: OPT_FLAGS := -O2
   $(BUILD_DIR)/src/engine/surface_load.o: OPT_FLAGS := -O2
