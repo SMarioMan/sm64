@@ -36,8 +36,18 @@ UNUSED static void goto_behavior_unused(const BehaviorScript *bhvAddr) {
     gCurrentObject->bhvStackIndex = 0;
 }
 
-// Generate a pseudorandom integer from 0 to 65535 from the random seed, and update the seed.
+// Generate a pseudorandom integer from 0 to 65535 using VR4300i COP0 Count and Random registers.
 u16 random_u16(void) {
+#ifdef __GNUC__
+    u32 count;
+    u32 rnd;
+    __asm__ volatile(
+        "mfc0 %0, $9\n"
+        "mfc0 %1, $1\n"
+        : "=r"(count), "=r"(rnd)
+    );
+    return (u16)((rnd << 11) ^ count);
+#else
     u16 temp1, temp2;
 
     if (gRandomSeed16 == 22026) {
@@ -63,6 +73,7 @@ u16 random_u16(void) {
     }
 
     return gRandomSeed16;
+#endif
 }
 
 // Generate a pseudorandom float in the range [0, 1).
@@ -77,11 +88,7 @@ f32 random_float(void) {
 
 // Return either -1 or 1 with a 50:50 chance.
 s32 random_sign(void) {
-    if (random_u16() >= 0x7FFF) {
-        return 1;
-    } else {
-        return -1;
-    }
+    return (random_u16() & 0x8000) ? 1 : -1;
 }
 
 // Update an object's graphical position and rotation to match its real position and rotation.
