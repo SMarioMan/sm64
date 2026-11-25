@@ -46,7 +46,6 @@ ALIGNED8 static const Texture coin_seg3_texture_03006F80[] = {
 
 // 0x03007780 - 0x030077D0
 const Gfx coin_seg3_dl_03007780[] = {
-    gsDPPipeSync(),
     gsSPClearGeometryMode(G_LIGHTING),
     gsDPSetCombineMode(G_CC_MODULATEIA, G_CC_MODULATEIA),
     gsSPTexture(0x8000, 0x8000, 0, G_TX_RENDERTILE, G_ON),

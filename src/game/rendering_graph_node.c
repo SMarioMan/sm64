@@ -313,6 +313,9 @@ static void geo_process_switch(struct GraphNodeSwitchCase *node) {
 /**
  * Process a camera node.
  */
+static f32 sBillboardCos = 1.0f;
+static f32 sBillboardSin = 0.0f;
+
 static void geo_process_camera(struct GraphNodeCamera *node) {
     Mat4 cameraTransform;
     Mtx *rollMtx = alloc_display_list(sizeof(*rollMtx));
@@ -332,6 +335,8 @@ static void geo_process_camera(struct GraphNodeCamera *node) {
     gMatStackFixed[gMatStackIndex] = mtx;
     if (node->fnNode.node.children != 0) {
         gCurGraphNodeCamera = node;
+        sBillboardCos = coss(node->roll);
+        sBillboardSin = sins(node->roll);
         node->matrixPtr = &gMatStack[gMatStackIndex];
         geo_process_node_and_siblings(node->fnNode.node.children);
         gCurGraphNodeCamera = NULL;
@@ -443,20 +448,48 @@ static void geo_process_scale(struct GraphNodeScale *node) {
  * point matrix stacks.
  * For the rest it acts as a normal display list node.
  */
+static void mtxf_billboard_fast(Mat4 dest, Mat4 mtx, Vec3f position) {
+    dest[0][0] = sBillboardCos;
+    dest[0][1] = sBillboardSin;
+    dest[0][2] = 0.0f;
+    dest[0][3] = 0.0f;
+
+    dest[1][0] = -sBillboardSin;
+    dest[1][1] = sBillboardCos;
+    dest[1][2] = 0.0f;
+    dest[1][3] = 0.0f;
+
+    dest[2][0] = 0.0f;
+    dest[2][1] = 0.0f;
+    dest[2][2] = 1.0f;
+    dest[2][3] = 0.0f;
+
+    dest[3][0] =
+        mtx[0][0] * position[0] + mtx[1][0] * position[1] + mtx[2][0] * position[2] + mtx[3][0];
+    dest[3][1] =
+        mtx[0][1] * position[0] + mtx[1][1] * position[1] + mtx[2][1] * position[2] + mtx[3][1];
+    dest[3][2] =
+        mtx[0][2] * position[0] + mtx[1][2] * position[1] + mtx[2][2] * position[2] + mtx[3][2];
+    dest[3][3] = 1.0f;
+}
+
 static void geo_process_billboard(struct GraphNodeBillboard *node) {
     Vec3f translation;
     Mtx *mtx = alloc_display_list(sizeof(*mtx));
 
     gMatStackIndex++;
     vec3s_to_vec3f(translation, node->translation);
-    mtxf_billboard(gMatStack[gMatStackIndex], gMatStack[gMatStackIndex - 1], translation,
-                   gCurGraphNodeCamera->roll);
+    mtxf_billboard_fast(gMatStack[gMatStackIndex], gMatStack[gMatStackIndex - 1], translation);
     if (gCurGraphNodeHeldObject != NULL) {
-        mtxf_scale_vec3f(gMatStack[gMatStackIndex], gMatStack[gMatStackIndex],
-                         gCurGraphNodeHeldObject->objNode->header.gfx.scale);
+        Vec3f *scale = &gCurGraphNodeHeldObject->objNode->header.gfx.scale;
+        if ((*scale)[0] != 1.0f || (*scale)[1] != 1.0f || (*scale)[2] != 1.0f) {
+            mtxf_scale_vec3f(gMatStack[gMatStackIndex], gMatStack[gMatStackIndex], *scale);
+        }
     } else if (gCurGraphNodeObject != NULL) {
-        mtxf_scale_vec3f(gMatStack[gMatStackIndex], gMatStack[gMatStackIndex],
-                         gCurGraphNodeObject->scale);
+        Vec3f *scale = &gCurGraphNodeObject->scale;
+        if ((*scale)[0] != 1.0f || (*scale)[1] != 1.0f || (*scale)[2] != 1.0f) {
+            mtxf_scale_vec3f(gMatStack[gMatStackIndex], gMatStack[gMatStackIndex], *scale);
+        }
     }
 
     mtxf_to_mtx(mtx, gMatStack[gMatStackIndex]);
@@ -973,15 +1006,18 @@ static void geo_process_object(struct Object *node) {
             mtxf_mul(gMatStack[gMatStackIndex + 1], *node->header.gfx.throwMatrix,
                      gMatStack[gMatStackIndex]);
         } else if (node->header.gfx.node.flags & GRAPH_RENDER_BILLBOARD) {
-            mtxf_billboard(gMatStack[gMatStackIndex + 1], gMatStack[gMatStackIndex],
-                           node->header.gfx.pos, gCurGraphNodeCamera->roll);
+            mtxf_billboard_fast(gMatStack[gMatStackIndex + 1], gMatStack[gMatStackIndex],
+                                node->header.gfx.pos);
         } else {
             mtxf_rotate_zxy_and_translate(mtxf, node->header.gfx.pos, node->header.gfx.angle);
             mtxf_mul(gMatStack[gMatStackIndex + 1], mtxf, gMatStack[gMatStackIndex]);
         }
 
-        mtxf_scale_vec3f(gMatStack[gMatStackIndex + 1], gMatStack[gMatStackIndex + 1],
-                         node->header.gfx.scale);
+        if (node->header.gfx.scale[0] != 1.0f || node->header.gfx.scale[1] != 1.0f
+            || node->header.gfx.scale[2] != 1.0f) {
+            mtxf_scale_vec3f(gMatStack[gMatStackIndex + 1], gMatStack[gMatStackIndex + 1],
+                             node->header.gfx.scale);
+        }
         node->header.gfx.throwMatrix = &gMatStack[++gMatStackIndex];
         node->header.gfx.cameraToObject[0] = gMatStack[gMatStackIndex][3][0];
         node->header.gfx.cameraToObject[1] = gMatStack[gMatStackIndex][3][1];

@@ -241,17 +241,6 @@ s8 init_shadow(struct Shadow *s, f32 xPos, f32 yPos, f32 zPos, s16 shadowScale, 
     }
 
     s->shadowScale = scale_shadow_with_distance(shadowScale, yPos - s->floorHeight);
-
-    s->floorDownwardAngle = atan2_deg(s->floorNormalZ, s->floorNormalX);
-
-    floorSteepness = sqrtf(s->floorNormalX * s->floorNormalX + s->floorNormalZ * s->floorNormalZ);
-
-    // This if-statement avoids dividing by 0.
-    if (floorSteepness == 0.0) {
-        s->floorTilt = 0;
-    } else {
-        s->floorTilt = 90.0 - atan2_deg(floorSteepness, s->floorNormalY);
-    }
     return 0;
 }
 
@@ -590,12 +579,42 @@ void correct_lava_shadow_height(struct Shadow *s) {
  * Create a shadow under a player, correcting that shadow's opacity during
  * appropriate animations and other states.
  */
+static Gfx *create_planar_shadow_4_verts(struct Shadow *s, s8 shadowShape) {
+    Vtx *verts = alloc_display_list(4 * sizeof(Vtx));
+    Gfx *displayList = alloc_display_list(5 * sizeof(Gfx));
+    f32 halfScale;
+    f32 relY;
+    f32 dxY = 0.0f;
+    f32 dzY = 0.0f;
+    u8 alpha;
+
+    if (verts == NULL || displayList == NULL) {
+        return NULL;
+    }
+
+    halfScale = s->shadowScale * 0.5f;
+    relY = s->floorHeight - s->parentY;
+    alpha = s->solidity;
+
+    if (!gShadowAboveWaterOrLava && s->floorNormalY != 0.0f
+        && (s->floorNormalX != 0.0f || s->floorNormalZ != 0.0f)) {
+        f32 invNy = -halfScale / s->floorNormalY;
+        dxY = s->floorNormalX * invNy;
+        dzY = s->floorNormalZ * invNy;
+    }
+
+    make_vertex(verts, 0, -halfScale, relY - dxY - dzY, -halfScale, -15 << 5, -15 << 5, 255, 255, 255, alpha);
+    make_vertex(verts, 1,  halfScale, relY + dxY - dzY, -halfScale,  15 << 5, -15 << 5, 255, 255, 255, alpha);
+    make_vertex(verts, 2, -halfScale, relY - dxY + dzY,  halfScale, -15 << 5,  15 << 5, 255, 255, 255, alpha);
+    make_vertex(verts, 3,  halfScale, relY + dxY + dzY,  halfScale,  15 << 5,  15 << 5, 255, 255, 255, alpha);
+
+    add_shadow_to_display_list(displayList, verts, SHADOW_WITH_4_VERTS, shadowShape);
+    return displayList;
+}
+
 Gfx *create_shadow_player(f32 xPos, f32 yPos, f32 zPos, s16 shadowScale, u8 solidity, s32 isLuigi) {
-    Vtx *verts;
-    Gfx *displayList;
     struct Shadow shadow;
     s8 ret;
-    s32 i;
 
     // Update global variables about whether Mario is on a flying carpet.
     if (gCurrLevelNum == LEVEL_RR && sSurfaceTypeBelowShadow != SURFACE_DEATH_PLANE) {
@@ -613,7 +632,6 @@ Gfx *create_shadow_player(f32 xPos, f32 yPos, f32 zPos, s16 shadowScale, u8 soli
     switch (correct_shadow_solidity_for_animations(isLuigi, solidity, &shadow)) {
         case SHADOW_SOLIDITY_NO_SHADOW:
             return NULL;
-            break;
         case SHADOW_SOILDITY_ALREADY_SET:
             ret = init_shadow(&shadow, xPos, yPos, zPos, shadowScale, /* overwriteSolidity */ 0);
             break;
@@ -625,72 +643,34 @@ Gfx *create_shadow_player(f32 xPos, f32 yPos, f32 zPos, s16 shadowScale, u8 soli
         return NULL;
     }
 
-    verts = alloc_display_list(9 * sizeof(Vtx));
-    displayList = alloc_display_list(5 * sizeof(Gfx));
-    if (verts == NULL || displayList == NULL) {
-        return NULL;
-    }
-
     correct_lava_shadow_height(&shadow);
-
-    for (i = 0; i < 9; i++) {
-        make_shadow_vertex(verts, i, shadow, SHADOW_WITH_9_VERTS);
-    }
-    add_shadow_to_display_list(displayList, verts, SHADOW_WITH_9_VERTS, SHADOW_SHAPE_CIRCLE);
-    return displayList;
+    return create_planar_shadow_4_verts(&shadow, SHADOW_SHAPE_CIRCLE);
 }
 
 /**
- * Create a circular shadow composed of 9 vertices.
+ * Create a circular shadow composed of 4 planar vertices (replacing redundant 9-vert mesh).
  */
 Gfx *create_shadow_circle_9_verts(f32 xPos, f32 yPos, f32 zPos, s16 shadowScale, u8 solidity) {
-    Vtx *verts;
-    Gfx *displayList;
     struct Shadow shadow;
-    s32 i;
 
     if (init_shadow(&shadow, xPos, yPos, zPos, shadowScale, solidity) != 0) {
         return NULL;
     }
 
-    verts = alloc_display_list(9 * sizeof(Vtx));
-    displayList = alloc_display_list(5 * sizeof(Gfx));
-
-    if (verts == NULL || displayList == NULL) {
-        return 0;
-    }
-    for (i = 0; i < 9; i++) {
-        make_shadow_vertex(verts, i, shadow, SHADOW_WITH_9_VERTS);
-    }
-    add_shadow_to_display_list(displayList, verts, SHADOW_WITH_9_VERTS, SHADOW_SHAPE_CIRCLE);
-    return displayList;
+    return create_planar_shadow_4_verts(&shadow, SHADOW_SHAPE_CIRCLE);
 }
 
 /**
  * Create a circular shadow composed of 4 vertices.
  */
 Gfx *create_shadow_circle_4_verts(f32 xPos, f32 yPos, f32 zPos, s16 shadowScale, u8 solidity) {
-    Vtx *verts;
-    Gfx *displayList;
     struct Shadow shadow;
-    s32 i;
 
     if (init_shadow(&shadow, xPos, yPos, zPos, shadowScale, solidity) != 0) {
         return NULL;
     }
 
-    verts = alloc_display_list(4 * sizeof(Vtx));
-    displayList = alloc_display_list(5 * sizeof(Gfx));
-
-    if (verts == NULL || displayList == NULL) {
-        return 0;
-    }
-
-    for (i = 0; i < 4; i++) {
-        make_shadow_vertex(verts, i, shadow, SHADOW_WITH_4_VERTS);
-    }
-    add_shadow_to_display_list(displayList, verts, SHADOW_WITH_4_VERTS, SHADOW_SHAPE_CIRCLE);
-    return displayList;
+    return create_planar_shadow_4_verts(&shadow, SHADOW_SHAPE_CIRCLE);
 }
 
 /**

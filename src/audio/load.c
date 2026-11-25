@@ -109,6 +109,9 @@ ALSeqFile *get_audio_file_header(s32 arg0);
 /**
  * Performs an immediate DMA copy
  */
+#ifdef __GNUC__
+__attribute__((noinline))
+#endif
 void audio_dma_copy_immediate(uintptr_t devAddr, void *vAddr, size_t nbytes) {
     eu_stubbed_printf_3("Romcopy %x -> %x ,size %x\n", devAddr, vAddr, nbytes);
     osInvalDCache(vAddr, nbytes);
@@ -580,8 +583,8 @@ l2:
 }
 
 struct AudioBank *bank_load_immediate(s32 bankId, s32 arg1) {
-    UNUSED u32 pad1[4];
-    u32 buf[4];
+    u32 bufStorage[8];
+    u32 *buf = (u32 *)(((uintptr_t) bufStorage + 15) & ~15);
     u32 numInstruments, numDrums;
     struct AudioBank *ret;
     u8 *ctlData;
@@ -613,9 +616,8 @@ struct AudioBank *bank_load_immediate(s32 bankId, s32 arg1) {
 
 struct AudioBank *bank_load_async(s32 bankId, s32 arg1, struct SequencePlayer *seqPlayer) {
     u32 numInstruments, numDrums;
-    UNUSED u32 pad1[2];
-    u32 buf[4];
-    UNUSED u32 pad2;
+    u32 bufStorage[8];
+    u32 *buf = (u32 *)(((uintptr_t) bufStorage + 15) & ~15);
     size_t alloc;
     struct AudioBank *ret;
     u8 *ctlData;
@@ -912,7 +914,8 @@ void audio_init() {
     UNUSED s8 pad[32];
 #endif
 #if defined(VERSION_JP) || defined(VERSION_US)
-    u8 buf[0x10];
+    u8 bufStorage[0x20];
+    u8 *buf = (u8 *)(((uintptr_t) bufStorage + 15) & ~15);
 #endif
     s32 i, j, k;
     UNUSED s32 lim1; // lim1 unused in EU

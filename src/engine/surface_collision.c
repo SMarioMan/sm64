@@ -21,9 +21,7 @@ static s32 find_wall_collisions_from_list(struct SurfaceNode *surfaceNode,
     register struct Surface *surf;
     register f32 offset;
     register f32 radius = data->radius;
-    register f32 x = data->x;
     register f32 y = data->y + data->offsetY;
-    register f32 z = data->z;
     register f32 px, pz;
     register f32 w1, w2, w3;
     register f32 y1, y2, y3;
