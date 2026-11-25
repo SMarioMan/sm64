@@ -151,6 +151,7 @@ static void geo_process_master_list_sub(struct GraphNodeMasterList *node) {
 #ifdef F3DEX_GBI_2
     Mtx lMtx;
     guLookAtReflect(&lMtx, &lookAt, 0, 0, 0, /* eye */ 0, 0, 1, /* at */ 1, 0, 0 /* up */);
+    gSPLookAt(gDisplayListHead++, &lookAt);
 #endif
 
     if (enableZBuffer != 0) {
@@ -204,10 +205,6 @@ static void mtxf_translate_only(Mat4 dest, Mat4 src, Vec3f translation) {
 }
 
 static void geo_append_display_list(void *displayList, s16 layer) {
-
-#ifdef F3DEX_GBI_2
-    gSPLookAt(gDisplayListHead++, &lookAt);
-#endif
     if (gCurGraphNodeMasterList != 0) {
         struct DisplayListNode *listNode =
             alloc_only_pool_alloc(gDisplayListHeap, sizeof(struct DisplayListNode));
@@ -1077,10 +1074,6 @@ static void geo_process_object_parent(struct GraphNodeObjectParent *node) {
 void geo_process_held_object(struct GraphNodeHeldObject *node) {
     Mat4 mat;
     Vec3f translation;
-
-#ifdef F3DEX_GBI_2
-    gSPLookAt(gDisplayListHead++, &lookAt);
-#endif
 
     if (node->fnNode.func != NULL) {
         node->fnNode.func(GEO_CONTEXT_RENDER, &node->fnNode.node, gMatStack[gMatStackIndex]);

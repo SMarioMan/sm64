@@ -39,31 +39,31 @@ $(eval $(call validate-option,VERSION,jp us eu sh cn))
 ifeq      ($(VERSION),jp)
   DEFINES   += VERSION_JP=1
   OPT_FLAGS := -g
-  GRUCODE   ?= f3d_old
+  GRUCODE   ?= f3dex2
   VERSION_JP_US  ?= true
   VERSION_SH_CN  ?= false
 else ifeq ($(VERSION),us)
   DEFINES   += VERSION_US=1
   OPT_FLAGS := -g
-  GRUCODE   ?= f3d_old
+  GRUCODE   ?= f3dex2
   VERSION_JP_US  ?= true
   VERSION_SH_CN  ?= false
 else ifeq ($(VERSION),eu)
   DEFINES   += VERSION_EU=1
   OPT_FLAGS := -O2
-  GRUCODE   ?= f3d_new
+  GRUCODE   ?= f3dex2
   VERSION_JP_US  ?= false
   VERSION_SH_CN  ?= false
 else ifeq ($(VERSION),sh)
   DEFINES   += VERSION_SH=1
   OPT_FLAGS := -O2
-  GRUCODE   ?= f3d_new
+  GRUCODE   ?= f3dex2
   VERSION_JP_US  ?= false
   VERSION_SH_CN  ?= true
 else ifeq ($(VERSION),cn)
   DEFINES   += VERSION_CN=1
   OPT_FLAGS := -O2
-  GRUCODE   ?= f3d_new
+  GRUCODE   ?= f3dex2
   VERSION_JP_US ?= false
   VERSION_SH_CN  ?= true
 endif
@@ -422,8 +422,9 @@ else
   CFLAGS += -non_shared -Wab,-r4300_mul -Xcpluscomm -Xfullwarn -signed -32
 endif
 
-ASFLAGS   := -march=vr4300 -mabi=32 $(foreach i,$(INCLUDE_DIRS),-I$(i)) $(foreach d,$(DEFINES),--defsym $(d))
-RSPASMFLAGS := $(foreach d,$(DEFINES),-definelabel $(subst =, ,$(d)))
+ASM_DEFINES := $(filter-out PROFILE_BOOT_LEVEL=%,$(DEFINES))
+ASFLAGS   := -march=vr4300 -mabi=32 $(foreach i,$(INCLUDE_DIRS),-I$(i)) $(foreach d,$(ASM_DEFINES),--defsym $(d))
+RSPASMFLAGS := $(foreach d,$(ASM_DEFINES),-definelabel $(subst =, ,$(d)))
 
 ifeq ($(shell getconf LONG_BIT), 32)
   # Work around memory allocation bug in QEMU
