@@ -307,7 +307,7 @@ static struct Surface *read_surface_data(TerrainData *vertexData, TerrainData **
     nx = (y2 - y1) * (z3 - z2) - (z2 - z1) * (y3 - y2);
     ny = (z2 - z1) * (x3 - x2) - (x2 - x1) * (z3 - z2);
     nz = (x2 - x1) * (y3 - y2) - (y2 - y1) * (x3 - x2);
-    mag = sqrtf(nx * nx + ny * ny + nz * nz);
+    mag = nx * nx + ny * ny + nz * nz;
 
     // Could have used min_3 and max_3 for this...
     minY = y1;
@@ -327,13 +327,17 @@ static struct Surface *read_surface_data(TerrainData *vertexData, TerrainData **
     }
 
     // Checking to make sure no DIV/0
-    if (mag < 0.0001) {
+    if (mag < 1e-8f) {
         return NULL;
     }
-    mag = (f32)(1.0 / mag);
-    nx *= mag;
-    ny *= mag;
-    nz *= mag;
+    if (nx == 0.0f && nz == 0.0f) {
+        ny = (ny > 0.0f) ? 1.0f : -1.0f;
+    } else {
+        mag = 1.0f / sqrtf(mag);
+        nx *= mag;
+        ny *= mag;
+        nz *= mag;
+    }
 
     surface = alloc_surface();
 

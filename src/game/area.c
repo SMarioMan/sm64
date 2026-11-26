@@ -682,7 +682,7 @@ static void interp_apply_midframe(void) {
                                         f32 my = (*prevM)[c][1] + (*curM)[c][1];
                                         f32 mz = (*prevM)[c][2] + (*curM)[c][2];
                                         f32 lenSq = mx * mx + my * my + mz * mz;
-                                        f32 inv = (lenSq > 0.0f) ? (1.0f / sqrtf(lenSq)) : 0.0f;
+                                        f32 inv = fast_inv_sqrtf(lenSq);
                                         (*dst)[c][0] = mx * inv;
                                         (*dst)[c][1] = my * inv;
                                         (*dst)[c][2] = mz * inv;

@@ -32,6 +32,21 @@ extern f32 gCosineTable[];
 
 #define sqr(x) ((x) * (x))
 
+// Fast inverse square root with exponent-bit halving (1 Newton iteration, <0.17% error)
+static inline f32 fast_inv_sqrtf(f32 number) {
+    union { f32 f; u32 u; } conv, half;
+    f32 y;
+    if (number <= 0.0f) {
+        return 0.0f;
+    }
+    conv.f = number;
+    half.u = conv.u - 0x00800000U; // number * 0.5f without FPU multiply
+    conv.u = 0x5F375A86U - (conv.u >> 1);
+    y = conv.f;
+    y = y * (1.5f - (half.f * y * y));
+    return y;
+}
+
 void *vec3f_copy(Vec3f dest, Vec3f src);
 void *vec3f_set(Vec3f dest, f32 x, f32 y, f32 z);
 void *vec3f_add(Vec3f dest, Vec3f a);

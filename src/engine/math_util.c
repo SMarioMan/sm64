@@ -139,7 +139,7 @@ void *vec3f_cross(Vec3f dest, Vec3f a, Vec3f b) {
 /// Scale vector 'dest' so it has length 1
 void *vec3f_normalize(Vec3f dest) {
     //! Possible division by zero
-    f32 invsqrt = 1.0f / sqrtf(dest[0] * dest[0] + dest[1] * dest[1] + dest[2] * dest[2]);
+    f32 invsqrt = fast_inv_sqrtf(dest[0] * dest[0] + dest[1] * dest[1] + dest[2] * dest[2]);
 
     dest[0] *= invsqrt;
     dest[1] *= invsqrt;
@@ -208,7 +208,7 @@ void mtxf_lookat(Mat4 mtx, Vec3f from, Vec3f to, s16 roll) {
     dx = to[0] - from[0];
     dz = to[2] - from[2];
 
-    invLength = -1.0 / sqrtf(dx * dx + dz * dz);
+    invLength = -fast_inv_sqrtf(dx * dx + dz * dz);
     dx *= invLength;
     dz *= invLength;
 
@@ -220,7 +220,7 @@ void mtxf_lookat(Mat4 mtx, Vec3f from, Vec3f to, s16 roll) {
     yColZ = to[1] - from[1];
     zColZ = to[2] - from[2];
 
-    invLength = -1.0 / sqrtf(xColZ * xColZ + yColZ * yColZ + zColZ * zColZ);
+    invLength = -fast_inv_sqrtf(xColZ * xColZ + yColZ * yColZ + zColZ * zColZ);
     xColZ *= invLength;
     yColZ *= invLength;
     zColZ *= invLength;
@@ -229,7 +229,7 @@ void mtxf_lookat(Mat4 mtx, Vec3f from, Vec3f to, s16 roll) {
     yColX = zColY * xColZ - xColY * zColZ;
     zColX = xColY * yColZ - yColY * xColZ;
 
-    invLength = 1.0 / sqrtf(xColX * xColX + yColX * yColX + zColX * zColX);
+    invLength = fast_inv_sqrtf(xColX * xColX + yColX * yColX + zColX * zColX);
 
     xColX *= invLength;
     yColX *= invLength;
@@ -239,7 +239,7 @@ void mtxf_lookat(Mat4 mtx, Vec3f from, Vec3f to, s16 roll) {
     yColY = zColZ * xColX - xColZ * zColX;
     zColY = xColZ * yColX - yColZ * xColX;
 
-    invLength = 1.0 / sqrtf(xColY * xColY + yColY * yColY + zColY * zColY);
+    invLength = fast_inv_sqrtf(xColY * xColY + yColY * yColY + zColY * zColY);
     xColY *= invLength;
     yColY *= invLength;
     zColY *= invLength;
