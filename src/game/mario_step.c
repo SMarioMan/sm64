@@ -320,18 +320,65 @@ static s32 perform_ground_quarter_step(struct MarioState *m, Vec3f nextPos) {
 }
 
 s32 perform_ground_step(struct MarioState *m) {
-    s32 i;
-    u32 stepResult;
+    u32 stepResult = GROUND_STEP_NONE;
     Vec3f intendedPos;
+    f32 dx = m->floor->normal.y * m->vel[0];
+    f32 dz = m->floor->normal.y * m->vel[2];
+    f32 distSq = dx * dx + dz * dz;
 
-    for (i = 0; i < 4; i++) {
-        intendedPos[0] = m->pos[0] + m->floor->normal.y * (m->vel[0] / 4.0f);
-        intendedPos[2] = m->pos[2] + m->floor->normal.y * (m->vel[2] / 4.0f);
-        intendedPos[1] = m->pos[1];
+    if (distSq == 0.0f) {
+        // Stationary: 1 single collision pass instead of 4 identical quarter-steps.
+        stepResult = perform_ground_quarter_step(m, m->pos);
+    } else if (distSq > 1600.0f) {
+        // High-speed slide/motion: subdivide into 2 or 4 swept sub-steps so steep
+        // slopes and banked turns do not false-airborne or overshoot floor height.
+        s32 steps = (distSq > 4900.0f) ? 4 : 2;
+        f32 invSteps = (steps == 4) ? 0.25f : 0.5f;
+        s32 i;
+        Vec3f clampedPos;
 
-        stepResult = perform_ground_quarter_step(m, intendedPos);
-        if (stepResult == GROUND_STEP_LEFT_GROUND || stepResult == GROUND_STEP_HIT_WALL_STOP_QSTEPS) {
-            break;
+        for (i = 0; i < steps; i++) {
+            dx = m->floor->normal.y * m->vel[0] * invSteps;
+            dz = m->floor->normal.y * m->vel[2] * invSteps;
+            intendedPos[0] = m->pos[0] + dx;
+            intendedPos[1] = m->pos[1];
+            intendedPos[2] = m->pos[2] + dz;
+            find_wall_raycast(m->pos, intendedPos, 60.0f, 50.0f, clampedPos);
+            stepResult = perform_ground_quarter_step(m, clampedPos);
+            if (stepResult == GROUND_STEP_LEFT_GROUND || stepResult == GROUND_STEP_HIT_WALL_STOP_QSTEPS) {
+                break;
+            }
+        }
+    } else {
+        Vec3f startPos;
+        Vec3f clampedPos;
+
+        vec3f_copy(startPos, m->pos);
+        intendedPos[0] = startPos[0] + dx;
+        intendedPos[1] = startPos[1];
+        intendedPos[2] = startPos[2] + dz;
+
+        // Swept wall raycast prevents tunneling through thin walls in a single step.
+        find_wall_raycast(startPos, intendedPos, 60.0f, 50.0f, clampedPos);
+
+        stepResult = perform_ground_quarter_step(m, clampedPos);
+        if (stepResult == GROUND_STEP_HIT_WALL_STOP_QSTEPS) {
+            // Binary error-correction up to 3 refinements (<= 1.5% max position error)
+            // so Mario smoothly advances to the valid boundary instead of stopping 25% short.
+            f32 scale = 0.5f;
+            s32 iter;
+            dx = clampedPos[0] - startPos[0];
+            dz = clampedPos[2] - startPos[2];
+            for (iter = 0; iter < 3; iter++) {
+                intendedPos[0] = m->pos[0] + dx * scale;
+                intendedPos[1] = m->pos[1];
+                intendedPos[2] = m->pos[2] + dz * scale;
+                if (perform_ground_quarter_step(m, intendedPos) == GROUND_STEP_LEFT_GROUND) {
+                    stepResult = GROUND_STEP_LEFT_GROUND;
+                    break;
+                }
+                scale *= 0.5f;
+            }
         }
     }
 
@@ -370,8 +417,16 @@ u32 check_ledge_grab(struct MarioState *m, struct Surface *wall, Vec3f intendedP
     ledgePos[2] = nextPos[2] - wall->normal.z * 60.0f;
     ledgePos[1] = find_floor(ledgePos[0], nextPos[1] + 160.0f, ledgePos[2], &ledgeFloor);
 
-    if (ledgePos[1] - nextPos[1] <= 100.0f) {
+    if (ledgeFloor == NULL || ledgePos[1] - nextPos[1] <= 100.0f) {
         return FALSE;
+    }
+
+    // Prevent fake ledge grabs where Mario cannot actually stand/hold onto the ledge.
+    {
+        struct Surface *ledgeCeil;
+        if (vec3f_find_ceil(ledgePos, ledgePos[1], &ledgeCeil) - ledgePos[1] < 160.0f) {
+            return FALSE;
+        }
     }
 
     vec3f_copy(m->pos, ledgePos);
@@ -609,31 +664,46 @@ void apply_vertical_wind(struct MarioState *m) {
 
 s32 perform_air_step(struct MarioState *m, u32 stepArg) {
     Vec3f intendedPos;
-    s32 i;
-    s32 quarterStepResult;
+    Vec3f clampedPos;
     s32 stepResult = AIR_STEP_NONE;
 
     m->wall = NULL;
 
-    for (i = 0; i < 4; i++) {
-        intendedPos[0] = m->pos[0] + m->vel[0] / 4.0f;
-        intendedPos[1] = m->pos[1] + m->vel[1] / 4.0f;
-        intendedPos[2] = m->pos[2] + m->vel[2] / 4.0f;
+    if (m->vel[0] == 0.0f && m->vel[1] == 0.0f && m->vel[2] == 0.0f) {
+        stepResult = perform_air_quarter_step(m, m->pos, stepArg);
+    } else {
+        f32 absSum = (m->vel[0] < 0.0f ? -m->vel[0] : m->vel[0])
+                   + (m->vel[1] < 0.0f ? -m->vel[1] : m->vel[1])
+                   + (m->vel[2] < 0.0f ? -m->vel[2] : m->vel[2]);
 
-        quarterStepResult = perform_air_quarter_step(m, intendedPos, stepArg);
+        intendedPos[0] = m->pos[0] + m->vel[0];
+        intendedPos[1] = m->pos[1] + m->vel[1];
+        intendedPos[2] = m->pos[2] + m->vel[2];
 
-        //! On one qf, hit OOB/ceil/wall to store the 2 return value, and continue
-        // getting 0s until your last qf. Graze a wall on your last qf, and it will
-        // return the stored 2 with a sharply angled reference wall. (some gwks)
-
-        if (quarterStepResult != AIR_STEP_NONE) {
-            stepResult = quarterStepResult;
-        }
-
-        if (quarterStepResult == AIR_STEP_LANDED || quarterStepResult == AIR_STEP_GRABBED_LEDGE
-            || quarterStepResult == AIR_STEP_GRABBED_CEILING
-            || quarterStepResult == AIR_STEP_HIT_LAVA_WALL) {
-            break;
+        // Swept wall raycast prevents tunneling through thin walls at any air speed.
+        if (find_wall_raycast(m->pos, intendedPos, 75.0f, 50.0f, clampedPos) == NULL
+            && absSum <= 64.0f) {
+            stepResult = perform_air_quarter_step(m, clampedPos, stepArg);
+        } else {
+            // High-speed or wall-crossing frame: subdivide into 2 swept half-steps
+            // for accurate landing, ledge grabs, and ceiling hits (2x faster than 4 qsteps).
+            s32 i;
+            for (i = 0; i < 2; i++) {
+                s32 subResult;
+                intendedPos[0] = m->pos[0] + m->vel[0] * 0.5f;
+                intendedPos[1] = m->pos[1] + m->vel[1] * 0.5f;
+                intendedPos[2] = m->pos[2] + m->vel[2] * 0.5f;
+                find_wall_raycast(m->pos, intendedPos, 75.0f, 50.0f, clampedPos);
+                subResult = perform_air_quarter_step(m, clampedPos, stepArg);
+                if (subResult != AIR_STEP_NONE) {
+                    stepResult = subResult;
+                }
+                if (subResult == AIR_STEP_LANDED || subResult == AIR_STEP_GRABBED_LEDGE
+                    || subResult == AIR_STEP_GRABBED_CEILING
+                    || subResult == AIR_STEP_HIT_LAVA_WALL) {
+                    break;
+                }
+            }
         }
     }
 

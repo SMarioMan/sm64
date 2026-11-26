@@ -151,6 +151,149 @@ static s32 find_wall_collisions_from_list(struct SurfaceNode *surfaceNode,
     return numCols;
 }
 
+static void raycast_wall_list(struct SurfaceNode *surfaceNode,
+                              f32 x0, f32 y0, f32 z0,
+                              f32 dx, f32 dy, f32 dz,
+                              f32 minY, f32 maxY,
+                              f32 *bestT, struct Surface **bestWall) {
+    struct Surface *surf;
+    f32 d0, d1, t, hx, hy, hz;
+    f32 w1, w2, w3, ty1, ty2, ty3;
+
+    while (surfaceNode != NULL) {
+        surf = surfaceNode->surface;
+        surfaceNode = surfaceNode->next;
+
+        if (maxY < surf->lowerY || minY > surf->upperY) {
+            continue;
+        }
+
+        d0 = surf->normal.x * x0 + surf->normal.y * y0 + surf->normal.z * z0 + surf->originOffset;
+        if (d0 < 0.0f) {
+            continue;
+        }
+        d1 = d0 + surf->normal.x * dx + surf->normal.y * dy + surf->normal.z * dz;
+        if (d1 >= 1.0f || d0 <= d1) {
+            continue;
+        }
+
+        t = (d0 - 1.0f) / (d0 - d1);
+        if (t < 0.0f) {
+            t = 0.0f;
+        }
+        if (t >= *bestT) {
+            continue;
+        }
+
+        hx = x0 + dx * t;
+        hy = y0 + dy * t;
+        hz = z0 + dz * t;
+
+        if (hy < surf->lowerY || hy > surf->upperY) {
+            continue;
+        }
+
+        if (surf->flags & SURFACE_FLAG_X_PROJECTION) {
+            w1 = -surf->vertex1[2]; w2 = -surf->vertex2[2]; w3 = -surf->vertex3[2];
+            ty1 = surf->vertex1[1]; ty2 = surf->vertex2[1]; ty3 = surf->vertex3[1];
+
+            if (surf->normal.x > 0.0f) {
+                if ((ty1 - hy) * (w2 - w1) - (w1 - -hz) * (ty2 - ty1) > 0.0f) continue;
+                if ((ty2 - hy) * (w3 - w2) - (w2 - -hz) * (ty3 - ty2) > 0.0f) continue;
+                if ((ty3 - hy) * (w1 - w3) - (w3 - -hz) * (ty1 - ty3) > 0.0f) continue;
+            } else {
+                if ((ty1 - hy) * (w2 - w1) - (w1 - -hz) * (ty2 - ty1) < 0.0f) continue;
+                if ((ty2 - hy) * (w3 - w2) - (w2 - -hz) * (ty3 - ty2) < 0.0f) continue;
+                if ((ty3 - hy) * (w1 - w3) - (w3 - -hz) * (ty1 - ty3) < 0.0f) continue;
+            }
+        } else {
+            w1 = surf->vertex1[0];  w2 = surf->vertex2[0];  w3 = surf->vertex3[0];
+            ty1 = surf->vertex1[1]; ty2 = surf->vertex2[1]; ty3 = surf->vertex3[1];
+
+            if (surf->normal.z > 0.0f) {
+                if ((ty1 - hy) * (w2 - w1) - (w1 - hx) * (ty2 - ty1) > 0.0f) continue;
+                if ((ty2 - hy) * (w3 - w2) - (w2 - hx) * (ty3 - ty2) > 0.0f) continue;
+                if ((ty3 - hy) * (w1 - w3) - (w3 - hx) * (ty1 - ty3) > 0.0f) continue;
+            } else {
+                if ((ty1 - hy) * (w2 - w1) - (w1 - hx) * (ty2 - ty1) < 0.0f) continue;
+                if ((ty2 - hy) * (w3 - w2) - (w2 - hx) * (ty3 - ty2) < 0.0f) continue;
+                if ((ty3 - hy) * (w1 - w3) - (w3 - hx) * (ty1 - ty3) < 0.0f) continue;
+            }
+        }
+
+        if (surf->type == SURFACE_CAMERA_BOUNDARY) {
+            continue;
+        }
+        if (surf->type == SURFACE_VANISH_CAP_WALLS) {
+            if (gCurrentObject != NULL && gCurrentObject == gMarioObject
+                && (gMarioState->flags & MARIO_VANISH_CAP)) {
+                continue;
+            }
+        }
+
+        *bestT = t;
+        *bestWall = surf;
+    }
+}
+
+/**
+ * Swept wall raycast from startPos to endPos with vertical offset and radius.
+ * Only triggers when crossing the wall plane (d1 < 1.0f), clamping horizontal
+ * (x, z) to 1.0f in front of the wall plane while preserving vertical Y motion
+ * so wall push, sliding, bonks, wall kicks, and gravity work naturally.
+ */
+struct Surface *find_wall_raycast(Vec3f startPos, Vec3f endPos, f32 offsetY, f32 radius, Vec3f outPos) {
+    f32 x0 = startPos[0];
+    f32 y0 = startPos[1] + offsetY;
+    f32 z0 = startPos[2];
+    f32 dx = endPos[0] - x0;
+    f32 dy = (endPos[1] + offsetY) - y0;
+    f32 dz = endPos[2] - z0;
+    f32 minX = (x0 < endPos[0] ? x0 : endPos[0]) - radius;
+    f32 maxX = (x0 > endPos[0] ? x0 : endPos[0]) + radius;
+    f32 minZ = (z0 < endPos[2] ? z0 : endPos[2]) - radius;
+    f32 maxZ = (z0 > endPos[2] ? z0 : endPos[2]) + radius;
+    f32 minY = (y0 < y0 + dy ? y0 : y0 + dy);
+    f32 maxY = (y0 > y0 + dy ? y0 : y0 + dy);
+    s32 minCellX = ((s32) minX + LEVEL_BOUNDARY_MAX) >> 10;
+    s32 maxCellX = ((s32) maxX + LEVEL_BOUNDARY_MAX) >> 10;
+    s32 minCellZ = ((s32) minZ + LEVEL_BOUNDARY_MAX) >> 10;
+    s32 maxCellZ = ((s32) maxZ + LEVEL_BOUNDARY_MAX) >> 10;
+    s32 cx, cz;
+    f32 bestT = 1.0f;
+    struct Surface *bestWall = NULL;
+
+    if (minCellX < 0) minCellX = 0;
+    if (maxCellX >= NUM_CELLS) maxCellX = NUM_CELLS - 1;
+    if (minCellZ < 0) minCellZ = 0;
+    if (maxCellZ >= NUM_CELLS) maxCellZ = NUM_CELLS - 1;
+
+    for (cz = minCellZ; cz <= maxCellZ; cz++) {
+        for (cx = minCellX; cx <= maxCellX; cx++) {
+            struct SurfaceNode *node = gDynamicSurfacePartition[cz][cx][SPATIAL_PARTITION_WALLS].next;
+            if (node != NULL) {
+                raycast_wall_list(node, x0, y0, z0, dx, dy, dz, minY, maxY, &bestT, &bestWall);
+            }
+            node = gStaticSurfacePartition[cz][cx][SPATIAL_PARTITION_WALLS].next;
+            if (node != NULL) {
+                raycast_wall_list(node, x0, y0, z0, dx, dy, dz, minY, maxY, &bestT, &bestWall);
+            }
+        }
+    }
+
+    if (bestWall != NULL) {
+        outPos[0] = startPos[0] + dx * bestT;
+        outPos[1] = endPos[1];
+        outPos[2] = startPos[2] + dz * bestT;
+    } else {
+        outPos[0] = endPos[0];
+        outPos[1] = endPos[1];
+        outPos[2] = endPos[2];
+    }
+
+    return bestWall;
+}
+
 /**
  * Formats the position and wall search for find_wall_collisions.
  */
@@ -246,6 +389,12 @@ static struct Surface *find_ceil_from_list(struct SurfaceNode *surfaceNode, s32 
     while (surfaceNode != NULL) {
         surf = surfaceNode->surface;
         surfaceNode = surfaceNode->next;
+
+        // Cut ceilings at their highest vertex to prevent exposed-ceiling invisible walls
+        // and reject ceilings already below the query point early.
+        if (y > surf->upperY) {
+            continue;
+        }
 
         x1 = surf->vertex1[0];
         z1 = surf->vertex1[2];
