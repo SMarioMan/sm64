@@ -29,6 +29,7 @@ struct EnvFxParticle {
 };
 
 extern s8 gEnvFxMode;
+extern u8 gEnvFxSkipUpdate;
 extern UNUSED s32 D_80330644;
 
 extern struct EnvFxParticle *gEnvFxBuffer;

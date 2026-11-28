@@ -26,6 +26,8 @@ extern OSMesgQueue gSIEventMesgQueue;
 extern struct VblankHandler *gVblankHandler1;
 extern struct VblankHandler *gVblankHandler2;
 extern struct SPTask *gActiveSPTask;
+extern void *gPendingGfxFramebuffer;
+extern void *volatile gPendingViFramebuffer;
 extern u32 gNumVblanks;
 extern s8 gResetTimer;
 extern s8 gNmiResetBarsTimer;

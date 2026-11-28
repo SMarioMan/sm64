@@ -142,6 +142,8 @@ Gfx *geo_exec_flying_carpet_create(s32 callContext, struct GraphNode *node, UNUS
     struct Object *curGraphNodeObject;
 
     if (callContext == GEO_CONTEXT_RENDER) {
+        s16 rippleTimer = sFlyingCarpetRippleTimer - (gInterpMidframe ? 0x200 : 0);
+
         verts = alloc_display_list(NUM_FLYING_CARPET_VERTICES * sizeof(*verts));
         displayList = alloc_display_list(7 * sizeof(*displayList));
         displayListHead = displayList;
@@ -157,7 +159,7 @@ Gfx *geo_exec_flying_carpet_create(s32 callContext, struct GraphNode *node, UNUS
             col = n % 3;
 
             x = sp64[n * 4 + 0];
-            y = round_float(sins(sFlyingCarpetRippleTimer + (row << 12) + (col << 14)) * 20.0);
+            y = round_float(sins(rippleTimer + (row << 12) + (col << 14)) * 20.0);
             z = sp64[n * 4 + 1];
             tx = sp64[n * 4 + 2];
             ty = sp64[n * 4 + 3];

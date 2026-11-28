@@ -516,10 +516,14 @@ void render_text_labels(void) {
             }
         }
 
-        mem_pool_free(gEffectsMemoryPool, sTextLabels[i]);
+        if (!gInterpActive) {
+            mem_pool_free(gEffectsMemoryPool, sTextLabels[i]);
+        }
     }
 
     gSPDisplayList(gDisplayListHead++, dl_hud_img_end);
 
-    sTextLabelsCount = 0;
+    if (!gInterpActive) {
+        sTextLabelsCount = 0;
+    }
 }

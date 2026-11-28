@@ -429,7 +429,8 @@ Gfx *movtex_gen_from_quad(s16 y, struct MovtexQuad *quad) {
     if (gMovtexCounter != gMovtexCounterPrev) {
         quad->rot += rotspeed;
     }
-    rot = quad->rot;
+    rot = (gInterpMidframe && gMovtexCounter != gMovtexCounterPrev) ? (s16) (quad->rot - (rotspeed >> 1))
+                                                                    : quad->rot;
     if (rotDir == ROTATE_CLOCKWISE) {
         movtex_make_quad_vertex(verts, 0, x1, y, z1, rot, 0, scale, alpha);
         movtex_make_quad_vertex(verts, 1, x2, y, z2, rot, 16384, scale, alpha);
@@ -702,6 +703,27 @@ void update_moving_texture_offset(s16 *movtexVerts, s32 attr) {
     }
 }
 
+#ifdef __GNUC__
+#define MOVTEX_INLINE static inline
+#else
+#define MOVTEX_INLINE static
+#endif
+
+MOVTEX_INLINE s16 movtex_get_base_s(const s16 *movtexVerts, s32 attrOffset) {
+    s16 baseS = movtexVerts[attrOffset];
+
+    if (gInterpMidframe && gMovtexCounter != gMovtexCounterPrev) {
+        s32 s = baseS - (movtexVerts[MOVTEX_ATTR_SPEED] >> 1);
+        if (s >= 1024) {
+            s -= 1024;
+        } else if (s <= -1024) {
+            s += 1024;
+        }
+        baseS = (s16) s;
+    }
+    return baseS;
+}
+
 /**
  * Make the first vertex of a moving texture with index 0.
  * This vertex is the base of all vertices with index > 0, which use this
@@ -727,7 +749,7 @@ void movtex_write_vertex_first(Vtx *vtx, s16 *movtexVerts, struct MovtexObject *
             r1 = c->r;
             g1 = c->g;
             b1 = c->b;
-            s = movtexVerts[MOVTEX_ATTR_NOCOLOR_S];
+            s = movtex_get_base_s(movtexVerts, MOVTEX_ATTR_NOCOLOR_S);
             t = movtexVerts[MOVTEX_ATTR_NOCOLOR_T];
             make_vertex(vtx, 0, x, y, z, s, t, r1, g1, b1, alpha);
             break;
@@ -735,7 +757,7 @@ void movtex_write_vertex_first(Vtx *vtx, s16 *movtexVerts, struct MovtexObject *
             r2 = movtexVerts[MOVTEX_ATTR_COLORED_R];
             g2 = movtexVerts[MOVTEX_ATTR_COLORED_G];
             b2 = movtexVerts[MOVTEX_ATTR_COLORED_B];
-            s = movtexVerts[MOVTEX_ATTR_COLORED_S];
+            s = movtex_get_base_s(movtexVerts, MOVTEX_ATTR_COLORED_S);
             t = movtexVerts[MOVTEX_ATTR_COLORED_T];
             make_vertex(vtx, 0, x, y, z, s, t, r2, g2, b2, alpha);
             break;
@@ -771,7 +793,7 @@ void movtex_write_vertex_index(Vtx *verts, s32 index, s16 *movtexVerts, struct M
             x = movtexVerts[index * 5 + MOVTEX_ATTR_X];
             y = movtexVerts[index * 5 + MOVTEX_ATTR_Y];
             z = movtexVerts[index * 5 + MOVTEX_ATTR_Z];
-            baseS = movtexVerts[MOVTEX_ATTR_NOCOLOR_S];
+            baseS = movtex_get_base_s(movtexVerts, MOVTEX_ATTR_NOCOLOR_S);
             baseT = movtexVerts[MOVTEX_ATTR_NOCOLOR_T];
             offS = movtexVerts[index * 5 + MOVTEX_ATTR_NOCOLOR_S];
             offT = movtexVerts[index * 5 + MOVTEX_ATTR_NOCOLOR_T];
@@ -786,7 +808,7 @@ void movtex_write_vertex_index(Vtx *verts, s32 index, s16 *movtexVerts, struct M
             x = movtexVerts[index * 8 + MOVTEX_ATTR_X];
             y = movtexVerts[index * 8 + MOVTEX_ATTR_Y];
             z = movtexVerts[index * 8 + MOVTEX_ATTR_Z];
-            baseS = movtexVerts[7];
+            baseS = movtex_get_base_s(movtexVerts, MOVTEX_ATTR_COLORED_S);
             baseT = movtexVerts[8];
             offS = movtexVerts[index * 8 + 7];
             offT = movtexVerts[index * 8 + 8];

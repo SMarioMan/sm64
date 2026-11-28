@@ -42,6 +42,7 @@ enum MenuMode {
     MENU_MODE_UNUSED_3
 };
 
+extern s16 gMenuMode;
 extern s8 gDialogCourseActNum;
 extern s8 gHudFlash;
 

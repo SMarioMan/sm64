@@ -163,5 +163,14 @@ void area_update_objects(void);
 void play_transition(s16 transType, s16 time, u8 red, u8 green, u8 blue);
 void play_transition_after_delay(s16 transType, s16 time, u8 red, u8 green, u8 blue, s16 delay);
 void render_game(void);
+s32 can_interpolate_frame(void);
+void interp_save_state(void);
+void interp_reset_state(void);
+
+extern u8 gInterpMidframe;
+extern u8 gInterpValid;
+s32 interp_get_obj_prev_anim(struct Object *obj, struct Animation **curAnim, s16 *animID,
+                             s16 *animFrame, s16 *animYTrans, s32 *animFrameAccelAssist,
+                             s32 *animAccel);
 
 #endif // AREA_H

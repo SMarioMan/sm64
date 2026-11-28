@@ -39,6 +39,7 @@ s16 gSnowParticleMaxCount;
 
 /* DATA */
 s8 gEnvFxMode = ENVFX_MODE_NONE;
+u8 gEnvFxSkipUpdate = 0;
 UNUSED s32 D_80330644 = 0;
 
 /// Template for a snow particle triangle
@@ -395,45 +396,49 @@ Gfx *envfx_update_snow(s32 snowMode, Vec3s marioPos, Vec3s camFrom, Vec3s camTo)
         return NULL;
     }
 
-    envfx_update_snowflake_count(snowMode, marioPos);
+    if (!gEnvFxSkipUpdate) {
+        envfx_update_snowflake_count(snowMode, marioPos);
+    }
 
     // Note: to and from are inverted here, so the resulting vector goes towards the camera
     orbit_from_positions(camTo, camFrom, &radius, &pitch, &yaw);
 
-    switch (snowMode) {
-        case ENVFX_SNOW_NORMAL:
-            // ensure the snow cylinder is no further than 250 units in front
-            // of the camera, and no closer than 1 unit.
-            if (radius > 250) {
-                radius -= 250;
-            } else {
-                radius = 1;
-            }
+    if (!gEnvFxSkipUpdate) {
+        switch (snowMode) {
+            case ENVFX_SNOW_NORMAL:
+                // ensure the snow cylinder is no further than 250 units in front
+                // of the camera, and no closer than 1 unit.
+                if (radius > 250) {
+                    radius -= 250;
+                } else {
+                    radius = 1;
+                }
 
-            pos_from_orbit(camTo, snowCylinderPos, radius, pitch, yaw);
-            envfx_update_snow_normal(snowCylinderPos[0], snowCylinderPos[1], snowCylinderPos[2]);
-            break;
+                pos_from_orbit(camTo, snowCylinderPos, radius, pitch, yaw);
+                envfx_update_snow_normal(snowCylinderPos[0], snowCylinderPos[1], snowCylinderPos[2]);
+                break;
 
-        case ENVFX_SNOW_WATER:
-            if (radius > 500) {
-                radius -= 500;
-            } else {
-                radius = 1;
-            }
+            case ENVFX_SNOW_WATER:
+                if (radius > 500) {
+                    radius -= 500;
+                } else {
+                    radius = 1;
+                }
 
-            pos_from_orbit(camTo, snowCylinderPos, radius, pitch, yaw);
-            envfx_update_snow_water(snowCylinderPos[0], snowCylinderPos[1], snowCylinderPos[2]);
-            break;
-        case ENVFX_SNOW_BLIZZARD:
-            if (radius > 250) {
-                radius -= 250;
-            } else {
-                radius = 1;
-            }
+                pos_from_orbit(camTo, snowCylinderPos, radius, pitch, yaw);
+                envfx_update_snow_water(snowCylinderPos[0], snowCylinderPos[1], snowCylinderPos[2]);
+                break;
+            case ENVFX_SNOW_BLIZZARD:
+                if (radius > 250) {
+                    radius -= 250;
+                } else {
+                    radius = 1;
+                }
 
-            pos_from_orbit(camTo, snowCylinderPos, radius, pitch, yaw);
-            envfx_update_snow_blizzard(snowCylinderPos[0], snowCylinderPos[1], snowCylinderPos[2]);
-            break;
+                pos_from_orbit(camTo, snowCylinderPos, radius, pitch, yaw);
+                envfx_update_snow_blizzard(snowCylinderPos[0], snowCylinderPos[1], snowCylinderPos[2]);
+                break;
+        }
     }
 
     rotate_triangle_vertices((s16 *) &vertex1, (s16 *) &vertex2, (s16 *) &vertex3, pitch, yaw);

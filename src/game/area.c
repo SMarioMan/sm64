@@ -19,9 +19,12 @@
 #include "rendering_graph_node.h"
 #include "level_update.h"
 #include "engine/geo_layout.h"
+#include "engine/math_util.h"
+#include "mario_misc.h"
 #include "save_file.h"
 #include "level_table.h"
 #include "dialog_ids.h"
+#include "profiler.h"
 
 struct SpawnInfo gPlayerSpawnInfos[1];
 struct GraphNode *D_8033A160[0x100];
@@ -297,7 +300,9 @@ void change_area(s32 index) {
 
 void area_update_objects(void) {
     gAreaUpdateCounter++;
+    profiler_stage_begin(PROF_STAGE_OBJECTS);
     update_objects(0);
+    profiler_stage_end(PROF_STAGE_OBJECTS);
 }
 
 /*
@@ -365,9 +370,411 @@ void play_transition_after_delay(s16 transType, s16 time, u8 red, u8 green, u8 b
     play_transition(transType, time, red, green, blue);
 }
 
+#define INTERP_ABSF(x) (((x) < 0.0f) ? -(x) : (x))
+#define INTERP_MAX_THROW_MATS 32
+#define INTERP_SAVED_VALID     0x01
+#define INTERP_SAVED_THROW_MOD 0x02
+
+u8 gInterpMidframe = 0;
+
+struct InterpObjPrev {
+    Vec3f pos;
+    Vec3s angle;
+    Vec3f scale;
+    struct Animation *curAnim;
+    s32 animFrameAccelAssist;
+    s32 animAccel;
+    s16 animID;
+    s16 animFrame;
+    s16 animYTrans;
+    u16 gen;
+    s8 throwIdx;
+};
+
+struct InterpObjSaved {
+    Vec3f pos;
+    Vec3s angle;
+    Vec3f scale;
+    s8 throwIdx;
+    u8 valid;
+};
+
+static Vec3f sPrevCamPos;
+static Vec3f sPrevCamFocus;
+static s16 sPrevCamRoll;
+static Vec3f sSavedCamPos;
+static Vec3f sSavedCamFocus;
+static s16 sSavedCamRoll;
+static Vec3s sPrevTorsoAngle;
+static Vec3s sSavedTorsoAngle;
+static Vec3s sPrevHeadAngle;
+static Vec3s sSavedHeadAngle;
+static Vec3s sPrevCamHeadRot;
+static Vec3s sSavedCamHeadRot;
+static s16 sPrevLevelNum = -1;
+static s16 sPrevAreaIndex = -1;
+static u16 sInterpGen = 0;
+u8 gInterpValid = 0;
+static struct InterpObjPrev sPrevObjs[OBJECT_POOL_CAPACITY];
+static struct InterpObjSaved sSavedObjs[OBJECT_POOL_CAPACITY];
+static u8 sActiveObjIdx[OBJECT_POOL_CAPACITY];
+static u8 sModifiedIdx[OBJECT_POOL_CAPACITY];
+static s32 sActiveObjCount;
+static s32 sModifiedCount;
+static Mat4 sPrevThrowMats[INTERP_MAX_THROW_MATS];
+static Mat4 sSavedThrowMats[INTERP_MAX_THROW_MATS];
+static s32 sPrevThrowCount;
+static s32 sSavedThrowCount;
+
+/**
+ * Returns TRUE when the engine is in a normal 3D gameplay/cutscene state safe
+ * for 60 FPS midpoint frame interpolation (excluding menus, dialogs, and fades).
+ */
+s32 can_interpolate_frame(void) {
+    return (gCurrentArea != NULL && gCurrentArea->camera != NULL && gMarioObject != NULL
+            && !gWarpTransition.pauseRendering && !gWarpTransition.isActive
+            && gMenuMode == MENU_MODE_NONE && get_dialog_id() == DIALOG_NONE);
+}
+
+/**
+ * Clears cached previous-frame interpolation state on level/area changes or
+ * 30 Hz menu/transition frames.
+ */
+void interp_reset_state(void) {
+    gInterpValid = 0;
+    sActiveObjCount = 0;
+}
+
+/**
+ * Retrieves the previous 30 Hz tick's animation state for an object in gObjectPool.
+ * Returns TRUE if valid snapshot data is available for this object.
+ */
+s32 interp_get_obj_prev_anim(struct Object *obj, struct Animation **curAnim, s16 *animID,
+                             s16 *animFrame, s16 *animYTrans, s32 *animFrameAccelAssist,
+                             s32 *animAccel) {
+    s32 idx;
+
+    if (!gInterpValid || obj == NULL) {
+        return 0;
+    }
+
+    idx = obj - gObjectPool;
+    if ((u32) idx >= OBJECT_POOL_CAPACITY || sPrevObjs[idx].gen != sInterpGen) {
+        return 0;
+    }
+
+    *curAnim = sPrevObjs[idx].curAnim;
+    *animID = sPrevObjs[idx].animID;
+    *animFrame = sPrevObjs[idx].animFrame;
+    *animYTrans = sPrevObjs[idx].animYTrans;
+    *animFrameAccelAssist = sPrevObjs[idx].animFrameAccelAssist;
+    *animAccel = sPrevObjs[idx].animAccel;
+    return 1;
+}
+
+/**
+ * Snapshots the current 30 Hz camera and active object transforms before
+ * running the next logic tick so a midpoint (t=0.5) frame can be interpolated.
+ */
+void interp_save_state(void) {
+    s32 i;
+    s32 listIdx;
+
+    if (!can_interpolate_frame() || gCurrLevelNum != sPrevLevelNum || gCurrAreaIndex != sPrevAreaIndex) {
+        sPrevLevelNum = gCurrLevelNum;
+        sPrevAreaIndex = gCurrAreaIndex;
+        gInterpValid = 0;
+        sActiveObjCount = 0;
+        return;
+    }
+
+    for (i = 0; i < 3; i++) {
+        sPrevCamPos[i] = gLakituState.pos[i];
+        sPrevCamFocus[i] = gLakituState.focus[i];
+        sPrevTorsoAngle[i] = gBodyStates[0].torsoAngle[i];
+        sPrevHeadAngle[i] = gBodyStates[0].headAngle[i];
+        sPrevCamHeadRot[i] = gPlayerCameraState->headRotation[i];
+    }
+    sPrevCamRoll = gLakituState.roll;
+    sPrevThrowCount = 0;
+    sActiveObjCount = 0;
+
+    if (++sInterpGen == 0) {
+        bzero(sPrevObjs, sizeof(sPrevObjs));
+        sInterpGen = 1;
+    }
+
+    for (listIdx = 0; sObjectListUpdateOrder[listIdx] >= 0; listIdx++) {
+        struct ObjectNode *head = &gObjectLists[sObjectListUpdateOrder[listIdx]];
+        struct ObjectNode *node = head->next;
+
+        while (node != head) {
+            struct Object *obj = (struct Object *) node;
+            node = node->next;
+            if (obj->activeFlags != ACTIVE_FLAG_DEACTIVATED) {
+                s32 idx = obj - gObjectPool;
+                if ((u32) idx < OBJECT_POOL_CAPACITY) {
+                    struct InterpObjPrev *prev = &sPrevObjs[idx];
+                    prev->pos[0] = obj->header.gfx.pos[0];
+                    prev->pos[1] = obj->header.gfx.pos[1];
+                    prev->pos[2] = obj->header.gfx.pos[2];
+                    prev->angle[0] = obj->header.gfx.angle[0];
+                    prev->angle[1] = obj->header.gfx.angle[1];
+                    prev->angle[2] = obj->header.gfx.angle[2];
+                    prev->scale[0] = obj->header.gfx.scale[0];
+                    prev->scale[1] = obj->header.gfx.scale[1];
+                    prev->scale[2] = obj->header.gfx.scale[2];
+                    prev->curAnim = obj->header.gfx.animInfo.curAnim;
+                    prev->animID = obj->header.gfx.animInfo.animID;
+                    prev->animFrame = obj->header.gfx.animInfo.animFrame;
+                    prev->animYTrans = obj->header.gfx.animInfo.animYTrans;
+                    prev->animFrameAccelAssist = obj->header.gfx.animInfo.animFrameAccelAssist;
+                    prev->animAccel = obj->header.gfx.animInfo.animAccel;
+                    if (obj->header.gfx.throwMatrix != NULL) {
+                        if (sPrevThrowCount < INTERP_MAX_THROW_MATS) {
+                            mtxf_copy(sPrevThrowMats[sPrevThrowCount], *obj->header.gfx.throwMatrix);
+                            prev->throwIdx = (s8) sPrevThrowCount++;
+                        } else {
+                            prev->throwIdx = -1;
+                        }
+                        obj->header.gfx.throwMatrix = NULL;
+                    } else {
+                        prev->throwIdx = -1;
+                    }
+                    prev->gen = sInterpGen;
+                    sActiveObjIdx[sActiveObjCount++] = (u8) idx;
+                }
+            }
+        }
+    }
+
+    gInterpValid = 1;
+}
+
+static void interp_apply_midframe(void) {
+    s32 i;
+    s32 k;
+    f32 camDist;
+
+    for (i = 0; i < 3; i++) {
+        sSavedCamPos[i] = gLakituState.pos[i];
+        sSavedCamFocus[i] = gLakituState.focus[i];
+        sSavedTorsoAngle[i] = gBodyStates[0].torsoAngle[i];
+        sSavedHeadAngle[i] = gBodyStates[0].headAngle[i];
+        gBodyStates[0].torsoAngle[i] =
+            sPrevTorsoAngle[i] + ((s16)(sSavedTorsoAngle[i] - sPrevTorsoAngle[i]) >> 1);
+        gBodyStates[0].headAngle[i] =
+            sPrevHeadAngle[i] + ((s16)(sSavedHeadAngle[i] - sPrevHeadAngle[i]) >> 1);
+        sSavedCamHeadRot[i] = gPlayerCameraState->headRotation[i];
+        gPlayerCameraState->headRotation[i] =
+            sPrevCamHeadRot[i] + ((s16)(sSavedCamHeadRot[i] - sPrevCamHeadRot[i]) >> 1);
+    }
+    sSavedCamRoll = gLakituState.roll;
+
+    camDist = INTERP_ABSF(sSavedCamPos[0] - sPrevCamPos[0])
+            + INTERP_ABSF(sSavedCamPos[1] - sPrevCamPos[1])
+            + INTERP_ABSF(sSavedCamPos[2] - sPrevCamPos[2])
+            + INTERP_ABSF(sSavedCamFocus[0] - sPrevCamFocus[0])
+            + INTERP_ABSF(sSavedCamFocus[1] - sPrevCamFocus[1])
+            + INTERP_ABSF(sSavedCamFocus[2] - sPrevCamFocus[2]);
+    if (camDist < 1000.0f) {
+        for (i = 0; i < 3; i++) {
+            gLakituState.pos[i] = 0.5f * (sPrevCamPos[i] + sSavedCamPos[i]);
+            gLakituState.focus[i] = 0.5f * (sPrevCamFocus[i] + sSavedCamFocus[i]);
+        }
+        gLakituState.roll = sPrevCamRoll + ((s16)(sSavedCamRoll - sPrevCamRoll) >> 1);
+    }
+
+    sSavedThrowCount = 0;
+    sModifiedCount = 0;
+    for (k = 0; k < sActiveObjCount; k++) {
+        s32 idx = sActiveObjIdx[k];
+        struct Object *obj = &gObjectPool[idx];
+        struct InterpObjPrev *prev = &sPrevObjs[idx];
+        s32 xformChanged;
+        u8 flags = 0;
+        f32 dist;
+
+        if (obj->activeFlags == ACTIVE_FLAG_DEACTIVATED || prev->gen != sInterpGen) {
+            continue;
+        }
+
+        xformChanged = (obj->header.gfx.pos[0] != prev->pos[0]
+                        || obj->header.gfx.pos[1] != prev->pos[1]
+                        || obj->header.gfx.pos[2] != prev->pos[2]
+                        || obj->header.gfx.angle[0] != prev->angle[0]
+                        || obj->header.gfx.angle[1] != prev->angle[1]
+                        || obj->header.gfx.angle[2] != prev->angle[2]
+                        || obj->header.gfx.scale[0] != prev->scale[0]
+                        || obj->header.gfx.scale[1] != prev->scale[1]
+                        || obj->header.gfx.scale[2] != prev->scale[2]);
+
+        if (!xformChanged && obj->header.gfx.throwMatrix == NULL) {
+            continue;
+        }
+
+        dist = INTERP_ABSF(obj->header.gfx.pos[0] - prev->pos[0])
+             + INTERP_ABSF(obj->header.gfx.pos[1] - prev->pos[1])
+             + INTERP_ABSF(obj->header.gfx.pos[2] - prev->pos[2]);
+        if (dist >= 500.0f) {
+            continue;
+        }
+
+        {
+            struct InterpObjSaved *saved = &sSavedObjs[sModifiedCount];
+            s32 j;
+
+            saved->throwIdx = -1;
+            if (xformChanged) {
+                for (j = 0; j < 3; j++) {
+                    saved->pos[j] = obj->header.gfx.pos[j];
+                    saved->angle[j] = obj->header.gfx.angle[j];
+                    saved->scale[j] = obj->header.gfx.scale[j];
+                    obj->header.gfx.pos[j] = 0.5f * (prev->pos[j] + saved->pos[j]);
+                    obj->header.gfx.scale[j] = 0.5f * (prev->scale[j] + saved->scale[j]);
+                    obj->header.gfx.angle[j] =
+                        prev->angle[j] + ((s16)(saved->angle[j] - prev->angle[j]) >> 1);
+                }
+                flags = INTERP_SAVED_VALID;
+            }
+
+            if (obj->header.gfx.throwMatrix != NULL && sSavedThrowCount < INTERP_MAX_THROW_MATS) {
+                Mat4 *dst = obj->header.gfx.throwMatrix;
+                Mat4 *curM = &sSavedThrowMats[sSavedThrowCount];
+                mtxf_copy(*curM, *dst);
+
+                if (prev->throwIdx >= 0) {
+                    Mat4 *prevM = &sPrevThrowMats[prev->throwIdx];
+                    const f32 *p = &(*prevM)[0][0];
+                    const f32 *q = &(*curM)[0][0];
+                    s32 m;
+                    for (m = 0; m < 15; m++) {
+                        if (p[m] != q[m]) {
+                            break;
+                        }
+                    }
+                    if (m != 15) {
+                        f32 tdist = INTERP_ABSF((*curM)[3][0] - (*prevM)[3][0])
+                                  + INTERP_ABSF((*curM)[3][1] - (*prevM)[3][1])
+                                  + INTERP_ABSF((*curM)[3][2] - (*prevM)[3][2]);
+                        if (tdist < 500.0f) {
+                            f32 dot = 0.0f;
+                            s32 c;
+                            for (j = 0; j < 3; j++) {
+                                (*dst)[3][j] = 0.5f * ((*prevM)[3][j] + (*curM)[3][j]);
+                            }
+                            for (c = 0; c < 3; c++) {
+                                for (j = 0; j < 3; j++) {
+                                    dot += (*prevM)[c][j] * (*curM)[c][j];
+                                }
+                            }
+                            if (dot > 1.5f) {
+                                f32 prevLenSq = (*prevM)[0][0] * (*prevM)[0][0]
+                                              + (*prevM)[0][1] * (*prevM)[0][1]
+                                              + (*prevM)[0][2] * (*prevM)[0][2];
+                                f32 curLenSq = (*curM)[0][0] * (*curM)[0][0]
+                                             + (*curM)[0][1] * (*curM)[0][1]
+                                             + (*curM)[0][2] * (*curM)[0][2];
+                                if (prevLenSq > 0.95f && prevLenSq < 1.05f && curLenSq > 0.95f
+                                    && curLenSq < 1.05f) {
+                                    for (c = 0; c < 3; c++) {
+                                        f32 mx = (*prevM)[c][0] + (*curM)[c][0];
+                                        f32 my = (*prevM)[c][1] + (*curM)[c][1];
+                                        f32 mz = (*prevM)[c][2] + (*curM)[c][2];
+                                        f32 lenSq = mx * mx + my * my + mz * mz;
+                                        f32 inv = (lenSq > 0.0f) ? (1.0f / sqrtf(lenSq)) : 0.0f;
+                                        (*dst)[c][0] = mx * inv;
+                                        (*dst)[c][1] = my * inv;
+                                        (*dst)[c][2] = mz * inv;
+                                    }
+                                } else {
+                                    for (c = 0; c < 3; c++) {
+                                        (*dst)[c][0] = 0.5f * ((*prevM)[c][0] + (*curM)[c][0]);
+                                        (*dst)[c][1] = 0.5f * ((*prevM)[c][1] + (*curM)[c][1]);
+                                        (*dst)[c][2] = 0.5f * ((*prevM)[c][2] + (*curM)[c][2]);
+                                    }
+                                }
+                            }
+                            saved->throwIdx = (s8) sSavedThrowCount++;
+                            flags |= INTERP_SAVED_THROW_MOD;
+                        }
+                    }
+                } else {
+                    f32 tdist = INTERP_ABSF((*curM)[3][0] - prev->pos[0])
+                              + INTERP_ABSF((*curM)[3][1] - prev->pos[1])
+                              + INTERP_ABSF((*curM)[3][2] - prev->pos[2]);
+                    if (tdist > 0.0f && tdist < 500.0f) {
+                        for (j = 0; j < 3; j++) {
+                            (*dst)[3][j] = 0.5f * (prev->pos[j] + (*curM)[3][j]);
+                        }
+                        saved->throwIdx = (s8) sSavedThrowCount++;
+                        flags |= INTERP_SAVED_THROW_MOD;
+                    }
+                }
+            }
+
+            if (flags != 0) {
+                saved->valid = flags;
+                sModifiedIdx[sModifiedCount++] = (u8) idx;
+            }
+        }
+    }
+}
+
+static void interp_restore_state(void) {
+    s32 i;
+    s32 k;
+
+    for (i = 0; i < 3; i++) {
+        gLakituState.pos[i] = sSavedCamPos[i];
+        gLakituState.focus[i] = sSavedCamFocus[i];
+        gBodyStates[0].torsoAngle[i] = sSavedTorsoAngle[i];
+        gBodyStates[0].headAngle[i] = sSavedHeadAngle[i];
+        gPlayerCameraState->headRotation[i] = sSavedCamHeadRot[i];
+    }
+    gLakituState.roll = sSavedCamRoll;
+
+    for (k = 0; k < sModifiedCount; k++) {
+        struct Object *obj = &gObjectPool[sModifiedIdx[k]];
+        struct InterpObjSaved *saved = &sSavedObjs[k];
+        if (saved->valid & INTERP_SAVED_VALID) {
+            obj->header.gfx.pos[0] = saved->pos[0];
+            obj->header.gfx.pos[1] = saved->pos[1];
+            obj->header.gfx.pos[2] = saved->pos[2];
+            obj->header.gfx.angle[0] = saved->angle[0];
+            obj->header.gfx.angle[1] = saved->angle[1];
+            obj->header.gfx.angle[2] = saved->angle[2];
+            obj->header.gfx.scale[0] = saved->scale[0];
+            obj->header.gfx.scale[1] = saved->scale[1];
+            obj->header.gfx.scale[2] = saved->scale[2];
+        }
+        if ((saved->valid & INTERP_SAVED_THROW_MOD) && obj->header.gfx.throwMatrix != NULL) {
+            mtxf_copy(*obj->header.gfx.throwMatrix, sSavedThrowMats[saved->throwIdx]);
+        }
+    }
+}
+
 void render_game(void) {
+    s32 canInterp = can_interpolate_frame();
+    s32 doMidframe = (gInterpActive && canInterp);
+
+    profiler_stage_begin(PROF_STAGE_RENDER);
+    if (!canInterp) {
+        gInterpValid = 0;
+    }
+    if (!doMidframe) {
+        gInterpActive = 0;
+    }
     if (gCurrentArea != NULL && !gWarpTransition.pauseRendering) {
+        if (doMidframe && gInterpValid) {
+            interp_apply_midframe();
+            gInterpMidframe = 1;
+        }
         geo_process_root(gCurrentArea->unk04, D_8032CE74, D_8032CE78, gFBSetColor);
+        gInterpMidframe = 0;
+        if (doMidframe && gInterpValid) {
+            interp_restore_state();
+        }
 
         gSPViewport(gDisplayListHead++, VIRTUAL_TO_PHYSICAL(&D_8032CF00));
 
@@ -418,6 +825,9 @@ void render_game(void) {
         }
     }
 
-    D_8032CE74 = NULL;
-    D_8032CE78 = NULL;
+    if (!gInterpActive) {
+        D_8032CE74 = NULL;
+        D_8032CE78 = NULL;
+    }
+    profiler_stage_end(PROF_STAGE_RENDER);
 }

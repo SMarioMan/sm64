@@ -24,15 +24,18 @@ Gfx *geo_envfx_main(s32 callContext, struct GraphNode *node, Mat4 mtxf) {
         struct GraphNodeGenerated *execNode = (struct GraphNodeGenerated *) node;
         u32 *params = &execNode->parameter; // accessed a s32 as 2 u16s by pointing to the variable and
                                             // casting to a local struct as necessary.
+        s32 doUpdate = (GET_HIGH_U16_OF_32(*params) != gAreaUpdateCounter);
 
-        if (GET_HIGH_U16_OF_32(*params) != gAreaUpdateCounter) {
+        if (doUpdate || gEnvFxMode != ENVFX_MODE_NONE) {
             UNUSED struct Camera *sp2C = gCurGraphNodeCamera->config.camera;
             s32 snowMode = GET_LOW_U16_OF_32(*params);
 
             vec3f_to_vec3s(camTo, gCurGraphNodeCamera->focus);
             vec3f_to_vec3s(camFrom, gCurGraphNodeCamera->pos);
             vec3f_to_vec3s(marioPos, gPlayerCameraState->pos);
+            gEnvFxSkipUpdate = !doUpdate;
             particleList = envfx_update_particles(snowMode, marioPos, camTo, camFrom);
+            gEnvFxSkipUpdate = 0;
             if (particleList != NULL) {
                 Mtx *mtx = alloc_display_list(sizeof(*mtx));
 
@@ -42,7 +45,9 @@ Gfx *geo_envfx_main(s32 callContext, struct GraphNode *node, Mat4 mtxf) {
                 gSPBranchList(&gfx[1], VIRTUAL_TO_PHYSICAL(particleList));
                 execNode->fnNode.node.flags = (execNode->fnNode.node.flags & 0xFF) | 0x400;
             }
-            SET_HIGH_U16_OF_32(*params, gAreaUpdateCounter);
+            if (doUpdate) {
+                SET_HIGH_U16_OF_32(*params, gAreaUpdateCounter);
+            }
         }
     } else if (callContext == GEO_CONTEXT_AREA_INIT) {
         // Give these arguments some dummy values. Not used in ENVFX_MODE_NONE

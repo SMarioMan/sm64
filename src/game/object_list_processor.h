@@ -59,6 +59,7 @@ enum ObjectList {
 
 
 extern struct ObjectNode gObjectListArray[];
+extern s8 sObjectListUpdateOrder[];
 
 extern s32 gDebugInfoFlags;
 extern s32 gNumFindFloorMisses;

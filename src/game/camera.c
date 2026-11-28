@@ -11411,6 +11411,11 @@ void set_fov_bbh(struct MarioState *m) {
     sFOVState.fov = approach_f32(sFOVState.fov, targetFoV, 2.f, 2.f);
 }
 
+static u16 sFovUpdateCounter = 0xFFFF;
+static f32 sPrevFov = 45.0f;
+static f32 sCurrFov = 45.0f;
+static u8 sFovValid = 0;
+
 /**
  * Sets the field of view for the GraphNodeCamera
  */
@@ -11420,46 +11425,63 @@ Gfx *geo_camera_fov(s32 callContext, struct GraphNode *g, UNUSED void *context) 
     u8 fovFunc = sFOVState.fovFunc;
 
     if (callContext == GEO_CONTEXT_RENDER) {
-        switch (fovFunc) {
-            case CAM_FOV_SET_45:
-                set_fov_45(marioState);
-                break;
-            case CAM_FOV_SET_29:
-                set_fov_29(marioState);
-                break;
-            case CAM_FOV_ZOOM_30:
-                zoom_fov_30(marioState);
-                break;
-            case CAM_FOV_DEFAULT:
-                fov_default(marioState);
-                break;
-            case CAM_FOV_BBH:
-                set_fov_bbh(marioState);
-                break;
-            case CAM_FOV_APP_45:
-                approach_fov_45(marioState);
-                break;
-            case CAM_FOV_SET_30:
-                set_fov_30(marioState);
-                break;
-            case CAM_FOV_APP_20:
-                approach_fov_20(marioState);
-                break;
-            case CAM_FOV_APP_80:
-                approach_fov_80(marioState);
-                break;
-            case CAM_FOV_APP_30:
-                approach_fov_30(marioState);
-                break;
-            case CAM_FOV_APP_60:
-                approach_fov_60(marioState);
-                break;
-            //! No default case
+        if (sFovUpdateCounter != gAreaUpdateCounter) {
+            f32 prevFov = sFovValid ? sCurrFov : sFOVState.fov;
+            switch (fovFunc) {
+                case CAM_FOV_SET_45:
+                    set_fov_45(marioState);
+                    break;
+                case CAM_FOV_SET_29:
+                    set_fov_29(marioState);
+                    break;
+                case CAM_FOV_ZOOM_30:
+                    zoom_fov_30(marioState);
+                    break;
+                case CAM_FOV_DEFAULT:
+                    fov_default(marioState);
+                    break;
+                case CAM_FOV_BBH:
+                    set_fov_bbh(marioState);
+                    break;
+                case CAM_FOV_APP_45:
+                    approach_fov_45(marioState);
+                    break;
+                case CAM_FOV_SET_30:
+                    set_fov_30(marioState);
+                    break;
+                case CAM_FOV_APP_20:
+                    approach_fov_20(marioState);
+                    break;
+                case CAM_FOV_APP_80:
+                    approach_fov_80(marioState);
+                    break;
+                case CAM_FOV_APP_30:
+                    approach_fov_30(marioState);
+                    break;
+                case CAM_FOV_APP_60:
+                    approach_fov_60(marioState);
+                    break;
+                //! No default case
+            }
+            perspective->fov = sFOVState.fov;
+            shake_camera_fov(perspective);
+            sPrevFov = prevFov;
+            sCurrFov = perspective->fov;
+            sFovUpdateCounter = gAreaUpdateCounter;
+            sFovValid = 1;
         }
+        if (gInterpMidframe && sFovValid && (sCurrFov - sPrevFov) > -15.0f
+            && (sCurrFov - sPrevFov) < 15.0f) {
+            perspective->fov = 0.5f * (sPrevFov + sCurrFov);
+        } else {
+            perspective->fov = sCurrFov;
+        }
+    } else {
+        perspective->fov = sFOVState.fov;
+        sFovValid = 0;
+        sFovUpdateCounter = (u16) (gAreaUpdateCounter - 1);
     }
 
-    perspective->fov = sFOVState.fov;
-    shake_camera_fov(perspective);
     return NULL;
 }
 

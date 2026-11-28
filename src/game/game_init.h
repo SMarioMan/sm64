@@ -60,6 +60,8 @@ extern u8 gDemoInputs[];
 
 extern u16 sRenderingFramebuffer;
 extern u32 gGlobalTimer;
+extern u32 gRenderFrame;
+extern u8 gInterpActive;
 
 void setup_game_memory(void);
 void thread5_game_loop(UNUSED void *arg);
@@ -71,5 +73,6 @@ void end_master_display_list(void);
 void render_init(void);
 void select_gfx_pool(void);
 void display_and_vsync(void);
+void display_and_vsync_frame(s32 waitExtraVblank, s32 incGlobalTimer);
 
 #endif // GAME_INIT_H

@@ -8,6 +8,7 @@
 #include "buffers/framebuffers.h"
 #include "buffers/zbuffer.h"
 #include "engine/level_script.h"
+#include "area.h"
 #include "game_init.h"
 #include "main.h"
 #include "memory.h"
@@ -19,6 +20,9 @@
 #include "segment2.h"
 #include "segment_symbols.h"
 #include "rumble_init.h"
+
+extern OSViContext *__osViCurr;
+extern OSViContext *__osViNext;
 
 // First 3 controller slots
 struct Controller gControllers[3];
@@ -60,6 +64,8 @@ static s32 sUnusedGameInitValue = 0;
 
 // General timer that runs as the game starts
 u32 gGlobalTimer = 0;
+u32 gRenderFrame = 0;
+u8 gInterpActive = 0;
 
 // Framebuffer rendering values (max 3)
 u16 sRenderedFramebuffer = 0;
@@ -336,17 +342,19 @@ void render_init(void) {
     init_rcp();
     clear_framebuffer(0);
     end_master_display_list();
+    gPendingGfxFramebuffer = (void *) PHYSICAL_TO_VIRTUAL(gPhysicalFramebuffers[sRenderingFramebuffer]);
     exec_display_list(&gGfxPool->spTask);
 
     sRenderingFramebuffer++;
     gGlobalTimer++;
+    gRenderFrame++;
 }
 
 /**
  * Selects the location of the F3D output buffer (gDisplayListHead).
  */
 void select_gfx_pool(void) {
-    gGfxPool = &gGfxPools[gGlobalTimer % ARRAY_COUNT(gGfxPools)];
+    gGfxPool = &gGfxPools[gRenderFrame % ARRAY_COUNT(gGfxPools)];
     set_segment_base_addr(1, gGfxPool->buffer);
     gGfxSPTask = &gGfxPool->spTask;
     gDisplayListHead = gGfxPool->buffer;
@@ -357,29 +365,46 @@ void select_gfx_pool(void) {
  * This function:
  * - Sends the current master display list out to be rendered.
  * - Tells the VI which color framebuffer to be displayed.
- * - Yields to the VI framerate twice, locking the game at 30 FPS.
+ * - Yields to the VI framerate once or twice depending on waitExtraVblank.
  * - Selects which framebuffer will be rendered and displayed to next time.
  */
-void display_and_vsync(void) {
+void display_and_vsync_frame(s32 waitExtraVblank, s32 incGlobalTimer) {
+    void *nextFb;
+
     profiler_log_thread5_time(BEFORE_DISPLAY_LISTS);
     osRecvMesg(&gGfxVblankQueue, &gMainReceivedMesg, OS_MESG_BLOCK);
     if (gGoddardVblankCallback != NULL) {
         gGoddardVblankCallback();
         gGoddardVblankCallback = NULL;
     }
+    gPendingGfxFramebuffer = (void *) PHYSICAL_TO_VIRTUAL(gPhysicalFramebuffers[sRenderingFramebuffer]);
     exec_display_list(&gGfxPool->spTask);
     profiler_log_thread5_time(AFTER_DISPLAY_LISTS);
     osRecvMesg(&gGameVblankQueue, &gMainReceivedMesg, OS_MESG_BLOCK);
-    osViSwapBuffer((void *) PHYSICAL_TO_VIRTUAL(gPhysicalFramebuffers[sRenderedFramebuffer]));
     profiler_log_thread5_time(THREAD5_END);
-    osRecvMesg(&gGameVblankQueue, &gMainReceivedMesg, OS_MESG_BLOCK);
+    if (waitExtraVblank) {
+        osRecvMesg(&gGameVblankQueue, &gMainReceivedMesg, OS_MESG_BLOCK);
+    }
     if (++sRenderedFramebuffer == 3) {
         sRenderedFramebuffer = 0;
     }
     if (++sRenderingFramebuffer == 3) {
         sRenderingFramebuffer = 0;
     }
-    gGlobalTimer++;
+    nextFb = (void *) PHYSICAL_TO_VIRTUAL(gPhysicalFramebuffers[sRenderingFramebuffer]);
+    while (__osViCurr->buffer == nextFb
+           || __osViNext->buffer == nextFb
+           || gPendingViFramebuffer == nextFb) {
+        osRecvMesg(&gGameVblankQueue, &gMainReceivedMesg, OS_MESG_BLOCK);
+    }
+    gRenderFrame++;
+    if (incGlobalTimer) {
+        gGlobalTimer++;
+    }
+}
+
+void display_and_vsync(void) {
+    display_and_vsync_frame(TRUE, TRUE);
 }
 
 // Controls
@@ -687,11 +712,26 @@ void thread5_game_loop(UNUSED void *arg) {
         }
 
         audio_game_loop_tick();
+        interp_save_state();
+        gInterpActive = 1;
         select_gfx_pool();
         read_controller_inputs();
         addr = level_script_execute(addr);
 
-        display_and_vsync();
+        if (gInterpActive) {
+            display_and_vsync_frame(FALSE, FALSE);
+            profiler_log_thread5_time(THREAD5_START);
+            gInterpActive = 0;
+            select_gfx_pool();
+            init_rcp();
+            render_game();
+            end_master_display_list();
+            alloc_display_list(0);
+            display_and_vsync_frame(FALSE, TRUE);
+        } else {
+            interp_reset_state();
+            display_and_vsync_frame(TRUE, TRUE);
+        }
 
         // when debug info is enabled, print the "BUF %d" information.
         if (gShowDebugText) {

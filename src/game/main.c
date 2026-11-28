@@ -48,6 +48,12 @@ struct SPTask *sCurrentAudioSPTask = NULL;
 struct SPTask *sCurrentDisplaySPTask = NULL;
 struct SPTask *sNextAudioSPTask = NULL;
 struct SPTask *sNextDisplaySPTask = NULL;
+extern OSViContext *__osViCurr;
+extern OSViContext *__osViNext;
+void *gPendingGfxFramebuffer = NULL;
+void *volatile gPendingViFramebuffer = NULL;
+static void *sCurrentDisplayFramebuffer = NULL;
+static void *sNextDisplayFramebuffer = NULL;
 s8 sAudioEnabled = TRUE;
 u32 gNumVblanks = 0;
 s8 gResetTimer = 0;
@@ -179,7 +185,9 @@ void receive_new_tasks(void) {
 
     if (sCurrentDisplaySPTask == NULL && sNextDisplaySPTask != NULL) {
         sCurrentDisplaySPTask = sNextDisplaySPTask;
+        sCurrentDisplayFramebuffer = sNextDisplayFramebuffer;
         sNextDisplaySPTask = NULL;
+        sNextDisplayFramebuffer = NULL;
     }
 }
 
@@ -232,6 +240,11 @@ void handle_vblank(void) {
         gResetTimer++;
     }
 #endif
+
+    if (gPendingViFramebuffer != NULL && __osViNext->buffer == __osViCurr->buffer) {
+        osViSwapBuffer((void *) gPendingViFramebuffer);
+        gPendingViFramebuffer = NULL;
+    }
 
     receive_new_tasks();
 
@@ -321,6 +334,14 @@ void handle_sp_complete(void) {
 
 void handle_dp_complete(void) {
     // Gfx SP task is completely done.
+    if (sCurrentDisplayFramebuffer != NULL) {
+        if (__osViNext->buffer == __osViCurr->buffer) {
+            osViSwapBuffer(sCurrentDisplayFramebuffer);
+        } else {
+            gPendingViFramebuffer = sCurrentDisplayFramebuffer;
+        }
+        sCurrentDisplayFramebuffer = NULL;
+    }
     if (sCurrentDisplaySPTask->msgqueue != NULL) {
         osSendMesg(sCurrentDisplaySPTask->msgqueue, sCurrentDisplaySPTask->msg, OS_MESG_NOBLOCK);
     }
@@ -396,10 +417,13 @@ void exec_display_list(struct SPTask *spTask) {
         osWritebackDCacheAll();
         spTask->state = SPTASK_STATE_NOT_STARTED;
         if (sCurrentDisplaySPTask == NULL) {
+            sCurrentDisplayFramebuffer = gPendingGfxFramebuffer;
+            sNextDisplayFramebuffer = NULL;
             sCurrentDisplaySPTask = spTask;
             sNextDisplaySPTask = NULL;
             osSendMesg(&gIntrMesgQueue, (OSMesg) MESG_START_GFX_SPTASK, OS_MESG_NOBLOCK);
         } else {
+            sNextDisplayFramebuffer = gPendingGfxFramebuffer;
             sNextDisplaySPTask = spTask;
         }
     }
