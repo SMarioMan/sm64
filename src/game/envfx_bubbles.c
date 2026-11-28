@@ -222,42 +222,55 @@ s32 envfx_is_whirlpool_bubble_alive(s32 index) {
  */
 void envfx_update_whirlpool(void) {
     s32 i;
+    s16 srcX = gEnvFxBubbleConfig[ENVFX_STATE_SRC_X];
+    s16 srcY = gEnvFxBubbleConfig[ENVFX_STATE_SRC_Y];
+    s16 srcZ = gEnvFxBubbleConfig[ENVFX_STATE_SRC_Z];
+    s16 destX = gEnvFxBubbleConfig[ENVFX_STATE_DEST_X];
+    s16 destY = gEnvFxBubbleConfig[ENVFX_STATE_DEST_Y];
+    s16 destZ = gEnvFxBubbleConfig[ENVFX_STATE_DEST_Z];
+    f32 cosPitch = coss(gEnvFxBubbleConfig[ENVFX_STATE_PITCH]);
+    f32 sinPitch = sins(gEnvFxBubbleConfig[ENVFX_STATE_PITCH]);
+    f32 cosMYaw = coss(-gEnvFxBubbleConfig[ENVFX_STATE_YAW]);
+    f32 sinMYaw = sins(-gEnvFxBubbleConfig[ENVFX_STATE_YAW]);
+    f32 m01 = -sinMYaw * cosPitch;
+    f32 m02 = -sinPitch * sinMYaw;
+    f32 m11 = cosPitch * cosMYaw;
+    f32 m12 = -sinPitch * cosMYaw;
+    struct EnvFxParticle *p = gEnvFxBuffer;
 
-    for (i = 0; i < sBubbleParticleMaxCount; i++) {
-        (gEnvFxBuffer + i)->isAlive = envfx_is_whirlpool_bubble_alive(i);
-        if (!(gEnvFxBuffer + i)->isAlive) {
-            (gEnvFxBuffer + i)->angleAndDist[1] = random_float() * 1000.0f;
-            (gEnvFxBuffer + i)->angleAndDist[0] = random_float() * 65536.0f;
-            (gEnvFxBuffer + i)->xPos =
-                gEnvFxBubbleConfig[ENVFX_STATE_SRC_X]
-                + sins((gEnvFxBuffer + i)->angleAndDist[0]) * (gEnvFxBuffer + i)->angleAndDist[1];
-            (gEnvFxBuffer + i)->zPos =
-                gEnvFxBubbleConfig[ENVFX_STATE_SRC_Z]
-                + coss((gEnvFxBuffer + i)->angleAndDist[0]) * (gEnvFxBuffer + i)->angleAndDist[1];
-            (gEnvFxBuffer + i)->bubbleY =
-                gEnvFxBubbleConfig[ENVFX_STATE_SRC_Y] + (random_float() * 100.0f - 50.0f);
-            (gEnvFxBuffer + i)->yPos = (i + gEnvFxBuffer)->bubbleY;
-            (gEnvFxBuffer + i)->unusedBubbleVar = 0;
-            (gEnvFxBuffer + i)->isAlive = TRUE;
+    for (i = 0; i < sBubbleParticleMaxCount; i++, p++) {
+        s32 x, y, z;
+        s32 vecX, vecY, vecZ;
 
-            envfx_rotate_around_whirlpool(&(gEnvFxBuffer + i)->xPos, &(gEnvFxBuffer + i)->yPos,
-                                          &(gEnvFxBuffer + i)->zPos);
+        p->isAlive = (p->bubbleY >= destY - 100) && (p->angleAndDist[1] >= 10);
+        if (!p->isAlive) {
+            p->angleAndDist[1] = random_float() * 1000.0f;
+            p->angleAndDist[0] = random_float() * 65536.0f;
+            p->xPos = srcX + sins(p->angleAndDist[0]) * p->angleAndDist[1];
+            p->zPos = srcZ + coss(p->angleAndDist[0]) * p->angleAndDist[1];
+            p->bubbleY = srcY + (random_float() * 100.0f - 50.0f);
+            p->yPos = p->bubbleY;
+            p->unusedBubbleVar = 0;
+            p->isAlive = TRUE;
         } else {
-            (gEnvFxBuffer + i)->angleAndDist[1] -= 40;
-            (gEnvFxBuffer + i)->angleAndDist[0] +=
-                (s16)(3000 - (gEnvFxBuffer + i)->angleAndDist[1] * 2) + 0x400;
-            (gEnvFxBuffer + i)->xPos =
-                gEnvFxBubbleConfig[ENVFX_STATE_SRC_X]
-                + sins((gEnvFxBuffer + i)->angleAndDist[0]) * (gEnvFxBuffer + i)->angleAndDist[1];
-            (gEnvFxBuffer + i)->zPos =
-                gEnvFxBubbleConfig[ENVFX_STATE_SRC_Z]
-                + coss((gEnvFxBuffer + i)->angleAndDist[0]) * (gEnvFxBuffer + i)->angleAndDist[1];
-            (gEnvFxBuffer + i)->bubbleY -= 40 - ((s16)(gEnvFxBuffer + i)->angleAndDist[1] / 100);
-            (gEnvFxBuffer + i)->yPos = (i + gEnvFxBuffer)->bubbleY;
-
-            envfx_rotate_around_whirlpool(&(gEnvFxBuffer + i)->xPos, &(gEnvFxBuffer + i)->yPos,
-                                          &(gEnvFxBuffer + i)->zPos);
+            p->angleAndDist[1] -= 40;
+            p->angleAndDist[0] += (s16) (3000 - p->angleAndDist[1] * 2) + 0x400;
+            p->xPos = srcX + sins(p->angleAndDist[0]) * p->angleAndDist[1];
+            p->zPos = srcZ + coss(p->angleAndDist[0]) * p->angleAndDist[1];
+            p->bubbleY -= 40 - ((s16) p->angleAndDist[1] / 100);
+            p->yPos = p->bubbleY;
         }
+
+        x = p->xPos;
+        y = p->yPos;
+        z = p->zPos;
+        vecX = x - destX;
+        vecY = y - destY;
+        vecZ = z - destZ;
+
+        p->xPos = destX + (s32) (vecX * cosMYaw + vecY * m01 + vecZ * m02);
+        p->yPos = destY + (s32) (vecX * sinMYaw + vecY * m11 + vecZ * m12);
+        p->zPos = destZ + (s32) (vecY * sinPitch + cosPitch * vecZ);
     }
 }
 
@@ -410,28 +423,34 @@ void envfx_bubbles_update_switch(s32 mode, Vec3s camTo, Vec3s vertex1, Vec3s ver
  */
 void append_bubble_vertex_buffer(Gfx *gfx, s32 index, Vec3s vertex1, Vec3s vertex2, Vec3s vertex3,
                                  Vtx *template) {
-    s32 i = 0;
+    s32 i;
     Vtx *vertBuf = alloc_display_list(15 * sizeof(Vtx));
+    struct EnvFxParticle *p;
 
     if (vertBuf == NULL) {
         return;
     }
 
-    for (i = 0; i < 15; i += 3) {
+    p = gEnvFxBuffer + index;
+    for (i = 0; i < 15; i += 3, p++) {
+        s16 px = p->xPos;
+        s16 py = p->yPos;
+        s16 pz = p->zPos;
+
         vertBuf[i] = template[0];
-        (vertBuf + i)->v.ob[0] = (gEnvFxBuffer + (index + i / 3))->xPos + vertex1[0];
-        (vertBuf + i)->v.ob[1] = (gEnvFxBuffer + (index + i / 3))->yPos + vertex1[1];
-        (vertBuf + i)->v.ob[2] = (gEnvFxBuffer + (index + i / 3))->zPos + vertex1[2];
+        vertBuf[i].v.ob[0] = px + vertex1[0];
+        vertBuf[i].v.ob[1] = py + vertex1[1];
+        vertBuf[i].v.ob[2] = pz + vertex1[2];
 
         vertBuf[i + 1] = template[1];
-        (vertBuf + i + 1)->v.ob[0] = (gEnvFxBuffer + (index + i / 3))->xPos + vertex2[0];
-        (vertBuf + i + 1)->v.ob[1] = (gEnvFxBuffer + (index + i / 3))->yPos + vertex2[1];
-        (vertBuf + i + 1)->v.ob[2] = (gEnvFxBuffer + (index + i / 3))->zPos + vertex2[2];
+        vertBuf[i + 1].v.ob[0] = px + vertex2[0];
+        vertBuf[i + 1].v.ob[1] = py + vertex2[1];
+        vertBuf[i + 1].v.ob[2] = pz + vertex2[2];
 
         vertBuf[i + 2] = template[2];
-        (vertBuf + i + 2)->v.ob[0] = (gEnvFxBuffer + (index + i / 3))->xPos + vertex3[0];
-        (vertBuf + i + 2)->v.ob[1] = (gEnvFxBuffer + (index + i / 3))->yPos + vertex3[1];
-        (vertBuf + i + 2)->v.ob[2] = (gEnvFxBuffer + (index + i / 3))->zPos + vertex3[2];
+        vertBuf[i + 2].v.ob[0] = px + vertex3[0];
+        vertBuf[i + 2].v.ob[1] = py + vertex3[1];
+        vertBuf[i + 2].v.ob[2] = pz + vertex3[2];
     }
 
     gSPVertex(gfx, VIRTUAL_TO_PHYSICAL(vertBuf), 15, 0);

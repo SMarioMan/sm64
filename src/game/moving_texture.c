@@ -431,16 +431,32 @@ Gfx *movtex_gen_from_quad(s16 y, struct MovtexQuad *quad) {
     }
     rot = (gInterpMidframe && gMovtexCounter != gMovtexCounterPrev) ? (s16) (quad->rot - (rotspeed >> 1))
                                                                     : quad->rot;
-    if (rotDir == ROTATE_CLOCKWISE) {
-        movtex_make_quad_vertex(verts, 0, x1, y, z1, rot, 0, scale, alpha);
-        movtex_make_quad_vertex(verts, 1, x2, y, z2, rot, 16384, scale, alpha);
-        movtex_make_quad_vertex(verts, 2, x3, y, z3, rot, -32768, scale, alpha);
-        movtex_make_quad_vertex(verts, 3, x4, y, z4, rot, -16384, scale, alpha);
-    } else { // ROTATE_COUNTER_CLOCKWISE
-        movtex_make_quad_vertex(verts, 0, x1, y, z1, rot, 0, scale, alpha);
-        movtex_make_quad_vertex(verts, 1, x2, y, z2, rot, -16384, scale, alpha);
-        movtex_make_quad_vertex(verts, 2, x3, y, z3, rot, -32768, scale, alpha);
-        movtex_make_quad_vertex(verts, 3, x4, y, z4, rot, 16384, scale, alpha);
+    {
+        f32 scaleFactor = 32.0f * (32.0f * scale - 1.0f);
+        s16 s = scaleFactor * sins(rot);
+        s16 t = scaleFactor * coss(rot);
+        u8 r = 255;
+        u8 g = 255;
+        u8 b = 255;
+
+        if (gMovtexVtxColor == MOVTEX_VTX_COLOR_YELLOW) {
+            b = 0;
+        } else if (gMovtexVtxColor == MOVTEX_VTX_COLOR_RED) {
+            g = 0;
+            b = 0;
+        }
+
+        if (rotDir == ROTATE_CLOCKWISE) {
+            make_vertex(verts, 0, x1, y, z1,  s,  t, r, g, b, alpha);
+            make_vertex(verts, 1, x2, y, z2,  t, -s, r, g, b, alpha);
+            make_vertex(verts, 2, x3, y, z3, -s, -t, r, g, b, alpha);
+            make_vertex(verts, 3, x4, y, z4, -t,  s, r, g, b, alpha);
+        } else { // ROTATE_COUNTER_CLOCKWISE
+            make_vertex(verts, 0, x1, y, z1,  s,  t, r, g, b, alpha);
+            make_vertex(verts, 1, x2, y, z2, -t,  s, r, g, b, alpha);
+            make_vertex(verts, 2, x3, y, z3, -s, -t, r, g, b, alpha);
+            make_vertex(verts, 3, x4, y, z4,  t, -s, r, g, b, alpha);
+        }
     }
 
     // Only add commands to change the texture when necessary

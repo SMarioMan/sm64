@@ -122,51 +122,34 @@ static void clear_static_surfaces(void) {
 static void add_surface_to_cell(s16 dynamic, s16 cellX, s16 cellZ, struct Surface *surface) {
     struct SurfaceNode *newNode = alloc_surface_node();
     struct SurfaceNode *list;
-    s16 surfacePriority;
-    s16 priority;
-    s16 sortDir;
-    s16 listIndex;
-
-    if (surface->normal.y > 0.01) {
-        listIndex = SPATIAL_PARTITION_FLOORS;
-        sortDir = 1; // highest to lowest, then insertion order
-    } else if (surface->normal.y < -0.01) {
-        listIndex = SPATIAL_PARTITION_CEILS;
-        sortDir = -1; // lowest to highest, then insertion order
-    } else {
-        listIndex = SPATIAL_PARTITION_WALLS;
-        sortDir = 0; // insertion order
-
-        if (surface->normal.x < -0.707 || surface->normal.x > 0.707) {
-            surface->flags |= SURFACE_FLAG_X_PROJECTION;
-        }
-    }
-
-    //! (Surface Cucking) Surfaces are sorted by the height of their first
-    //  vertex. Since vertices aren't ordered by height, this causes many
-    //  lower triangles to be sorted higher. This worsens surface cucking since
-    //  many functions only use the first triangle in surface order that fits,
-    //  missing higher surfaces.
-    //  upperY would be a better sort method.
-    surfacePriority = surface->vertex1[1] * sortDir;
+    s16 surfacePriority = surface->vertex1[1];
 
     newNode->surface = surface;
 
-    if (dynamic) {
-        list = &gDynamicSurfacePartition[cellZ][cellX][listIndex];
-    } else {
-        list = &gStaticSurfacePartition[cellZ][cellX][listIndex];
-    }
-
-    // Loop until we find the appropriate place for the surface in the list.
-    while (list->next != NULL) {
-        priority = list->next->surface->vertex1[1] * sortDir;
-
-        if (surfacePriority > priority) {
-            break;
+    if (surface->normal.y > 0.01f) {
+        list = dynamic ? &gDynamicSurfacePartition[cellZ][cellX][SPATIAL_PARTITION_FLOORS]
+                       : &gStaticSurfacePartition[cellZ][cellX][SPATIAL_PARTITION_FLOORS];
+        // Floors sort highest-to-lowest by vertex1[1].
+        while (list->next != NULL && surfacePriority <= list->next->surface->vertex1[1]) {
+            list = list->next;
         }
-
-        list = list->next;
+    } else if (surface->normal.y < -0.01f) {
+        list = dynamic ? &gDynamicSurfacePartition[cellZ][cellX][SPATIAL_PARTITION_CEILS]
+                       : &gStaticSurfacePartition[cellZ][cellX][SPATIAL_PARTITION_CEILS];
+        // Ceilings sort lowest-to-highest by vertex1[1].
+        while (list->next != NULL && surfacePriority >= list->next->surface->vertex1[1]) {
+            list = list->next;
+        }
+    } else {
+        if (surface->normal.x < -0.707f || surface->normal.x > 0.707f) {
+            surface->flags |= SURFACE_FLAG_X_PROJECTION;
+        }
+        list = dynamic ? &gDynamicSurfacePartition[cellZ][cellX][SPATIAL_PARTITION_WALLS]
+                       : &gStaticSurfacePartition[cellZ][cellX][SPATIAL_PARTITION_WALLS];
+        // Walls preserve insertion order without height sorting.
+        while (list->next != NULL) {
+            list = list->next;
+        }
     }
 
     newNode->next = list->next;
@@ -349,6 +332,10 @@ static struct Surface *read_surface_data(TerrainData *vertexData, TerrainData **
     }
     if (nx == 0.0f && nz == 0.0f) {
         ny = (ny > 0.0f) ? 1.0f : -1.0f;
+    } else if (ny == 0.0f && nz == 0.0f) {
+        nx = (nx > 0.0f) ? 1.0f : -1.0f;
+    } else if (ny == 0.0f && nx == 0.0f) {
+        nz = (nz > 0.0f) ? 1.0f : -1.0f;
     } else {
         mag = 1.0f / sqrtf(mag);
         nx *= mag;
@@ -696,16 +683,30 @@ void transform_object_vertices(TerrainData **data, TerrainData *vertexData) {
     m20 = (*mPtr)[2][0]; m21 = (*mPtr)[2][1]; m22 = (*mPtr)[2][2];
     m30 = (*mPtr)[3][0]; m31 = (*mPtr)[3][1]; m32 = (*mPtr)[3][2];
 
-    // Go through all vertices, rotating and translating them to transform the object.
-    while (numVertices--) {
-        vx = *(vertices++);
-        vy = *(vertices++);
-        vz = *(vertices++);
+    if (m00 == 1.0f && m11 == 1.0f && m22 == 1.0f
+        && m01 == 0.0f && m02 == 0.0f && m10 == 0.0f
+        && m12 == 0.0f && m20 == 0.0f && m21 == 0.0f) {
+        s32 tx = (s32) m30;
+        s32 ty = (s32) m31;
+        s32 tz = (s32) m32;
 
-        //! No bounds check on vertex data
-        *vertexData++ = (TerrainData)(vx * m00 + vy * m10 + vz * m20 + m30);
-        *vertexData++ = (TerrainData)(vx * m01 + vy * m11 + vz * m21 + m31);
-        *vertexData++ = (TerrainData)(vx * m02 + vy * m12 + vz * m22 + m32);
+        while (numVertices--) {
+            *vertexData++ = (TerrainData)(*(vertices++) + tx);
+            *vertexData++ = (TerrainData)(*(vertices++) + ty);
+            *vertexData++ = (TerrainData)(*(vertices++) + tz);
+        }
+    } else {
+        // Go through all vertices, rotating and translating them to transform the object.
+        while (numVertices--) {
+            vx = *(vertices++);
+            vy = *(vertices++);
+            vz = *(vertices++);
+
+            //! No bounds check on vertex data
+            *vertexData++ = (TerrainData)(vx * m00 + vy * m10 + vz * m20 + m30);
+            *vertexData++ = (TerrainData)(vx * m01 + vy * m11 + vz * m21 + m31);
+            *vertexData++ = (TerrainData)(vx * m02 + vy * m12 + vz * m22 + m32);
+        }
     }
 
     *data = vertices;

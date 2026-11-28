@@ -689,9 +689,17 @@ static void geo_process_animated_part(struct GraphNodeAnimatedPart *node) {
     }
 
     if (gCurrAnimType == ANIM_TYPE_ROTATION) {
-        rotation[0] = anim_read_angle_interp(f0, f1, frac, animData, &gCurrAnimAttribute);
-        rotation[1] = anim_read_angle_interp(f0, f1, frac, animData, &gCurrAnimAttribute);
-        rotation[2] = anim_read_angle_interp(f0, f1, frac, animData, &gCurrAnimAttribute);
+        if (frac == 0) {
+            u16 *a = gCurrAnimAttribute;
+            rotation[0] = animData[a[1] + ((f0 < a[0]) ? f0 : (a[0] - 1))];
+            rotation[1] = animData[a[3] + ((f0 < a[2]) ? f0 : (a[2] - 1))];
+            rotation[2] = animData[a[5] + ((f0 < a[4]) ? f0 : (a[4] - 1))];
+            gCurrAnimAttribute = a + 6;
+        } else {
+            rotation[0] = anim_read_angle_interp(f0, f1, frac, animData, &gCurrAnimAttribute);
+            rotation[1] = anim_read_angle_interp(f0, f1, frac, animData, &gCurrAnimAttribute);
+            rotation[2] = anim_read_angle_interp(f0, f1, frac, animData, &gCurrAnimAttribute);
+        }
     }
     if ((rotation[0] | rotation[1] | rotation[2]) == 0) {
         mtxf_translate_only(gMatStack[gMatStackIndex + 1], gMatStack[gMatStackIndex], translation);
@@ -955,11 +963,10 @@ static void geo_process_shadow(struct GraphNodeShadow *node) {
  *
  * Since (0,0,0) is unaffected by rotation, columns 0, 1 and 2 are ignored.
  */
-static s32 obj_is_in_view(struct GraphNodeObject *node, Mat4 matrix) {
+static s32 obj_is_in_view_pos(struct GraphNodeObject *node, f32 x, f32 y, f32 z) {
     f32 cullingRadius;
     struct GraphNode *geo;
     f32 screenEdge;
-    f32 z = matrix[3][2];
 
     if (node->node.flags & GRAPH_RENDER_INVISIBLE) {
         return FALSE;
@@ -984,20 +991,47 @@ static s32 obj_is_in_view(struct GraphNodeObject *node, Mat4 matrix) {
     screenEdge = -z * sTanHalfFov + cullingRadius;
 
     // Check whether the object is vertically and horizontally in view
-    if (matrix[3][1] > screenEdge || matrix[3][1] < -screenEdge) {
+    if (y > screenEdge || y < -screenEdge) {
         return FALSE;
     }
 #ifdef WIDESCREEN
     screenEdge = -z * sTanHalfFov * GFX_DIMENSIONS_ASPECT_RATIO + cullingRadius;
 #endif
-    if (matrix[3][0] > screenEdge || matrix[3][0] < -screenEdge) {
+    if (x > screenEdge || x < -screenEdge) {
         return FALSE;
     }
     return TRUE;
 }
 
+static void mtxf_rotate_y_and_set_cam_pos(Mat4 dest, Mat4 parent, s16 yaw,
+                                          f32 camX, f32 camY, f32 camZ) {
+    f32 sy = sins(yaw);
+    f32 cy = coss(yaw);
+
+    dest[0][0] = cy * parent[0][0] - sy * parent[2][0];
+    dest[0][1] = cy * parent[0][1] - sy * parent[2][1];
+    dest[0][2] = cy * parent[0][2] - sy * parent[2][2];
+    dest[0][3] = 0.0f;
+
+    dest[1][0] = parent[1][0];
+    dest[1][1] = parent[1][1];
+    dest[1][2] = parent[1][2];
+    dest[1][3] = 0.0f;
+
+    dest[2][0] = sy * parent[0][0] + cy * parent[2][0];
+    dest[2][1] = sy * parent[0][1] + cy * parent[2][1];
+    dest[2][2] = sy * parent[0][2] + cy * parent[2][2];
+    dest[2][3] = 0.0f;
+
+    dest[3][0] = camX;
+    dest[3][1] = camY;
+    dest[3][2] = camZ;
+    dest[3][3] = 1.0f;
+}
+
 /**
- * Process an object node.
+ * Process an object node with early view-frustum culling and pure-yaw/identity
+ * transform fast paths.
  */
 static void geo_process_object(struct Object *node) {
     Mat4 mtxf;
@@ -1005,16 +1039,65 @@ static void geo_process_object(struct Object *node) {
     Mat4 *savedThrowMatrix;
 
     if (node->header.gfx.areaIndex == gCurGraphNodeRoot->areaIndex) {
+        Mat4 *parentMtx = &gMatStack[gMatStackIndex];
+        const f32 *objPos;
+        f32 camX, camY, camZ;
+
         savedThrowMatrix = node->header.gfx.throwMatrix;
-        if (node->header.gfx.throwMatrix != NULL) {
-            mtxf_mul(gMatStack[gMatStackIndex + 1], *node->header.gfx.throwMatrix,
-                     gMatStack[gMatStackIndex]);
+        objPos = (savedThrowMatrix != NULL) ? (*savedThrowMatrix)[3] : node->header.gfx.pos;
+        camX = objPos[0] * (*parentMtx)[0][0] + objPos[1] * (*parentMtx)[1][0]
+             + objPos[2] * (*parentMtx)[2][0] + (*parentMtx)[3][0];
+        camY = objPos[0] * (*parentMtx)[0][1] + objPos[1] * (*parentMtx)[1][1]
+             + objPos[2] * (*parentMtx)[2][1] + (*parentMtx)[3][1];
+        camZ = objPos[0] * (*parentMtx)[0][2] + objPos[1] * (*parentMtx)[1][2]
+             + objPos[2] * (*parentMtx)[2][2] + (*parentMtx)[3][2];
+
+        node->header.gfx.cameraToObject[0] = camX;
+        node->header.gfx.cameraToObject[1] = camY;
+        node->header.gfx.cameraToObject[2] = camZ;
+
+        if (!obj_is_in_view_pos(&node->header.gfx, camX, camY, camZ)) {
+            if (node->header.gfx.animInfo.curAnim != NULL) {
+                if (hasAnimation) {
+                    node->header.gfx.animInfo.animFrame = geo_update_animation_frame(
+                        &node->header.gfx.animInfo, &node->header.gfx.animInfo.animFrameAccelAssist);
+                }
+                node->header.gfx.animInfo.animTimer = gAreaUpdateCounter;
+            }
+            node->header.gfx.throwMatrix = (gInterpActive || gInterpValid) ? savedThrowMatrix : NULL;
+            return;
+        }
+
+        if (savedThrowMatrix != NULL) {
+            mtxf_mul(gMatStack[gMatStackIndex + 1], *savedThrowMatrix, *parentMtx);
         } else if (node->header.gfx.node.flags & GRAPH_RENDER_BILLBOARD) {
-            mtxf_billboard_fast(gMatStack[gMatStackIndex + 1], gMatStack[gMatStackIndex],
-                                node->header.gfx.pos);
+            mtxf_billboard_fast(gMatStack[gMatStackIndex + 1], *parentMtx, node->header.gfx.pos);
+        } else if ((node->header.gfx.angle[0] | node->header.gfx.angle[2]) == 0) {
+            if (node->header.gfx.angle[1] == 0) {
+                Mat4 *dst = &gMatStack[gMatStackIndex + 1];
+                (*dst)[0][0] = (*parentMtx)[0][0];
+                (*dst)[0][1] = (*parentMtx)[0][1];
+                (*dst)[0][2] = (*parentMtx)[0][2];
+                (*dst)[0][3] = 0.0f;
+                (*dst)[1][0] = (*parentMtx)[1][0];
+                (*dst)[1][1] = (*parentMtx)[1][1];
+                (*dst)[1][2] = (*parentMtx)[1][2];
+                (*dst)[1][3] = 0.0f;
+                (*dst)[2][0] = (*parentMtx)[2][0];
+                (*dst)[2][1] = (*parentMtx)[2][1];
+                (*dst)[2][2] = (*parentMtx)[2][2];
+                (*dst)[2][3] = 0.0f;
+                (*dst)[3][0] = camX;
+                (*dst)[3][1] = camY;
+                (*dst)[3][2] = camZ;
+                (*dst)[3][3] = 1.0f;
+            } else {
+                mtxf_rotate_y_and_set_cam_pos(gMatStack[gMatStackIndex + 1], *parentMtx,
+                                              node->header.gfx.angle[1], camX, camY, camZ);
+            }
         } else {
             mtxf_rotate_zxy_and_translate(mtxf, node->header.gfx.pos, node->header.gfx.angle);
-            mtxf_mul(gMatStack[gMatStackIndex + 1], mtxf, gMatStack[gMatStackIndex]);
+            mtxf_mul(gMatStack[gMatStackIndex + 1], mtxf, *parentMtx);
         }
 
         if (node->header.gfx.scale[0] != 1.0f || node->header.gfx.scale[1] != 1.0f
@@ -1023,26 +1106,20 @@ static void geo_process_object(struct Object *node) {
                              node->header.gfx.scale);
         }
         node->header.gfx.throwMatrix = &gMatStack[++gMatStackIndex];
-        node->header.gfx.cameraToObject[0] = gMatStack[gMatStackIndex][3][0];
-        node->header.gfx.cameraToObject[1] = gMatStack[gMatStackIndex][3][1];
-        node->header.gfx.cameraToObject[2] = gMatStack[gMatStackIndex][3][2];
 
-        // FIXME: correct types
         if (node->header.gfx.animInfo.curAnim != NULL) {
             geo_set_animation_globals_for_obj(node, &node->header.gfx.animInfo, hasAnimation);
         }
-        if (obj_is_in_view(&node->header.gfx, gMatStack[gMatStackIndex])) {
-            gMatStackFixed[gMatStackIndex] = NULL;
-            if (node->header.gfx.sharedChild != NULL) {
-                gCurGraphNodeObject = (struct GraphNodeObject *) node;
-                node->header.gfx.sharedChild->parent = &node->header.gfx.node;
-                geo_process_node_and_siblings(node->header.gfx.sharedChild);
-                node->header.gfx.sharedChild->parent = NULL;
-                gCurGraphNodeObject = NULL;
-            }
-            if (node->header.gfx.node.children != NULL) {
-                geo_process_node_and_siblings(node->header.gfx.node.children);
-            }
+        gMatStackFixed[gMatStackIndex] = NULL;
+        if (node->header.gfx.sharedChild != NULL) {
+            gCurGraphNodeObject = (struct GraphNodeObject *) node;
+            node->header.gfx.sharedChild->parent = &node->header.gfx.node;
+            geo_process_node_and_siblings(node->header.gfx.sharedChild);
+            node->header.gfx.sharedChild->parent = NULL;
+            gCurGraphNodeObject = NULL;
+        }
+        if (node->header.gfx.node.children != NULL) {
+            geo_process_node_and_siblings(node->header.gfx.node.children);
         }
 
         gMatStackIndex--;
