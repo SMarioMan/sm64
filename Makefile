@@ -418,6 +418,15 @@ ifeq ($(COMPILER),gcc)
   $(BUILD_DIR)/src/game/rendering_graph_node.o: OPT_FLAGS := -O2
   $(BUILD_DIR)/src/game/object_list_processor.o: OPT_FLAGS := -O2
   $(BUILD_DIR)/src/game/object_collision.o: OPT_FLAGS := -O2
+  $(BUILD_DIR)/src/game/object_helpers.o: OPT_FLAGS := -O2
+  $(BUILD_DIR)/src/game/camera.o: OPT_FLAGS := -O2
+  $(BUILD_DIR)/src/game/mario_step.o: OPT_FLAGS := -O2
+  $(BUILD_DIR)/src/game/envfx_bubbles.o: OPT_FLAGS := -O2
+  $(BUILD_DIR)/src/game/envfx_snow.o: OPT_FLAGS := -O2
+  $(BUILD_DIR)/src/game/moving_texture.o: OPT_FLAGS := -O2
+  $(BUILD_DIR)/src/game/area.o: OPT_FLAGS := -O2
+  $(BUILD_DIR)/src/game/spawn_object.o: OPT_FLAGS := -O2
+  $(BUILD_DIR)/src/game/platform_displacement.o: OPT_FLAGS := -O2
   $(BUILD_DIR)/src/game/shadow.o: OPT_FLAGS := -O2
   $(BUILD_DIR)/src/game/mario.o: OPT_FLAGS := -O2
   $(BUILD_DIR)/src/audio/%.o: OPT_FLAGS := -O2
