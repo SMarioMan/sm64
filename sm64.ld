@@ -161,7 +161,12 @@ SECTIONS
         BUILD_DIR/src/game/memory.o(.text);
         BUILD_DIR/src/game/save_file.o(.text);
         BUILD_DIR/src/game/area.o(.text);
+        BUILD_DIR/src/game/screen_transition.o(.text);
         BUILD_DIR/src/game/rendering_graph_node.o(.text);
+        BUILD_DIR/src/game/shadow.o(.text);
+        BUILD_DIR/src/game/paintings.o(.text);
+        BUILD_DIR/src/game/skybox.o(.text);
+        BUILD_DIR/src/game/geo_misc.o(.text);
         BUILD_DIR/src/game/profiler.o(.text);
         BUILD_DIR/asm/decompress.o(.text);
         BUILD_DIR/src/game/camera.o(.text);
@@ -178,12 +183,7 @@ SECTIONS
 #endif
         BUILD_DIR/src/game/spawn_sound.o(.text);
         BUILD_DIR/src/game/debug.o(.text);
-        BUILD_DIR/src/game/screen_transition.o(.text);
-        BUILD_DIR/src/game/shadow.o(.text);
-        BUILD_DIR/src/game/skybox.o(.text);
         BUILD_DIR/src/game/moving_texture.o(.text);
-        BUILD_DIR/src/game/geo_misc.o(.text);
-        BUILD_DIR/src/game/paintings.o(.text);
         BUILD_DIR/src/game/print.o(.text);
         BUILD_DIR/src/game/ingame_menu.o(.text);
         BUILD_DIR/src/game/envfx_snow.o(.text);
@@ -192,25 +192,27 @@ SECTIONS
         BUILD_DIR/src/game/hud.o(.text);
         BUILD_DIR/src/game/obj_behaviors.o(.text);
         BUILD_DIR/src/game/obj_behaviors_2.o(.text);
+        /* Hot audio computation block (co-located for 16 KB I-cache) */
 #if defined(VERSION_SH) || defined(VERSION_CN)
         BUILD_DIR/src/audio/synthesis_sh.o(.text);
 #else
         BUILD_DIR/src/audio/synthesis.o(.text);
 #endif
+        BUILD_DIR/src/audio/playback.o(.text);
+        BUILD_DIR/src/audio/effects.o(.text);
+        BUILD_DIR/src/audio/seqplayer.o(.text);
+        BUILD_DIR/src/audio/external.o(.text);
+        BUILD_DIR/src/audio/port_eu.o(.text);
+        /* Cold audio loading / heap */
         BUILD_DIR/src/audio/heap.o(.text);
         BUILD_DIR/src/audio/load.o(.text);
 #if defined(VERSION_SH) || defined(VERSION_CN)
         BUILD_DIR/src/audio/load_sh.o(.text);
         BUILD_DIR/src/audio/port_sh.o(.text);
 #endif
-        BUILD_DIR/src/audio/playback.o(.text);
-        BUILD_DIR/src/audio/effects.o(.text);
-        BUILD_DIR/src/audio/seqplayer.o(.text);
 #if defined(VERSION_SH) || defined(VERSION_CN)
         BUILD_DIR/libultra.a:osDriveRomInit.o(.text);
 #endif
-        BUILD_DIR/src/audio/external.o(.text);
-        BUILD_DIR/src/audio/port_eu.o(.text);
 
 #if defined(VERSION_EU) || defined(VERSION_SH) || defined(VERSION_CN)
 #ifdef VERSION_CN
